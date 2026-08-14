@@ -11,6 +11,7 @@
   --g3:#4caf50;   /* hijau muda */
   --gp:#e8f5e9;   /* hijau pucat */
   --e1:#b8860b;   /* emas tua */
+  --e1:#b8860b;
   --e2:#daa520;   /* emas */
   --ep:#fff8e1;   /* emas pucat */
 }
@@ -84,8 +85,7 @@ body{
 /* ===== GRIDS ===== */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
-/* Grid kartu fitur: lingkaran menyesuaikan lebar layar */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:18px}
 
 /* ===== TABS ===== */
 .tabs{display:flex;gap:8px;margin-bottom:15px;flex-wrap:wrap}
@@ -199,7 +199,6 @@ body{
 
 /* ============================================================
    HALAMAN KHUSUS: DASHBOARD (index.html)
-   KARTU FITUR BUNDAR (menyesuaikan tampilan HP)
    ============================================================ */
 .dash-hdr{
   background:linear-gradient(135deg,var(--g1),var(--g2));
@@ -218,44 +217,48 @@ body{
 .greeting h2{color:var(--g1);font-size:22px}
 .greeting p{color:#555;margin-top:4px;font-size:14px}
 
-/* Menu Cards BUNDAR ala ikon aplikasi */
+/* ===== MENU CARD: LINGKARAN UTUH (ANTI-KOTAK) =====
+   Teknik: padding-top:100% => tinggi selalu = lebar => kotak sempurna,
+   lalu border-radius:50% => LINGKARAN UTUH di semua browser/HP.
+   Isi kartu diposisikan ABSOLUT agar tidak bisa meregangkan lingkaran. */
 .menu{
-  background:#fff;
-  border-radius:50%;              /* bentuk bundar */
-  aspect-ratio:1/1;               /* tetap lingkaran sempurna */
+  position:relative;
+  display:block;
   width:100%;
+  height:0;
+  padding-top:100%;            /* kunci lingkaran utuh */
+  border-radius:50%;           /* bulat sempurna */
+  background:#fff;
+  border:3px solid var(--e2);
+  box-shadow:0 4px 20px rgba(0,0,0,.08);
+  text-decoration:none;color:inherit;
+  overflow:hidden;             /* isi tidak boleh keluar lingkaran */
+  transition:transform .15s,box-shadow .15s;
+}
+.menu-in{                      /* wadah isi di dalam lingkaran */
+  position:absolute;top:0;left:0;width:100%;height:100%;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   text-align:center;
-  padding:14px;
-  box-shadow:0 4px 20px rgba(0,0,0,.08);
-  border:3px solid var(--e2);     /* ring emas mengelilingi */
-  text-decoration:none;color:inherit;
-  transition:transform .15s,box-shadow .15s;
-  overflow:hidden;
-  position:relative;
-}
-.menu:hover{
-  transform:translateY(-3px) scale(1.02);
-  box-shadow:0 8px 30px rgba(0,0,0,.15);
+  padding:15%;                 /* aman di dalam area lingkaran */
 }
 .menu .ico{
-  font-size:30px;
-  width:60px;height:60px;
+  width:56px;height:56px;border-radius:50%;
   background:linear-gradient(135deg,var(--g2),var(--e2));
-  border-radius:50%;
+  color:#fff;font-size:26px;
   display:flex;align-items:center;justify-content:center;
   margin-bottom:8px;
   box-shadow:0 3px 10px rgba(0,0,0,.15);
 }
-.menu h3{color:var(--g1);font-size:13px;margin-bottom:3px;line-height:1.25}
+.menu h3{color:var(--g1);font-size:13px;line-height:1.25;margin-bottom:4px}
 .menu p{
   font-size:10px;color:#666;line-height:1.35;
   display:-webkit-box;-webkit-line-clamp:2;
   -webkit-box-orient:vertical;overflow:hidden;
 }
+.menu:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 8px 30px rgba(0,0,0,.15)}
 .menu.disabled{opacity:.6;pointer-events:none}
-.menu .badge{background:var(--g2);margin-top:6px}
+.menu .badge{background:var(--g2)}
 
 /* ============================================================
    RESPONSIVE
@@ -267,14 +270,12 @@ body{
   .hdr{padding:10px 14px}
   .hdr .hdr-left h2{font-size:14px}
   .login-box{padding:25px}
-  .grid{grid-template-columns:repeat(3,1fr);gap:14px}  /* tablet: 3 lingkaran */
+  .grid{grid-template-columns:repeat(3,1fr);gap:14px}   /* tablet: 3 lingkaran */
 }
 @media(max-width:480px){
-  /* HP: 2 lingkaran per baris seperti home screen */
-  .grid{grid-template-columns:repeat(2,1fr);gap:14px}
-  .menu{border-width:2px;padding:10px}
-  .menu .ico{width:52px;height:52px;font-size:26px;margin-bottom:6px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:14px}   /* HP: 2 lingkaran */
+  .menu .ico{width:48px;height:48px;font-size:22px}
   .menu h3{font-size:12px}
-  .menu p{display:none}          /* deskripsi disembunyikan agar lingkaran rapi */
+  .menu p{display:none}   /* deskripsi disembunyikan agar lingkaran rapi di HP */
   .hdr button{font-size:11px;padding:6px 10px}
 }
