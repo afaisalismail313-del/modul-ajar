@@ -20,17 +20,65 @@ body{background:linear-gradient(135deg,var(--gp),var(--ep));min-height:100vh}
 .greeting{margin-bottom:24px}
 .greeting h2{color:var(--g1);font-size:22px}
 .greeting p{color:#555;margin-top:4px;font-size:14px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
-.menu{background:#fff;border-radius:15px;padding:22px;box-shadow:0 4px 20px rgba(0,0,0,.08);
-      border-left:5px solid var(--e2);text-decoration:none;color:inherit;
-      display:block;transition:transform .15s,box-shadow .15s}
-.menu:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.12)}
-.menu .ico{font-size:38px;margin-bottom:10px}
-.menu h3{color:var(--g1);font-size:16px;margin-bottom:6px}
-.menu p{font-size:13px;color:#666;line-height:1.5}
+
+/* ============ GRID KARTU BUNDAR ============ */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:22px}
+
+/* Kartu menu BENTUK LINGKARAN penuh */
+.menu{
+  position:relative;
+  display:block;
+  width:100%;
+  aspect-ratio:1/1;             /* tetap persegi => lingkaran sempurna */
+  background:#fff;
+  border-radius:50%;            /* LINGKARAN */
+  border:3px solid var(--e2);   /* ring emas mengelilingi */
+  box-shadow:0 4px 20px rgba(0,0,0,.08);
+  text-decoration:none;color:inherit;
+  overflow:hidden;
+  transition:transform .15s,box-shadow .15s;
+}
+.menu:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 10px 30px rgba(0,0,0,.15)}
+
+/* Isi kartu diposisikan ABSOLUT di dalam lingkaran agar lingkaran tidak melar */
+.menu-in{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:16%;
+}
+.menu .ico{
+  width:58px;height:58px;border-radius:50%;
+  background:linear-gradient(135deg,var(--g2),var(--e2));
+  color:#fff;font-size:26px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:10px;box-shadow:0 3px 10px rgba(0,0,0,.15);
+}
+.menu h3{color:var(--g1);font-size:14px;margin-bottom:4px;line-height:1.25}
+.menu p{
+  font-size:11px;color:#666;line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
 .badge{display:inline-block;background:var(--g2);color:#fff;font-size:10px;
        padding:2px 8px;border-radius:10px;margin-top:8px}
 .badge.soon{background:#888}
+
+/* Fallback browser lama yang belum mendukung aspect-ratio */
+@supports not (aspect-ratio:1/1){
+  .menu{height:auto}
+  .menu::before{content:"";display:block;padding-top:100%}
+}
+
+/* ============ RESPONSIVE TAMPILAN HP ============ */
+@media(max-width:640px){
+  .wrap{padding:16px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:14px}  /* 2 lingkaran per baris */
+  .menu{border-width:2px}
+  .menu-in{padding:12%}
+  .menu .ico{width:46px;height:46px;font-size:20px;margin-bottom:6px}
+  .menu h3{font-size:12px}
+  .menu p{display:none}   /* deskripsi disembunyikan agar lingkaran rapi di HP */
+  .badge{margin-top:5px}
+}
 </style>
 </head>
 <body>
@@ -51,18 +99,22 @@ body{background:linear-gradient(135deg,var(--gp),var(--ep));min-height:100vh}
   <div class="grid">
     <!-- Menu: Modul Ajar -->
     <a href="modul-ajar.html" class="menu">
-      <div class="ico">📝</div>
-      <h3>Modul Ajar</h3>
-      <p>Generate Modul Ajar Terintegrasi KBC berbasis ATP.</p>
-      <span class="badge">Aktif</span>
+      <div class="menu-in">
+        <div class="ico">📝</div>
+        <h3>Modul Ajar</h3>
+        <p>Generate Modul Ajar Terintegrasi KBC berbasis ATP.</p>
+        <span class="badge">Aktif</span>
+      </div>
     </a>
 
     <!-- Menu: Worksheet -->
     <a href="worksheet.html" class="menu">
-      <div class="ico">🧩</div>
-      <h3>Worksheet</h3>
-      <p>Buat Students Worksheet F4 otomatis dengan prompt AI siap pakai.</p>
-      <span class="badge">Aktif</span>
+      <div class="menu-in">
+        <div class="ico">🧩</div>
+        <h3>Worksheet</h3>
+        <p>Buat Students Worksheet F4 otomatis dengan prompt AI siap pakai.</p>
+        <span class="badge">Aktif</span>
+      </div>
     </a>
   </div>
 </div>
