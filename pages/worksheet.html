@@ -59,16 +59,13 @@ textarea{resize:vertical}
 </div>
 
 <div class="wrap">
-<!-- ===================== KOLOM KIRI : PANEL 1–3 ===================== -->
 <div>
-  <!-- PANEL 1 : BIDANG STUDI -->
   <div class="card" style="--c:#2563eb">
     <h2><span class="badge">1</span> Panel Bidang Studi</h2>
     <div class="hint">Pilih mata pelajaran — daftar TP otomatis dimuat dari file ATP. Bahasa Inggris → worksheet berbahasa Inggris; Bahasa Arab → berbahasa Arab.</div>
     <select id="selMapel"></select>
   </div>
 
-  <!-- PANEL 2 : PILIHAN TP -->
   <div class="card" style="--c:#7c3aed">
     <h2><span class="badge">2</span> Panel Pilihan TP (dari ATP)</h2>
     <div class="hint">Pilih bab, lalu pilih satu Tujuan Pembelajaran yang terintegrasi KBC.</div>
@@ -79,7 +76,6 @@ textarea{resize:vertical}
     <div class="tpbox" id="tpDetail"></div>
   </div>
 
-  <!-- PANEL 3 : MATERI PEMBELAJARAN -->
   <div class="card" style="--c:#16a34a">
     <h2><span class="badge">3</span> Panel Materi Pembelajaran</h2>
     <div class="hint">Judul dan isi konten dapat diedit bebas.</div>
@@ -106,9 +102,7 @@ textarea{resize:vertical}
   </div>
 </div>
 
-<!-- ===================== KOLOM KANAN : PANEL 4–5 ===================== -->
 <div class="right">
-  <!-- PANEL 4 : DUA PROMPT TERPISAH -->
   <div class="card" style="--c:#d97706">
     <h2><span class="badge">4</span> Salin Prompt (2 Halaman Terpisah)</h2>
     <div class="hint">Halaman 1 = Student Worksheet, Halaman 2 = Kunci Jawaban. Salin masing-masing lalu tempel ke GPT (disarankan pada chat yang sama) agar menghasilkan 2 gambar terpisah.</div>
@@ -124,7 +118,6 @@ textarea{resize:vertical}
     <div class="btnrow"><button class="btn btn-copy blue" id="btnCopyKunci">📋 Salin Prompt Halaman 2</button></div>
   </div>
 
-  <!-- PANEL 5 : LINK GPT -->
   <div class="card" style="--c:#10a37f">
     <h2><span class="badge">5</span> Panel Link GPT</h2>
     <div class="hint">Tempel prompt Halaman 1, kirim, lalu tempel prompt Halaman 2 pada chat yang sama.</div>
@@ -139,7 +132,6 @@ textarea{resize:vertical}
 <div id="toast"></div>
 
 <script>
-/* ===== AUTH GUARD ===== */
 Auth.requireLogin();
 const user = Auth.getUser();
 if (user) {
@@ -147,7 +139,7 @@ if (user) {
     `${user.role.toUpperCase()} • ${user.nama || user.username}`;
 }
 
-/* ================= DATABASE ATP (sesuai file yang diupload) ================= */
+/* ================= DATABASE ATP ================= */
 const ATP={
 kimia:{label:"Kimia — Kelas XI (Fase F)",bab:[
  {nama:"IKATAN KIMIA (Ganjil)",kbc:"Cinta Allah & Rasul-Nya • Cinta Ilmu • Cinta Diri & Sesama • Cinta Tanah Air • Cinta Lingkungan",items:[
@@ -179,6 +171,71 @@ kimia:{label:"Kimia — Kelas XI (Fase F)",bab:[
   {k:"Pergeseran Kesetimbangan",jp:"3 JP",t:"Murid mampu menunjukkan sikap adaptif (Cinta Diri) dalam menghadapi perubahan, mengambil hikmah dari Asas Le Chatelier. Murid dapat menganalisis arah pergeseran kesetimbangan akibat perubahan konsentrasi, suhu, volume, dan tekanan."},
   {k:"Industri",jp:"3 JP",t:"Murid mampu menumbuhkan rasa bangga (Nasionalisme) terhadap potensi industri kimia nasional. Murid dapat menjelaskan penerapan prinsip kesetimbangan pada proses pembuatan amonia (Haber-Bosch) dan asam sulfat (Kontak)."}]}
 ]},
+
+/* ================= MATEMATIKA 12 ================= */
+matematika:{label:"Matematika — Kelas XII (Fase F)",bab:[
+ {nama:"BAB 1: Transformasi Fungsi (Ganjil)",kbc:"Cinta Allah & Rasul-Nya • Cinta Sesama • Cinta Bangsa/Negara • Cinta Diri Sendiri",items:[
+  {k:"Translasi & Refleksi",jp:"3 JP",j:"Transformasi Fungsi: Translasi & Refleksi",t:"Murid mampu menunjukkan sikap syukur atas keteraturan (Cinta Allah) dengan tepat menentukan bayangan titik dan fungsi hasil Translasi. Murid mampu menghargai simetri (Cinta Allah) dengan teliti menentukan bayangan titik dan fungsi hasil Refleksi terhadap garis dan sumbu."},
+  {k:"Dilatasi & Rotasi",jp:"3 JP",j:"Transformasi Fungsi: Dilatasi & Rotasi",t:"Murid mampu berempati pada perubahan skala (Cinta Sesama) dengan menentukan bayangan titik dan fungsi hasil Dilatasi (perbesaran/pengecilan). Murid mampu bersikap toleran terhadap perbedaan sudut pandang (Cinta Sesama) dengan benar menentukan bayangan titik dan fungsi hasil Rotasi di titik pusat O(0,0) dan P(a,b)."},
+  {k:"Kombinasi Transformasi Fungsi",jp:"3 JP",j:"Kombinasi Transformasi Fungsi",t:"Murid mampu berkolaborasi memecahkan masalah Kombinasi Translasi dan Refleksi pada fungsi (P-1). Murid mampu bernalar kritis menentukan bayangan fungsi akibat kombinasi Rotasi dan Dilatasi (P-2)."},
+  {k:"Proyek Aplikasi",jp:"3 JP",j:"Proyek Aplikasi Transformasi Fungsi",t:"Murid mampu menciptakan pola (Kreativitas) motif desain berbasis Transformasi Fungsi (Cinta Bangsa/Negara). Murid mampu merefleksikan pentingnya ketelitian dan integritas (Cinta Diri Sendiri) dalam proses transformasi."}]},
+ {nama:"BAB 2: Busur dan Juring Lingkaran (Ganjil)",kbc:"Cinta Diri Sendiri • Cinta Sesama • Cinta kepada Allah SWT • Cinta Lingkungan",items:[
+  {k:"Busur Lingkaran",jp:"3 JP",j:"Busur Lingkaran",t:"Murid mampu menghitung panjang Busur Lingkaran berdasarkan sudut pusat (derajat dan radian) dan jari-jari. Murid mampu menunjukkan ketelitian (Cinta Diri Sendiri) dalam perhitungan yang melibatkan π."},
+  {k:"Juring Lingkaran",jp:"3 JP",j:"Juring Lingkaran",t:"Murid mampu menghitung luas Juring Lingkaran dan luas Tembereng secara akurat. Murid mampu berkolaborasi (Cinta Sesama) memecahkan masalah praktis pengukuran area juring (misalnya: pembagian area taman)."},
+  {k:"Hubungan Panjang Busur dan Luas Juring",jp:"3 JP",j:"Hubungan Panjang Busur dan Luas Juring",t:"Murid mampu menganalisis dan membuktikan hubungan proporsional antara panjang busur dan luas juring. Murid mampu merefleksikan keindahan keteraturan geometris (Cinta kepada Allah SWT) dalam bentuk lingkaran melalui aplikasi pengukuran lingkungan (Cinta Lingkungan)."}]},
+ {nama:"BAB 3: Kombinatorik (Genap)",kbc:"Cinta Diri Sendiri • Cinta kepada Allah SWT • Cinta Sesama • Cinta Ilmu",items:[
+  {k:"Aturan Pengisian Tempat",jp:"3 JP",j:"Aturan Pengisian Tempat",t:"Murid mampu menghitung banyaknya cara susunan/pemilihan menggunakan Aturan Pengisian Tempat (perkalian dan penjumlahan). Murid mampu menunjukkan ketelitian (Cinta Diri Sendiri) dalam mengidentifikasi syarat khusus pada aturan perkalian."},
+  {k:"Permutasi",jp:"3 JP",j:"Permutasi",t:"Murid mampu menghitung Permutasi (linear, siklis, unsur sama) dan membedakannya secara logis (Penalaran Kritis). Murid mampu mensyukuri keteraturan formula Permutasi (Cinta kepada Allah SWT) dalam memodelkan susunan yang unik."},
+  {k:"Kombinasi",jp:"3 JP",j:"Kombinasi",t:"Murid mampu menghitung Kombinasi dan membedakannya secara kritis dengan Permutasi. Murid mampu berkolaborasi (Cinta Sesama) memecahkan masalah pemilihan yang memerlukan prinsip keadilan (tanpa memandang urutan)."},
+  {k:"Peluang Suatu Kejadian & Majemuk",jp:"3 JP",j:"Peluang Suatu Kejadian & Majemuk",t:"Murid mampu menghitung peluang suatu kejadian dan peluang gabungan (Saling Lepas/Tidak Saling Lepas). Murid mampu merefleksikan perlunya rasionalitas (Cinta Diri Sendiri) dalam menginterpretasikan nilai peluang."},
+  {k:"Peluang Kejadian Majemuk (Bebas & Bersyarat)",jp:"3 JP",j:"Peluang Kejadian Majemuk (Bebas & Bersyarat)",t:"Murid mampu menganalisis dan menghitung peluang kejadian Saling Bebas dan Tidak Saling Bebas. Murid mampu bernalar kritis memecahkan studi kasus Peluang Bersyarat (P-6). Murid mampu merefleksikan Tawakal (Cinta kepada Allah SWT) setelah menghitung kemungkinan yang terukur (P-6)."}]}
+]},
+
+/* ================= MATEMATIKA TINGKAT LANJUT 12 ================= */
+matematikaTL:{label:"Matematika Tingkat Lanjut — Kelas XII (Fase F)",bab:[
+ {nama:"BAB 1: Geometri Analitik (Ganjil)",kbc:"Cinta Allah & Rasul-Nya • Cinta Lingkungan • Cinta Ilmu",items:[
+  {k:"Lingkaran & Garis Singgung",jp:"3 JP",j:"Geometri Analitik: Lingkaran & Garis Singgung",t:"Murid mampu menunjukkan rasa syukur atas keteraturan matematis dengan merumuskan persamaan lingkaran pusat O(0,0) dan P(a,b) secara mandiri. Murid dapat berkolaborasi menentukan kedudukan garis terhadap lingkaran menggunakan nilai diskriminan secara kritis."},
+  {k:"Irisan Kerucut",jp:"3 JP",j:"Geometri Analitik: Irisan Kerucut",t:"Murid mampu menunjukkan sikap peduli lingkungan dengan menganalisis aplikasi parabola pada kompor tenaga surya. Murid dapat menalar kritis perbedaan karakteristik persamaan parabola, elips, dan hiperbola melalui eksplorasi terbimbing."}]},
+ {nama:"BAB 2: Limit (Ganjil)",kbc:"Cinta Allah & Rasul-Nya • Cinta Ilmu • Cinta Sesama",items:[
+  {k:"Definisi Limit",jp:"3 JP",j:"Limit: Definisi",t:"Murid mampu mengembangkan rasa syukur atas keteraturan alam dengan menjelaskan konsep limit secara intuitif. Murid dapat menunjukkan sikap teliti dalam menaksir nilai fungsi di sekitar titik tertentu."},
+  {k:"Sifat Limit",jp:"3 JP",j:"Limit: Sifat-sifat",t:"Murid bersikap ikhlas menerima perbedaan pendapat saat membuktikan sifat limit fungsi. Murid dapat menalar kritis penggunaan sifat limit dalam penyelesaian soal."},
+  {k:"Limit Aljabar",jp:"3 JP",j:"Limit: Aljabar",t:"Murid mampu menunjukkan kemandirian dalam memfaktorkan fungsi aljabar. Murid dapat berkolaborasi memecahkan bentuk limit tak tentu."},
+  {k:"Limit Trigonometri",jp:"3 JP",j:"Limit: Trigonometri",t:"Murid menunjukkan cinta ilmu dengan mengeksplorasi formula limit trigonometri melalui interpretasi geometri. Murid mampu menerapkan formula limit trigonometri secara presisi."},
+  {k:"Aplikasi Limit",jp:"3 JP",j:"Limit: Aplikasi",t:"Murid menunjukkan tanggung jawab sosial dengan menganalisis aplikasi limit pada fenomena nyata (seperti laju pandemi/kecepatan). Murid mampu mempresentasikan solusi masalah kontekstual dengan komunikatif."}]},
+ {nama:"BAB 3: Turunan Fungsi (Ganjil)",kbc:"Cinta Allah & Rasul-Nya • Cinta Diri • Cinta Bangsa • Cinta Lingkungan",items:[
+  {k:"Definisi Turunan",jp:"3 JP",j:"Turunan: Definisi",t:"Murid mampu menunjukkan rasa syukur (Cinta Allah) dengan merumuskan konsep turunan sebagai limit garis sekan. Murid dapat menunjukkan ketelitian dalam penulisan notasi Leibniz dan Newton."},
+  {k:"Sifat-Sifat Turunan",jp:"3 JP",j:"Turunan: Sifat-Sifat",t:"Murid bersikap sabar (Cinta Diri) dalam menerapkan aturan rantai pada fungsi komposisi. Murid mampu berkolaborasi membuktikan turunan fungsi trigonometri dasar."},
+  {k:"Aplikasi Turunan 1",jp:"3 JP",j:"Turunan: Aplikasi Dasar",t:"Murid mampu menunjukkan penalaran kritis dalam menentukan titik ekstrim sebuah kurva. Murid dapat mengembangkan empati dengan membantu teman menentukan kemonotonan fungsi."},
+  {k:"Aplikasi Berbagai Bidang",jp:"3 JP",j:"Turunan: Aplikasi Berbagai Bidang",t:"Murid mampu menunjukkan tanggung jawab sosial (Cinta Bangsa) dengan menganalisis fungsi keuntungan produksi industri nasional. Murid dapat merefleksikan pentingnya optimasi sumber daya demi kelestarian alam (Cinta Lingkungan)."}]},
+ {nama:"BAB 4: Integral (Genap)",kbc:"Cinta Allah & Rasul-Nya • Cinta Diri • Cinta Sesama",items:[
+  {k:"Integral Tak Tentu",jp:"3 JP",j:"Integral Tak Tentu",t:"Murid dapat mengembangkan rasa syukur atas akal dengan mendefinisikan integral sebagai antiturunan secara tepat. Murid mampu menunjukkan kemandirian dalam membuktikan sifat-sifat integral tak tentu."},
+  {k:"Integral Tentu",jp:"3 JP",j:"Integral Tentu",t:"Murid mampu menunjukkan sikap teliti dalam menghitung Jumlahan Riemann sebagai bentuk apresiasi terhadap proses. Murid dapat menggunakan Teorema Dasar Kalkulus secara kritis untuk menghitung nilai integral tentu."},
+  {k:"Penerapan Integral",jp:"3 JP",j:"Penerapan Integral",t:"Murid mampu menunjukkan empati dan kerja sama dalam memecahkan masalah luas daerah yang berkaitan dengan lingkungan. Murid dapat menerapkan integral dalam bidang ekonomi nasional dengan rasa tanggung jawab sosial."}]},
+ {nama:"BAB 5: Analisis Data dan Peluang (Genap)",kbc:"Cinta Allah & Rasul-Nya • Cinta Diri • Cinta Sesama",items:[
+  {k:"Distribusi Seragam",jp:"3 JP",j:"Distribusi Seragam",t:"Murid mampu mengembangkan rasa syukur atas keadilan Tuhan dengan menjelaskan konsep distribusi seragam. Murid dapat menunjukkan sikap jujur dalam melakukan eksperimen peluang sederhana."},
+  {k:"Distribusi Binomial",jp:"3 JP",j:"Distribusi Binomial",t:"Murid mampu menunjukkan keteguhan hati (Cinta Diri) dalam menghitung peluang sukses dan gagal pada eksperimen binomial. Murid dapat berkolaborasi menentukan nilai harapan distribusi binomial dari data simulasi."},
+  {k:"Distribusi Normal",jp:"3 JP",j:"Distribusi Normal",t:"Murid menunjukkan sikap toleransi (Cinta Sesama) dengan memahami variasi data dalam kurva normal. Murid dapat menalar kritis penggunaan tabel Z dalam memecahkan masalah distribusi normal."}]}
+]},
+
+/* ================= GEOGRAFI 12 ================= */
+geografi:{label:"Geografi — Kelas XII (Fase F)",bab:[
+ {nama:"BAB 1: Pengembangan Wilayah (Ganjil)",kbc:"Cinta kepada Bangsa dan Negara • Cinta kepada Sesama • Cinta kepada Allah SWT",items:[
+  {k:"Pengembangan Wilayah dan Tata Ruang",jp:"3 JP",j:"Pengembangan Wilayah dan Tata Ruang",t:"Murid mampu menjelaskan konsep pengembangan wilayah, hierarki, dan fungsi Tata Ruang (RTRW/RDTR). Murid dapat menunjukkan sikap nasionalisme (Cinta kepada Bangsa dan Negara) dengan menganalisis pentingnya pembangunan wilayah yang merata (keadilan spasial)."},
+  {k:"Interaksi Desa-Kota dan Konflik Ruang",jp:"3 JP",j:"Interaksi Desa-Kota dan Konflik Ruang",t:"Murid mampu menganalisis interaksi Desa-Kota dan dampak Urbanisasi terhadap kedua wilayah. Murid dapat menunjukkan sikap empati (Cinta kepada Sesama) dengan mengevaluasi konflik pemanfaatan ruang (misalnya, penggusuran) dan mengusulkan solusi inklusif."},
+  {k:"Indeks Kebahagiaan dan Kualitas Hidup",jp:"3 JP",j:"Indeks Kebahagiaan dan Kualitas Hidup",t:"Murid mampu menganalisis Indeks Kebahagiaan (IK) BPS dan mengaitkannya dengan dimensi kualitas hidup (fasilitas, lingkungan, sosial). Murid dapat mengembangkan rasa syukur (Cinta kepada Allah SWT) dengan mengakui bahwa Kebahagiaan sejati tidak hanya diukur dari kekayaan materi."},
+  {k:"Proyek Desain Kota Bahagia",jp:"3 JP",j:"Proyek Desain Kota Bahagia",t:"Murid mampu merancang konsep Tata Ruang Mikro (tingkat RW/Kelurahan) yang mendukung peningkatan Kebahagiaan Penduduk (Kreativitas). Murid menunjukkan komitmen kewargaan (Cinta kepada Bangsa dan Negara) dengan mempromosikan tata ruang yang adil dan berkelanjutan."}]},
+ {nama:"BAB 2: Pembangunan Wilayah (Ganjil)",kbc:"Cinta kepada Allah SWT • Cinta kepada Diri Sendiri • Cinta kepada Sesama • Cinta kepada Bangsa dan Negara",items:[
+  {k:"Konsep dan Indikator Pembangunan",jp:"3 JP",j:"Konsep dan Indikator Pembangunan",t:"Murid mampu menjelaskan paradigma dan pendekatan pembangunan yang berpusat pada manusia (people-centered development). Murid dapat menunjukkan rasa syukur (Cinta kepada Allah SWT) atas kemajuan ilmu pengetahuan yang memungkinkan pembangunan."},
+  {k:"Revolusi Industri 4.0 dan Masyarakat 5.0",jp:"3 JP",j:"Revolusi Industri 4.0 dan Masyarakat 5.0",t:"Murid mampu menganalisis secara kritis dampak Revolusi Industri 4.0 terhadap peluang dan tantangan pembangunan wilayah di Indonesia. Murid mampu merumuskan 3 keterampilan yang harus dimiliki untuk menjadi SDM unggul di era Masyarakat 5.0 (Cinta kepada Diri Sendiri)."},
+  {k:"Kesejahteraan, Pengaruh Pembangunan & RI 4.0",jp:"3 JP",j:"Kesejahteraan, Pengaruh Pembangunan & RI 4.0",t:"Murid mampu mengevaluasi Indikator Kesejahteraan (IPM, Gini Ratio) dan mengidentifikasi penyebab kesenjangan. Murid dapat menunjukkan empati (Cinta kepada Sesama) dengan mengusulkan program pembangunan yang inklusif bagi kelompok rentan."},
+  {k:"Proyek Aksi Nyata dan Refleksi",jp:"3 JP",j:"Proyek Aksi Nyata dan Refleksi",t:"Murid mampu merancang Mini-Project Pembangunan Wilayah berbasis teknologi 4.0 yang berkelanjutan (Kreativitas). Murid menunjukkan komitmen kewargaan (Cinta kepada Bangsa dan Negara) dengan mempromosikan pembangunan yang adil dan beretika."}]},
+ {nama:"BAB 3: Dinamika Kerja Sama Antarnegara (Genap)",kbc:"Cinta kepada Sesama • Cinta kepada Bangsa dan Negara • Cinta kepada Allah SWT",items:[
+  {k:"Kerja Sama Antarnegara",jp:"3 JP",j:"Kerja Sama Antarnegara",t:"Murid mampu menjelaskan jenis-jenis, manfaat, dan faktor pendorong Kerja Sama Antarnegara. Murid dapat menunjukkan sikap toleransi dan empati (Cinta kepada Sesama) terhadap kepentingan negara lain dalam konteks kerja sama global."},
+  {k:"Geopolitik Indonesia",jp:"3 JP",j:"Geopolitik Indonesia",t:"Murid mampu menganalisis peran Geopolitik dan Wawasan Nusantara sebagai modal strategis Indonesia dalam menjalin kerja sama internasional. Murid dapat mengembangkan rasa nasionalisme dan bangga (Cinta kepada Bangsa dan Negara) terhadap posisi silang strategis Indonesia."},
+  {k:"Kerja Sama Indonesia dalam Kancah Internasional",jp:"3 JP",j:"Kerja Sama Indonesia dalam Kancah Internasional",t:"Murid mampu mengidentifikasi dan menganalisis peran Indonesia dalam organisasi regional (ASEAN) dan global (PBB/G20). Murid dapat menunjukkan komitmen untuk mendukung perdamaian dan keadilan global sebagai manifestasi Cinta kepada Allah SWT."},
+  {k:"Pengaruh Kerja Sama terhadap Ketahanan Wilayah",jp:"3 JP",j:"Pengaruh Kerja Sama terhadap Ketahanan Wilayah",t:"Murid mampu mengevaluasi dampak positif dan negatif Kerja Sama Antarnegara terhadap Ketahanan Wilayah (khususnya perbatasan). Murid mampu merumuskan ide strategis (Kreativitas) untuk memperkuat Ketahanan Wilayah di kawasan perbatasan demi Ketahanan Nasional."}]}
+]},
+
 inggris:{label:"Bahasa Inggris — Kelas XII (Fase F)",bab:[
  {nama:"Unit 1: Narrative Text — The Story of a Friendly Future (30 JP)",kbc:"Cinta Allah Swt. dan Rasul-Nya • Cinta Ilmu • Cinta Lingkungan",items:[
   {k:"12.1.1 Tujuan komunikatif & struktur skematis teks naratif",j:"Narrative Text: The Story of a Friendly Future",t:"Mengidentifikasi tujuan komunikatif dan struktur skematis teks naratif secara kritis melalui pembelajaran kontekstual tentang energi terbarukan untuk menumbuhkan Cinta Ilmu, Cinta Lingkungan, serta sikap bertanggung jawab dalam menjaga bumi sebagai amanah Allah Swt."},
@@ -207,10 +264,12 @@ inggris:{label:"Bahasa Inggris — Kelas XII (Fase F)",bab:[
   {k:"12.4.5 Menulis discussion text",j:"Discussion Text: Carbon Footprints",t:"Menulis teks discussion dengan struktur skematis dan unsur kebahasaan yang tepat serta mengembangkan argumen secara santun, objektif, dan bertanggung jawab sebagai penerapan nilai-nilai KBC."},
   {k:"12.4.6 Presentasi kelompok discussion text",j:"Discussion Text: Carbon Footprints",t:"Melakukan presentasi kelompok yang berfokus pada teks discussion dengan menunjukkan sikap percaya diri, kerja sama, toleransi, saling menghargai, dan tanggung jawab dalam menyampaikan serta menanggapi pendapat."}]}
 ]},
+
 arab:{label:"Bahasa Arab — (sesuai ATP)",bab:[
  {nama:"Materi Bahasa Arab (silakan sesuaikan dengan ATP Anda)",kbc:"Cinta Allah Swt. dan Rasul-Nya • Cinta Ilmu",items:[
   {k:"Tujuan Pembelajaran Bahasa Arab",j:"Materi Bahasa Arab",t:"(Gantilah teks ini dengan Tujuan Pembelajaran Bahasa Arab dari ATP Anda yang terintegrasi dengan nilai-nilai Kurikulum Berbasis Cinta.)"}]}
 ]},
+
 qh:{label:"Al-Qur'an Hadis — Kelas X (Fase E)",bab:[
  {nama:"BAB 1: Membudayakan Pola Hidup Sederhana & Menyantuni Dhuafa (Ganjil)",kbc:"Cinta Allah Swt. dan Rasul-Nya • Cinta Diri & Sesama Manusia",items:[
   {k:"QS al-Furqan: 67 — Seni Keseimbangan",jp:"2 JP",t:"Murid mampu menunjukkan sikap bersahaja dan seimbang dalam berkonsumi sebagai wujud cinta Allah. Murid dapat mengembangkan rasa syukur atas kecukupan yang dimiliki tanpa harus berlebih-lebihan."},
@@ -257,9 +316,11 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const M=()=>ATP[state.mapel], B=()=>M().bab[state.babIdx], TP=()=>B().items[state.tpIdx];
 
-/* aturan bahasa per bidang studi */
 const ATURAN_BAHASA={
  kimia:"menggunakan Bahasa Indonesia.",
+ matematika:"menggunakan Bahasa Indonesia.",
+ matematikaTL:"menggunakan Bahasa Indonesia.",
+ geografi:"menggunakan Bahasa Indonesia.",
  inggris:"bidang studi ini adalah Bahasa Inggris, maka SELURUH isi Students Worksheet (judul, instruksi, kegiatan, soal, dan kunci jawaban) harus ditulis dalam Bahasa Inggris.",
  arab:"bidang studi ini adalah Bahasa Arab, maka SELURUH isi Students Worksheet (judul, instruksi, kegiatan, soal, dan kunci jawaban) harus ditulis dalam Bahasa Arab.",
  qh:"menggunakan Bahasa Indonesia."
@@ -274,7 +335,6 @@ function showTPDetail(){
   $("tpDetail").innerHTML=`<b>${esc(t.k)}</b>${t.jp?` • ${t.jp}`:""}<br>${esc(t.t)}<br><b class="kbc">❤ Integrasi KBC:</b> ${esc(B().kbc)}`;
 }
 
-/* ---- isi kegiatan otomatis (mengikuti bahasa bidang studi) ---- */
 function defaultActivities(judul,firstKbc){
   if(state.mapel==="inggris") return [
    `Ice breaking & apperception: observe a short picture/video about "${judul}", then each student writes one thing he/she is grateful for related to today's topic.`,
@@ -310,7 +370,6 @@ function syncFields(){
   $("fS3").value=state.s3;$("fS4").value=state.s4;$("fWarna").value=state.warna;$("fPrepared").value=state.prepared;
 }
 
-/* ---- bangun DUA prompt TERPISAH (halaman 1 & halaman 2) ---- */
 function buildPrompts(){
   const t=TP();
   const kegiatan=
@@ -364,7 +423,6 @@ Kunci jawaban dalam bentuk gambar.`;
   $("countKunci").textContent=kunci.length+" karakter";
 }
 
-/* ================= EVENT ================= */
 $("selMapel").onchange=e=>{state.mapel=e.target.value;state.babIdx=0;state.tpIdx=0;fillBab();fillTP();applyTP();};
 $("selBab").onchange=e=>{state.babIdx=+e.target.value;state.tpIdx=0;fillTP();applyTP();};
 $("selTP").onchange=e=>{state.tpIdx=+e.target.value;applyTP();};
@@ -374,7 +432,6 @@ $("selTP").onchange=e=>{state.tpIdx=+e.target.value;applyTP();};
 });
 $("fPrepared").addEventListener("input",e=>{state.prepared=e.target.value;localStorage.setItem("preparedBy",e.target.value);buildPrompts();});
 
-/* ---- salin prompt halaman 1 & halaman 2 ---- */
 async function copyText(el){
   try{await navigator.clipboard.writeText(el.value);}
   catch(e){el.select();document.execCommand("copy");}
@@ -382,13 +439,11 @@ async function copyText(el){
 $("btnCopyWS").onclick=async()=>{await copyText($("promptWS"));toast("✅ Prompt Halaman 1 (Worksheet) tersalin!");};
 $("btnCopyKunci").onclick=async()=>{await copyText($("promptKunci"));toast("✅ Prompt Halaman 2 (Kunci Jawaban) tersalin!");};
 
-/* ---- buka GPT ---- */
 $("btnGPT").onclick=()=>window.open($("gptLink").value.trim()||"https://chatgpt.com/","_blank");
 document.querySelectorAll(".linknote a").forEach(a=>a.onclick=e=>{e.preventDefault();$("gptLink").value=a.dataset.link;toast("Link diperbarui: "+a.dataset.link);});
 
 function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove("show"),2600);}
 
-/* init */
 fillBab();fillTP();applyTP();syncFields();
 </script>
 </body>
