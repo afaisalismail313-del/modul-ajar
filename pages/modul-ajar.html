@@ -815,6 +815,43 @@ ATP_DEFAULT.fisika.units.push(
 {k:["XI"],s:"2",judul:"Bab 8: Gelombang Mekanik dan Bunyi",kunci:"Gelombang & Bunyi",jp:"9 JP",kbc:["Cinta Ilmu","Cinta Diri dan Sesama"],desc:"Karakteristik gelombang mekanik, bunyi, dan penerapannya (sonar, USG).",tp:["Murid mampu menganalisis karakteristik gelombang mekanik dan bunyi serta penerapannya.","Murid mampu menghubungkan konsep bunyi dan gelombang dengan teknologi (sonar, USG) sebagai wujud cinta ilmu (Cinta Ilmu)."]}
 );
 }
+</script><script>
+/* ===== 1) ATP EKONOMI KELAS XI (Fase F) ===== */
+if(typeof ATP_DEFAULT!=='undefined' && ATP_DEFAULT.ekonomi && !ATP_DEFAULT.ekonomi.units.some(u=>u.k.includes("XI"))){
+ATP_DEFAULT.ekonomi.units.push(
+/* GANJIL */
+{k:["XI"],s:"1",judul:"Bab 1: Masalah Ekonomi dan Sistem Ekonomi",kunci:"Masalah & Sistem Ekonomi",jp:"12 JP",kbc:["Cinta Ilmu","Cinta Tanah Air"],desc:"Kelangkaan, masalah ekonomi, dan sistem ekonomi.",tp:["Murid mampu menjelaskan konsep kelangkaan dan masalah ekonomi (apa, bagaimana, untuk siapa).","Murid mampu membandingkan sistem ekonomi tradisional, komando, pasar, dan campuran.","Murid mampu mengaitkan sistem ekonomi Indonesia dengan nilai Pancasila (Cinta Tanah Air)."]},
+{k:["XI"],s:"1",judul:"Bab 2: Pelaku Kegiatan Ekonomi",kunci:"Pelaku Ekonomi",jp:"9 JP",kbc:["Cinta Diri dan Sesama","Cinta Ilmu"],desc:"Rumah tangga, perusahaan, pemerintah, masyarakat luar negeri; circular flow.",tp:["Murid mampu mengidentifikasi pelaku kegiatan ekonomi dan perannya.","Murid mampu menganalisis arus lingkaran kegiatan ekonomi (circular flow diagram).","Murid mampu menunjukkan sikap kolaboratif antar pelaku ekonomi (Cinta Diri dan Sesama)."]},
+{k:["XI"],s:"1",judul:"Bab 3: Pasar dan Mekanisme Kerja Pasar",kunci:"Pasar & Harga",jp:"12 JP",kbc:["Cinta Ilmu","Cinta Diri dan Sesama"],desc:"Permintaan, penawaran, keseimbangan pasar, dan elastisitas.",tp:["Murid mampu menganalisis hukum permintaan dan penawaran serta terbentuknya harga keseimbangan.","Murid mampu menghitung elastisitas permintaan dan penawaran sederhana.","Murid mampu menunjukkan sikap jujur dan adil dalam transaksi pasar (Cinta Diri dan Sesama)."]},
+/* GENAP */
+{k:["XI"],s:"2",judul:"Bab 4: Bank dan Lembaga Keuangan",kunci:"Bank & Lembaga Keuangan",jp:"12 JP",kbc:["Cinta Tanah Air","Cinta Ilmu"],desc:"Bank sentral, bank umum, bank syariah, dan lembaga keuangan bukan bank.",tp:["Murid mampu menjelaskan peran bank dan lembaga keuangan dalam perekonomian.","Murid mampu membedakan bank konvensional dan bank syariah.","Murid mampu menumbuhkan literasi keuangan dan cinta tanah air melalui pemahaman sistem keuangan nasional."]},
+{k:["XI"],s:"2",judul:"Bab 5: Manajemen",kunci:"Manajemen",jp:"9 JP",kbc:["Cinta Ilmu","Cinta Diri dan Sesama"],desc:"Pengertian, fungsi, dan bidang manajemen.",tp:["Murid mampu menjelaskan pengertian dan fungsi manajemen (POAC).","Murid mampu mengidentifikasi bidang-bidang manajemen.","Murid mampu menerapkan sikap disiplin dan tanggung jawab dalam mengelola kegiatan (Cinta Diri dan Sesama)."]},
+{k:["XI"],s:"2",judul:"Bab 6: Pengantar Akuntansi",kunci:"Akuntansi Dasar",jp:"12 JP",kbc:["Cinta Ilmu","Cinta Diri dan Sesama"],desc:"Pengertian, persamaan akuntansi, dan transaksi debit-kredit.",tp:["Murid mampu menjelaskan pengertian dan manfaat akuntansi.","Murid mampu menyusun persamaan dasar akuntansi sederhana.","Murid mampu menunjukkan ketelitian dan kejujuran dalam mencatat transaksi (Cinta Diri dan Sesama)."]}
+);
+}
+
+/* ===== 2) PERKAYA ASESMEN PEMBELAJARAN ===== */
+if(typeof buildModul==='function'){
+const _bm=buildModul;
+buildModul=function(mk,k,s){
+let h=_bm(mk,k,s);
+const km=(h.match(/Kata Kunci:<\/b>\s*([^<]+)</)||[])[1]||'materi';
+/* --- Asesmen Awal: Teknik + Instrumen / Pertanyaan Pemantik --- */
+h=h.replace('<tr><th>1. Asesmen Awal</th><td>',
+'<tr><th>1. Asesmen Awal</th><td><b>Teknik:</b> Tes diagnostik (kognitif & non-kognitif) dan tanya jawab. <b>Instrumen / Pertanyaan Pemantik:</b> (1) Apa yang kamu ketahui tentang '+km+'? (2) Pernahkah kamu melihat/mengalami fenomena '+km+' dalam kehidupan sehari-hari? (3) Apa yang ingin kamu ketahui tentang '+km+'? <br>');
+/* --- Asesmen Proses: Teknik + Bentuk --- */
+h=h.replace('<tr><th>2. Asesmen Proses</th><td>',
+'<tr><th>2. Asesmen Proses</th><td><b>Teknik:</b> Observasi, penilaian kinerja, dan jurnal refleksi. <b>Bentuk:</b> Lembar observasi/checklist sikap, rubrik diskusi/presentasi, dan jurnal harian. <br>');
+/* --- Asesmen Akhir: Teknik + Bentuk + Rubrik --- */
+h=h.replace('<tr><th>3. Asesmen Akhir</th><td>',
+'<tr><th>3. Asesmen Akhir</th><td><b>Teknik:</b> Tes tertulis dan penugasan/proyek. <b>Bentuk:</b> Soal pilihan ganda/uraian, produk/proyek, portofolio. <b>Rubrik Penilaian:</b> '+
+'<table><tr><th>Aspek</th><th>Skor 4</th><th>Skor 3</th><th>Skor 2</th><th>Skor 1</th></tr>'+
+'<tr><td>Pemahaman Konsep</td><td>Menjelaskan konsep '+km+' tepat & lengkap</td><td>Tepat namun kurang lengkap</td><td>Sebagian konsep dengan bimbingan</td><td>Belum mampu menjelaskan</td></tr>'+
+'<tr><td>Keterampilan Proses</td><td>Mengaplikasikan mandiri & sistematis</td><td>Dengan sedikit bimbingan</td><td>Dengan bimbingan penuh</td><td>Belum mampu mengaplikasikan</td></tr>'+
+'<tr><td>Sikap (KBC)</td><td>Konsisten menunjukkan sikap cinta</td><td>Sering menunjukkan sikap</td><td>Kadang menunjukkan sikap</td><td>Belum menunjukkan sikap</td></tr></table><br>');
+return h;
+};
+}
 </script>
 </body>
 </html>
