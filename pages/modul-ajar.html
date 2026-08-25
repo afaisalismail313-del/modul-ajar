@@ -912,6 +912,53 @@ h=h.split(orig).join(neu);
 return h;
 };
 }
+</script><script>
+/* ===== KEMITRAAN PEMBELAJARAN: Bidang Studi Terkait Dinamis ===== */
+if(typeof buildModul==='function'){
+var _prevBuild=buildModul;
+var RELATED={
+fisika:['Matematika','Kimia','Informatika'],
+kimia:['Biologi','Fisika','Matematika','Geografi'],
+biologi:['Kimia','Geografi','PJOK','Prakarya (Budidaya)'],
+matematika:['Fisika','Ekonomi','Informatika','Geografi'],
+matematika_tl:['Matematika','Fisika','Informatika','Ekonomi'],
+geografi:['Sosiologi','Sejarah','Biologi','Ekonomi','Pendidikan Pancasila'],
+sejarah:['Sosiologi','Pendidikan Pancasila','Bahasa Indonesia','SKI','Geografi'],
+sosiologi:['Sejarah','Pendidikan Pancasila','Ekonomi','Bahasa Indonesia','Geografi'],
+ekonomi:['Matematika','Sosiologi','Geografi','Fikih (Muamalah)','Pendidikan Pancasila'],
+bahasa_indonesia:['Sejarah','SKI','Seni Budaya','Bahasa Arab','Bahasa Inggris','Pendidikan Pancasila'],
+bahasa_indonesia_tl:['Bahasa Indonesia','Sejarah','Seni Budaya','SKI','Informatika'],
+bahasa_inggris:['Bahasa Indonesia','Informatika','Sosiologi','Sejarah'],
+bahasa_inggris_tl:['Bahasa Inggris','Bahasa Indonesia','Informatika','Sosiologi'],
+bahasa_arab:['SKI','Fikih','Akidah Akhlak','Bahasa Indonesia',"Al-Qur'an Hadis"],
+bahasa_arab_tl:['Bahasa Arab','SKI','Fikih','Akidah Akhlak',"Al-Qur'an Hadis"],
+pendidikan_pancasila:['Sejarah','Sosiologi','Fikih','Akidah Akhlak','Bahasa Indonesia'],
+fikih:['Akidah Akhlak',"Al-Qur'an Hadis",'Ekonomi (Muamalah)','Sejarah','Pendidikan Pancasila'],
+akidah_akhlak:['Fikih','SKI',"Al-Qur'an Hadis",'Bahasa Indonesia','Pendidikan Pancasila'],
+quran_hadits:['Fikih','Akidah Akhlak','Bahasa Arab','SKI','Sejarah'],
+pjok:['Biologi','Fisika','Akidah Akhlak','Prakarya'],
+seni_rupa:['Sejarah','Bahasa Indonesia','Sosiologi','Informatika','Prakarya (Kerajinan)'],
+seni_musik:['Sejarah','Bahasa Indonesia','Seni Tari','Informatika'],
+seni_tari:['Sejarah','Seni Musik','Bahasa Indonesia','Sosiologi','PJOK'],
+seni_teater:['Bahasa Indonesia','Sejarah','Seni Musik','Sosiologi','Informatika'],
+informatika:['Matematika','Fisika','Ekonomi','Bahasa Inggris'],
+kerajinan:['Seni Rupa','Ekonomi','Geografi','Biologi','Prakarya (Budidaya)'],
+budidaya:['Biologi','Ekonomi','Geografi','Kimia','Prakarya (Kerajinan)'],
+btq:['Bahasa Arab','Akidah Akhlak','Fikih',"Al-Qur'an Hadis"]
+};
+buildModul=function(mk,k,s){
+var h=_prevBuild(mk,k,s);
+var rel=RELATED[mk]||['Bahasa Indonesia','Pendidikan Pancasila'];
+var u=(typeof selUnit!=='undefined')?selUnit:null;
+var topik=(u&&u.kunci)?u.kunci:(u&&u.judul)?u.judul:'materi';
+var lab=(['fisika','kimia','biologi'].indexOf(mk)>-1)?'laboratorium IPA':
+(['informatika'].indexOf(mk)>-1)?'laboratorium Komputer':'perpustakaan madrasah';
+var teks='Guru mata pelajaran terkait (<b>'+rel.join(', ')+'</b>), '+lab+', tokoh agama/masyarakat setempat, serta orang tua/wali murid — untuk mendukung pendalaman materi <b>'+topik+'</b> secara lintas disiplin.';
+var re=/(<tr><th>6\. Kemitraan Pembelajaran<\/th><td>)[\s\S]*?(<\/td><\/tr>)/;
+h=h.replace(re,'$1'+teks+'$2');
+return h;
+};
+}
 </script>
 </body>
 </html>
