@@ -878,6 +878,40 @@ if(!ATP_DEFAULT.seni_rupa){
   if(!ATP_DEFAULT.seni_rupa.units.some(function(u){return u.k.indexOf("XII")>-1;})){ATP_DEFAULT.seni_rupa.units.push.apply(ATP_DEFAULT.seni_rupa.units,SR_XII);}
 }
 }
+</script><script>
+/* ===== TAMBAHAN: Frasa KBC pada Tujuan Pembelajaran ===== */
+function tailKBC(key,i){
+var M={
+"Cinta kepada Allah dan Rasul":{a:"mendekatkan diri kepada Allah dan Rasul-Nya",k:"setiap ilmu adalah amanah dari Allah"},
+"Cinta Ilmu":{a:"terus menuntut dan mengamalkan ilmu",k:"ilmu adalah cahaya penuntun kehidupan"},
+"Cinta Lingkungan":{a:"menjaga dan melestarikan alam sekitar",k:"alam adalah titipan yang harus dijaga"},
+"Cinta Diri dan Sesama":{a:"menghargai diri dan sesama manusia",k:"setiap manusia mulia di sisi Allah"},
+"Cinta Tanah Air":{a:"berkontribusi bagi bangsa dan negara",k:"tanah air adalah anugerah yang wajib disyukuri"}
+};
+var m=M[key]||M["Cinta Ilmu"];
+var r=i%3;
+if(r===0)return " sebagai kesadaran untuk "+m.a;
+if(r===1)return " dengan menyadari bahwa "+m.k;
+return " sebagai wujud "+key;
+}
+function tpKBC(tp,kbc,i){
+if(/cinta|kesadaran|menyadari/i.test(tp))return tp;   // sudah ada frasa cinta/kesadaran
+var key=kbc[i%kbc.length];
+return tp+tailKBC(key,i);
+}
+if(typeof buildModul==='function'){
+var _bm=buildModul;
+buildModul=function(mk,k,s){
+var h=_bm(mk,k,s);
+var u=(typeof selUnit!=='undefined')?selUnit:null;
+if(u&&u.tp&&u.kbc&&u.kbc.length){
+var orig=u.tp.join('<br>');
+var neu=u.tp.map(function(t,i){return tpKBC(t,u.kbc,i);}).join('<br>');
+h=h.split(orig).join(neu);
+}
+return h;
+};
+}
 </script>
 </body>
 </html>
