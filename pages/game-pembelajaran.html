@@ -86,6 +86,13 @@
             .question-text { font-size: 1em; }
             .answer-btn { padding: 12px; font-size: 14px; }
         }
+        
+        /* Debug overlay */
+        #debug-overlay {
+            position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); 
+            color: #0f0; font-family: monospace; font-size: 12px; padding: 10px; 
+            max-height: 150px; overflow-y: auto; z-index: 9999; display: none;
+        }
     </style>
 </head>
 <body>
@@ -134,7 +141,6 @@
                 <label>Nama Pemain:</label>
                 <input type="text" id="playerName" placeholder="Masukkan nama Anda" value="Siswa Hebat">
             </div>
-            <!-- PERBAIKAN: Hapus onclick, gunakan ID saja -->
             <button class="btn btn-primary" id="startBtn">🎮 MULAI BALAPAN</button>
         </div>
     </div>
@@ -163,7 +169,31 @@
         </div>
     </div>
 
+    <!-- Debug Overlay untuk melihat error langsung di HP -->
+    <div id="debug-overlay"></div>
+
     <script>
+        // --- SISTEM DEBUGGING OTOMATIS ---
+        const debugOverlay = document.getElementById('debug-overlay');
+        function logDebug(msg, type = 'info') {
+            const time = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ff4444' : (type === 'success' ? '#44ff44' : '#00ff00');
+            console.log(`[${time}] ${msg}`);
+            debugOverlay.style.display = 'block';
+            debugOverlay.innerHTML += `<div style="color:${color}">[${time}] ${msg}</div>`;
+            debugOverlay.scrollTop = debugOverlay.scrollHeight;
+        }
+
+        // Tangkap semua error global
+        window.onerror = function(message, source, lineno, colno, error) {
+            const errMsg = `ERROR GLOBAL: ${message} (Baris: ${lineno})`;
+            logDebug(errMsg, 'error');
+            alert("⚠️ TERJADI KESALAHAN SISTEM:\n\n" + message + "\n\nSilakan screenshot pesan ini dan kirim ke pengembang.");
+            return true;
+        };
+
+        logDebug("✅ SCRIPT MULAI DIMUAT", "success");
+
         // Game State
         let gameState = {
             selectedPlane: 1, selectedPlaneColor: '#4A90E2', questionCount: 10, background: 'forest',
@@ -177,7 +207,7 @@
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
             if (audioCtx.state === 'suspended') {
-                audioCtx.resume().catch(e => console.log("Audio resume failed:", e));
+                audioCtx.resume().catch(e => logDebug("Audio resume gagal: " + e.message, 'error'));
             }
         }
 
@@ -222,7 +252,7 @@
                         osc.start(now + i * 0.1); osc.stop(now + i * 0.1 + 0.3);
                     });
                 }
-            } catch (e) { console.error("Audio error:", e); }
+            } catch (e) { logDebug("Audio error: " + e.message, 'error'); }
         }
 
         // Database ATP (Ringkas dan Valid)
@@ -274,6 +304,7 @@
         };
 
         function updateTopics() {
+            logDebug("updateTopics() dipanggil");
             const subjectSelect = document.getElementById('subjectSelect');
             const topicSelect = document.getElementById('topicSelect');
             const selectedSubject = subjectSelect.value;
@@ -291,44 +322,57 @@
 
         // Initialize Menu
         document.addEventListener('DOMContentLoaded', function() {
-            updateTopics();
-            const planeSelection = document.getElementById('planeSelection');
-            const colors = ['#4A90E2', '#E24A4A', '#E2A74A', '#4AE24A', '#8E4AE2', '#4AE2E2', '#E24A8E', '#D4AF37'];
-            
-            for (let i = 1; i <= 8; i++) {
-                const div = document.createElement('div');
-                div.className = `plane-option plane-${i} ${i === 1 ? 'selected' : ''}`;
-                div.dataset.plane = i;
-                div.dataset.color = colors[i-1];
-                div.innerHTML = `<img src="${getPlaneSvg(colors[i-1], i)}" alt="Pesawat ${i}"><div style="font-size:11px; margin-top:4px;">Pesawat ${i}</div>`;
-                div.addEventListener('click', function() {
-                    document.querySelectorAll('.plane-option').forEach(p => p.classList.remove('selected'));
-                    this.classList.add('selected');
-                    gameState.selectedPlane = parseInt(this.dataset.plane);
-                    gameState.selectedPlaneColor = this.dataset.color;
-                });
-                planeSelection.appendChild(div);
-            }
+            logDebug("✅ DOM SELESAI DIMUAT", "success");
+            try {
+                updateTopics();
+                const planeSelection = document.getElementById('planeSelection');
+                const colors = ['#4A90E2', '#E24A4A', '#E2A74A', '#4AE24A', '#8E4AE2', '#4AE2E2', '#E24A8E', '#D4AF37'];
+                
+                for (let i = 1; i <= 8; i++) {
+                    const div = document.createElement('div');
+                    div.className = `plane-option plane-${i} ${i === 1 ? 'selected' : ''}`;
+                    div.dataset.plane = i;
+                    div.dataset.color = colors[i-1];
+                    div.innerHTML = `<img src="${getPlaneSvg(colors[i-1], i)}" alt="Pesawat ${i}"><div style="font-size:11px; margin-top:4px;">Pesawat ${i}</div>`;
+                    div.addEventListener('click', function() {
+                        document.querySelectorAll('.plane-option').forEach(p => p.classList.remove('selected'));
+                        this.classList.add('selected');
+                        gameState.selectedPlane = parseInt(this.dataset.plane);
+                        gameState.selectedPlaneColor = this.dataset.color;
+                        logDebug(`Pesawat ${gameState.selectedPlane} dipilih`);
+                    });
+                    planeSelection.appendChild(div);
+                }
 
-            document.querySelectorAll('.bg-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected'));
-                    this.classList.add('selected');
-                    gameState.background = this.dataset.bg;
+                document.querySelectorAll('.bg-option').forEach(option => {
+                    option.addEventListener('click', function() {
+                        document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected'));
+                        this.classList.add('selected');
+                        gameState.background = this.dataset.bg;
+                    });
                 });
-            });
 
-            // PERBAIKAN UTAMA: Event listener yang bersih tanpa preventDefault
-            const startBtn = document.getElementById('startBtn');
-            if (startBtn) {
-                startBtn.addEventListener('click', function() {
-                    try {
-                        startGame();
-                    } catch (error) {
-                        console.error("Error starting game:", error);
-                        alert("Terjadi kesalahan saat memulai: " + error.message);
-                    }
-                });
+                // --- PERBAIKAN UTAMA TOMBOL MULAI ---
+                const startBtn = document.getElementById('startBtn');
+                logDebug(`Tombol start ditemukan: ${startBtn ? 'YA' : 'TIDAK'}`, startBtn ? 'success' : 'error');
+
+                if (startBtn) {
+                    startBtn.addEventListener('click', function(e) {
+                        logDebug("✅ TOMBOL 'MULAI' DIKLIK!", "success");
+                        e.preventDefault(); // Mencegah perilaku default browser
+                        try {
+                            logDebug("Memanggil fungsi startGame()...");
+                            startGame();
+                        } catch (err) {
+                            logDebug("❌ ERROR DI startGame: " + err.message, "error");
+                            alert("Gagal memulai game:\n" + err.message);
+                        }
+                    });
+                } else {
+                    logDebug("❌ ELEMEN startBtn TIDAK DITEMUKAN DI HTML!", "error");
+                }
+            } catch (err) {
+                logDebug("❌ ERROR SAAT INISIALISASI: " + err.message, "error");
             }
         });
 
@@ -337,6 +381,7 @@
         }
 
         function startGame() {
+            logDebug("🚀 FUNGSI startGame() BERJALAN", "success");
             initAudio();
             gameState.playerName = document.getElementById('playerName').value || 'Siswa Hebat';
             const selectedSubject = document.getElementById('subjectSelect').value;
@@ -364,6 +409,7 @@
 
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('gameScreen').classList.add('active');
+            logDebug("Layar game ditampilkan");
             
             const bg = document.getElementById('gameBackground');
             bg.className = 'game-background ' + gameState.background;
