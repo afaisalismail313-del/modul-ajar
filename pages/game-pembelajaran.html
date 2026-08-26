@@ -14,14 +14,14 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
+            overflow: hidden;
             touch-action: manipulation;
         }
 
         .screen {
             display: none;
-            min-height: 100vh;
-            padding: 20px;
+            height: 100vh;
+            width: 100vw;
         }
 
         .screen.active {
@@ -35,13 +35,15 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
         }
 
         .game-title {
-            font-size: 2em;
+            font-size: 1.8em;
             color: white;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
             animation: bounce 2s infinite;
         }
@@ -54,7 +56,7 @@
         .menu-card {
             background: white;
             border-radius: 20px;
-            padding: 30px;
+            padding: 25px;
             width: 100%;
             max-width: 500px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
@@ -104,14 +106,14 @@
         .plane-selection {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin: 20px 0;
+            gap: 8px;
+            margin: 15px 0;
         }
 
         .plane-option {
             border: 3px solid #ddd;
             border-radius: 10px;
-            padding: 10px;
+            padding: 8px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
@@ -127,7 +129,7 @@
         .plane-option img {
             width: 100%;
             height: auto;
-            max-width: 80px;
+            max-width: 60px;
         }
 
         .plane-option.plane-1 { border-color: #4A90E2; }
@@ -143,14 +145,14 @@
         .bg-selection {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 8px;
             margin: 15px 0;
         }
 
         .bg-option {
             border: 3px solid #ddd;
             border-radius: 10px;
-            padding: 15px 10px;
+            padding: 10px 5px;
             text-align: center;
             cursor: pointer;
             font-size: 12px;
@@ -162,20 +164,18 @@
             background: #f0f0ff;
         }
 
-        .bg-option i {
-            font-size: 24px;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        /* Game Screen */
+        /* Game Screen Layout */
         .game-screen {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
             position: relative;
-            padding: 0;
         }
 
         .game-background {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
@@ -183,136 +183,128 @@
             z-index: -1;
             background-size: cover;
             background-position: center;
-            transition: background-image 0.5s;
         }
 
-        .game-background.forest {
-            background: linear-gradient(to bottom, #87CEEB 0%, #90EE90 50%, #228B22 100%);
-        }
+        .game-background.forest { background: linear-gradient(to bottom, #87CEEB 0%, #90EE90 50%, #228B22 100%); }
+        .game-background.ocean { background: linear-gradient(to bottom, #87CEEB 0%, #4169E1 50%, #1E90FF 100%); }
+        .game-background.desert { background: linear-gradient(to bottom, #FFD700 0%, #FFA500 50%, #DAA520 100%); }
+        .game-background.space { background: linear-gradient(to bottom, #000000 0%, #1a1a2e 50%, #16213e 100%); }
+        .game-background.mountain { background: linear-gradient(to bottom, #87CEEB 0%, #E0E0E0 50%, #696969 100%); }
+        .game-background.sunset { background: linear-gradient(to bottom, #FF6B6B 0%, #FFE66D 50%, #4ECDC4 100%); }
 
-        .game-background.ocean {
-            background: linear-gradient(to bottom, #87CEEB 0%, #4169E1 50%, #1E90FF 100%);
-        }
-
-        .game-background.desert {
-            background: linear-gradient(to bottom, #FFD700 0%, #FFA500 50%, #DAA520 100%);
-        }
-
-        .game-background.space {
-            background: linear-gradient(to bottom, #000000 0%, #1a1a2e 50%, #16213e 100%);
-        }
-
-        .game-background.mountain {
-            background: linear-gradient(to bottom, #87CEEB 0%, #E0E0E0 50%, #696969 100%);
-        }
-
-        .game-background.sunset {
-            background: linear-gradient(to bottom, #FF6B6B 0%, #FFE66D 50%, #4ECDC4 100%);
+        .race-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            padding-bottom: 40px;
+            background: rgba(0,0,0,0.15);
+            margin: 10px 10px 10px 0;
+            border-radius: 0 20px 20px 0;
         }
 
         .race-track {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: 100%;
+            justify-content: space-around;
             position: relative;
-            padding: 20px 10px;
-            min-height: 100vh;
         }
 
         .racer-lane {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 10px;
+            flex: 1;
             position: relative;
-            min-height: 80px;
+            height: 100%;
+            border-right: 2px dashed rgba(255,255,255,0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
         }
 
-        .racer-lane.player {
-            border: 3px solid #FFD700;
-            box-shadow: 0 0 15px rgba(255,215,0,0.5);
-        }
-
-        .lane-number {
-            font-weight: bold;
-            color: #333;
-            margin-right: 10px;
-            min-width: 30px;
+        .racer-lane:last-child {
+            border-right: none;
         }
 
         .lane-plane {
-            width: 60px;
-            height: 60px;
-            margin-right: 10px;
-            transition: all 0.3s;
+            width: 45px;
+            height: 45px;
+            transition: bottom 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: absolute;
+            bottom: 0%;
+            z-index: 10;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
         }
 
-        .lane-progress {
-            flex: 1;
-            height: 30px;
-            background: #e0e0e0;
-            border-radius: 15px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .lane-progress-bar {
-            height: 100%;
-            transition: width 0.5s ease-out;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 10px;
+        .lane-name {
+            position: absolute;
+            bottom: -35px;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 3px black;
+            text-align: center;
+            width: 90%;
+            background: rgba(0,0,0,0.6);
+            padding: 4px 0;
+            border-radius: 4px;
         }
 
         .finish-line {
             position: absolute;
-            right: 10px;
-            top: 0;
-            bottom: 0;
-            width: 20px;
+            top: 30px;
+            left: 0;
+            right: 0;
+            height: 20px;
             background: repeating-linear-gradient(
-                45deg,
+                90deg,
                 #000,
                 #000 10px,
                 #fff 10px,
                 #fff 20px
             );
+            z-index: 5;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
-        /* Quiz Modal */
-        .quiz-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+        .finish-label {
+            position: absolute;
+            top: 55px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 1px 1px 3px black;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(10px);
+            white-space: nowrap;
+            z-index: 15;
+            background: rgba(0,0,0,0.7);
+            padding: 4px 8px;
+            border-radius: 12px;
         }
 
-        .quiz-modal.active {
-            display: flex;
+        .finish-label.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .quiz-content {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            width: 100%;
+        /* Quiz Container */
+        .quiz-container {
+            flex: 1;
             max-width: 500px;
-            max-height: 90vh;
+            padding: 25px;
             overflow-y: auto;
-            animation: slideUp 0.3s;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            background: rgba(255, 255, 255, 0.95);
+            border-left: 5px solid #667eea;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.15);
+            border-radius: 20px 0 0 20px;
+            margin: 10px 0 10px 10px;
         }
 
         .question-header {
@@ -320,12 +312,12 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            padding-bottom: 10px;
+            padding-bottom: 15px;
             border-bottom: 2px solid #eee;
         }
 
         .question-number {
-            font-size: 1.2em;
+            font-size: 1.1em;
             color: #667eea;
             font-weight: bold;
         }
@@ -336,13 +328,15 @@
             padding: 5px 15px;
             border-radius: 20px;
             font-weight: bold;
+            font-size: 0.9em;
         }
 
         .question-text {
-            font-size: 1.3em;
+            font-size: 1.15em;
             color: #333;
             margin-bottom: 25px;
             line-height: 1.6;
+            font-weight: 500;
         }
 
         .answer-options {
@@ -353,29 +347,38 @@
 
         .answer-btn {
             padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
             background: white;
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 16px;
+            transition: all 0.2s;
+            font-size: 15px;
             text-align: left;
+            color: #444;
+            font-weight: 500;
         }
 
-        .answer-btn:hover, .answer-btn:active {
-            background: #f0f0ff;
+        .answer-btn:hover:not(:disabled) {
+            background: #f0f4ff;
             border-color: #667eea;
             transform: translateX(5px);
         }
 
         .answer-btn.correct {
-            background: #90EE90;
-            border-color: #228B22;
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
         }
 
         .answer-btn.wrong {
-            background: #ff6b6b;
-            border-color: #cc0000;
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .answer-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
         }
 
         /* Results Screen */
@@ -385,12 +388,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
         .results-card {
             background: white;
             border-radius: 20px;
-            padding: 40px;
+            padding: 30px;
             width: 100%;
             max-width: 500px;
             text-align: center;
@@ -403,7 +407,7 @@
         }
 
         .winner-text {
-            font-size: 2em;
+            font-size: 1.8em;
             color: #667eea;
             margin-bottom: 20px;
             font-weight: bold;
@@ -425,96 +429,7 @@
             border-radius: 5px;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .game-title {
-                font-size: 1.5em;
-            }
-
-            .menu-card, .quiz-content, .results-card {
-                padding: 20px;
-            }
-
-            .plane-selection {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 5px;
-            }
-
-            .plane-option img {
-                max-width: 60px;
-            }
-
-            .bg-selection {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .lane-plane {
-                width: 40px;
-                height: 40px;
-            }
-
-            .question-text {
-                font-size: 1.1em;
-            }
-
-            .answer-btn {
-                padding: 12px;
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .plane-selection {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .plane-option {
-                padding: 5px;
-            }
-
-            .plane-option img {
-                max-width: 50px;
-            }
-
-            .bg-selection {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .loading {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2000;
-        }
-
-        .loading.active {
-            display: block;
-        }
-
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .stars {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
+        /* Stars for space */
         .star {
             position: absolute;
             background: white;
@@ -526,50 +441,64 @@
             0%, 100% { opacity: 0.3; }
             50% { opacity: 1; }
         }
+
+        /* Responsive Mobile */
+        @media (max-width: 768px) {
+            .game-screen {
+                flex-direction: column;
+            }
+            .race-container {
+                flex: 0 0 45vh;
+                padding-bottom: 30px;
+                margin: 0;
+                border-radius: 0;
+            }
+            .quiz-container {
+                flex: 1;
+                max-width: 100%;
+                border-left: none;
+                border-top: 5px solid #667eea;
+                padding: 15px;
+                margin: 0;
+                border-radius: 0;
+            }
+            .lane-plane {
+                width: 35px;
+                height: 35px;
+            }
+            .lane-name {
+                font-size: 9px;
+                bottom: -25px;
+            }
+            .finish-line {
+                top: 20px;
+                height: 15px;
+            }
+            .finish-label {
+                top: 40px;
+                font-size: 11px;
+            }
+            .question-text {
+                font-size: 1em;
+            }
+            .answer-btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <!-- Menu Screen -->
     <div class="screen menu-screen active" id="menuScreen">
-        <h1 class="game-title">️ GAME BALAP PESAWAT KUIS ATP ✈️</h1>
+        <h1 class="game-title">✈️ GAME BALAP PESAWAT KUIS ATP ✈️</h1>
         
         <div class="menu-card">
             <div class="form-group">
                 <label>Pilih Pesawat Anda:</label>
                 <div class="plane-selection" id="planeSelection">
-                    <div class="plane-option plane-1" data-plane="1" data-color="#4A90E2">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%234A90E2'/%3E%3Ctext x='50' y='60' text-anchor='middle' fill='white' font-size='30' font-weight='bold'%3E1%3C/text%3E%3C/svg%3E" alt="Pesawat 1">
-                        <div>Pesawat 1</div>
-                    </div>
-                    <div class="plane-option plane-2" data-plane="2" data-color="#E24A4A">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23E24A4A'/%3E%3Ctext x='50' y='60' text-anchor='middle' fill='white' font-size='30' font-weight='bold'%3E2%3C/text%3E%3C/svg%3E" alt="Pesawat 2">
-                        <div>Pesawat 2</div>
-                    </div>
-                    <div class="plane-option plane-3" data-plane="3" data-color="#E2A74A">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23E2A74A'/%3E%3Ctext x='50' y='60' text-anchor='middle' fill='white' font-size='30' font-weight='bold'%3E3%3C/text%3E%3C/svg%3E" alt="Pesawat 3">
-                        <div>Pesawat 3</div>
-                    </div>
-                    <div class="plane-option plane-4" data-plane="4" data-color="#4AE24A">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%234AE24A'/%3E%3Ctext x='50' y='60' text-anchor='middle' fill='white' font-size='30' font-weight='bold'%3E4%3C/text%3E%3C/svg%3E" alt="Pesawat 4">
-                        <div>Pesawat 4</div>
-                    </div>
-                    <div class="plane-option plane-5" data-plane="5" data-color="#8E4AE2">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%238E4AE2'/%3E%3Ctext x='50' y='60' text-anchor='middle' fill='white' font-size='30' font-weight='bold'%3E5%3C/text%3E%3C/svg%3E" alt="Pesawat 5">
-                        <div>Pesawat 5</div>
-                    </div>
-                    <div class="plane-option plane-6" data-plane="6" data-color="#4AE2E2">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%234AE2E2'/%3E%3Ctext x='50' y='60' text-anchor='middle' fill='white' font-size='30' font-weight='bold'%3E6%3C/text%3E%3C/svg%3E" alt="Pesawat 6">
-                        <div>Pesawat 6</div>
-                    </div>
-                    <div class="plane-option plane-7" data-plane="7" data-color="#E24A8E">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23E24A8E'/%3E%3Ctext x='50' y='60' text-anchor='middle' fill='white' font-size='30' font-weight='bold'%3E7%3C/text%3E%3C/svg%3E" alt="Pesawat 7">
-                        <div>Pesawat 7</div>
-                    </div>
-                    <div class="plane-option plane-8" data-plane="8" data-color="#D4AF37">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23D4AF37'/%3E%3Ctext x='50' y='60' text-anchor='middle' fill='white' font-size='30' font-weight='bold'%3E8%3C/text%3E%3C/svg%3E" alt="Pesawat 8">
-                        <div>Pesawat 8</div>
-                    </div>
+                    <!-- Generated by JS -->
                 </div>
             </div>
 
@@ -579,17 +508,16 @@
                     <option value="5">5 Soal</option>
                     <option value="10" selected>10 Soal</option>
                     <option value="15">15 Soal</option>
-                    <option value="20">20 Soal</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label>Pilih Background:</label>
                 <div class="bg-selection" id="bgSelection">
-                    <div class="bg-option selected" data-bg="forest"> Hutan</div>
-                    <div class="bg-option" data-bg="ocean"> Laut</div>
-                    <div class="bg-option" data-bg="desert">️ Gurun</div>
-                    <div class="bg-option" data-bg="space"> Luar Angkasa</div>
+                    <div class="bg-option selected" data-bg="forest">🌲 Hutan</div>
+                    <div class="bg-option" data-bg="ocean">🌊 Laut</div>
+                    <div class="bg-option" data-bg="desert">🏜️ Gurun</div>
+                    <div class="bg-option" data-bg="space">🌌 Luar Angkasa</div>
                     <div class="bg-option" data-bg="mountain">⛰️ Gunung</div>
                     <div class="bg-option" data-bg="sunset">🌅 Sunset</div>
                 </div>
@@ -597,7 +525,7 @@
 
             <div class="form-group">
                 <label>Nama Pemain:</label>
-                <input type="text" id="playerName" placeholder="Masukkan nama Anda" value="Pemain 1">
+                <input type="text" id="playerName" placeholder="Masukkan nama Anda" value="Siswa Hebat">
             </div>
 
             <button class="btn btn-primary" onclick="startGame()">🎮 MULAI BALAPAN</button>
@@ -608,14 +536,13 @@
     <div class="screen game-screen" id="gameScreen">
         <div class="game-background" id="gameBackground"></div>
         
-        <div class="race-track" id="raceTrack">
-            <!-- Racers will be added here dynamically -->
+        <div class="race-container">
+            <div class="race-track" id="raceTrack">
+                <!-- Racers will be added here dynamically -->
+            </div>
         </div>
-    </div>
 
-    <!-- Quiz Modal -->
-    <div class="quiz-modal" id="quizModal">
-        <div class="quiz-content">
+        <div class="quiz-container" id="quizContainer">
             <div class="question-header">
                 <span class="question-number" id="questionNumber">Soal 1/10</span>
                 <span class="timer" id="timer">⏱️ 30s</span>
@@ -632,17 +559,13 @@
     <!-- Results Screen -->
     <div class="screen results-screen" id="resultsScreen">
         <div class="results-card">
-            <div class="trophy" id="trophy"></div>
+            <div class="trophy" id="trophy">🏆</div>
             <div class="winner-text" id="winnerText">Selamat!</div>
             <div class="score-details" id="scoreDetails">
                 <!-- Score details will be added here -->
             </div>
             <button class="btn btn-primary" onclick="backToMenu()">🔄 Main Lagi</button>
         </div>
-    </div>
-
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
     </div>
 
     <script>
@@ -652,7 +575,7 @@
             selectedPlaneColor: '#4A90E2',
             questionCount: 10,
             background: 'forest',
-            playerName: 'Pemain 1',
+            playerName: 'Siswa Hebat',
             currentQuestion: 0,
             playerPosition: 0,
             opponents: [],
@@ -662,173 +585,168 @@
             timeLeft: 30
         };
 
-        // Sample ATP Questions - GANTI DENGAN SOAL ANDA
+        let audioCtx;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playSound(type) {
+            if (!audioCtx) return;
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'correct') {
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(523.25, now);
+                oscillator.frequency.exponentialRampToValueAtTime(1046.5, now + 0.1);
+                gainNode.gain.setValueAtTime(0.3, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                oscillator.start(now);
+                oscillator.stop(now + 0.3);
+            } else if (type === 'wrong') {
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.setValueAtTime(150, now);
+                oscillator.frequency.linearRampToValueAtTime(100, now + 0.2);
+                gainNode.gain.setValueAtTime(0.3, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                oscillator.start(now);
+                oscillator.stop(now + 0.3);
+            } else if (type === 'move') {
+                oscillator.type = 'triangle';
+                oscillator.frequency.setValueAtTime(200, now);
+                oscillator.frequency.exponentialRampToValueAtTime(400, now + 0.1);
+                gainNode.gain.setValueAtTime(0.15, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                oscillator.start(now);
+                oscillator.stop(now + 0.15);
+            } else if (type === 'win') {
+                [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.2, now + i * 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.3);
+                    osc.start(now + i * 0.1);
+                    osc.stop(now + i * 0.1 + 0.3);
+                });
+            }
+        }
+
+        // ATP Matematika Fase E Kelas 11 Questions
         const atpQuestions = [
             {
-                question: "Apa kepanjangan dari ATP dalam kurikulum Merdeka Belajar?",
-                options: [
-                    "Alur Tujuan Pembelajaran",
-                    "Asesmen Tujuan Pendidikan",
-                    "Analisis Tujuan Pembelajaran",
-                    "Alokasi Tujuan Pendidikan"
-                ],
+                question: "Sifat bilangan berpangkat a^m × a^n = a^(m+n) digunakan untuk menyederhanakan perhitungan. Hasil dari 2³ × 2⁴ adalah...",
+                options: ["2⁷ = 128", "2¹² = 4096", "4⁷ = 16384", "2⁷ = 64"],
                 correct: 0
             },
             {
-                question: "Komponen utama dalam ATP meliputi?",
-                options: [
-                    "Capaian Pembelajaran, Tujuan Pembelajaran, dan Kegiatan Pembelajaran",
-                    "Hanya Tujuan Pembelajaran",
-                    "Hanya Capaian Pembelajaran",
-                    "RPP dan Silabus"
-                ],
+                question: "Dalam menganalisis peluruhan zat untuk keselamatan lingkungan, kita menggunakan sifat eksponen. Bentuk sederhana dari (3²)³ adalah...",
+                options: ["3⁵", "3⁶", "9³", "6³"],
+                correct: 1
+            },
+            {
+                question: "Nilai dari setiap bilangan (kecuali 0) dipangkatkan 0 adalah 1. Nilai dari 5⁰ adalah...",
+                options: ["0", "1", "5", "Tidak terdefinisi"],
+                correct: 1
+            },
+            {
+                question: "Bilangan berpangkat pecahan terkait erat dengan bentuk akar. Bentuk akar dari x^(1/2) adalah...",
+                options: ["x²", "2x", "√x", "1/x²"],
+                correct: 2
+            },
+            {
+                question: "Penyelesaian persamaan eksponensial 2^x = 32 dengan cermat menghasilkan nilai x = ...",
+                options: ["4", "5", "6", "16"],
+                correct: 1
+            },
+            {
+                question: "Jika 3^(2x) = 81, maka nilai x yang memenuhi persamaan tersebut adalah...",
+                options: ["1", "2", "3", "4"],
+                correct: 1
+            },
+            {
+                question: "Fungsi f(x) = 2^x merupakan contoh fungsi yang sering digunakan untuk memodelkan pertumbuhan populasi. Jenis fungsi ini disebut...",
+                options: ["Fungsi Linear", "Fungsi Kuadrat", "Fungsi Eksponensial", "Fungsi Konstan"],
+                correct: 2
+            },
+            {
+                question: "Grafik fungsi eksponensial f(x) = a^x dengan a > 1 (misal: pertumbuhan investasi) memiliki karakteristik...",
+                options: ["Monoton naik", "Monoton turun", "Berbentuk parabola", "Garis lurus horizontal"],
                 correct: 0
             },
             {
-                question: "Fungsi utama ATP adalah?",
-                options: [
-                    "Sebagai panduan guru dalam merencanakan pembelajaran",
-                    "Sebagai dokumen administrasi saja",
-                    "Sebagai pengganti RPP",
-                    "Sebagai evaluasi siswa"
-                ],
+                question: "Bentuk umum persamaan kuadrat yang harus dikenali dengan teliti adalah...",
+                options: ["ax + b = 0", "ax² + bx + c = 0 (a≠0)", "ax³ + bx² + cx + d = 0", "y = mx + c"],
+                correct: 1
+            },
+            {
+                question: "Akar-akar dari persamaan kuadrat x² - 5x + 6 = 0 yang diperoleh melalui faktorisasi adalah...",
+                options: ["1 dan 6", "2 dan 3", "-2 dan -3", "-1 dan -6"],
+                correct: 1
+            },
+            {
+                question: "Nilai diskriminan (D = b² - 4ac) dari x² - 4x + 4 = 0 adalah 0, yang berarti persamaan ini memiliki...",
+                options: ["Dua akar real berbeda", "Akar real kembar", "Akar imajiner", "Tidak memiliki akar"],
+                correct: 1
+            },
+            {
+                question: "Jika diskriminan D < 0, maka akar persamaan kuadrat bersifat...",
+                options: ["Real dan berbeda", "Real kembar", "Imajiner (tidak real)", "Nol"],
+                correct: 2
+            },
+            {
+                question: "Titik puncak (vertex) dari fungsi kuadrat f(x) = x² adalah...",
+                options: ["(0, 0)", "(1, 1)", "(-1, 1)", "(0, 1)"],
                 correct: 0
             },
             {
-                question: "Dalam menyusun ATP, hal pertama yang harus ditentukan adalah?",
-                options: [
-                    "Capaian Pembelajaran (CP)",
-                    "Metode pembelajaran",
-                    "Media pembelajaran",
-                    "Penilaian"
-                ],
-                correct: 0
+                question: "Sumbu simetri dari fungsi kuadrat f(x) = x² - 4x + 3 dapat ditentukan dengan rumus x = -b/2a, hasilnya adalah...",
+                options: ["x = -2", "x = 2", "x = 4", "x = -4"],
+                correct: 1
             },
             {
-                question: "Berapa fase dalam Capaian Pembelajaran kurikulum Merdeka?",
-                options: [
-                    "6 fase",
-                    "4 fase",
-                    "8 fase",
-                    "5 fase"
-                ],
-                correct: 0
-            },
-            {
-                question: "Fase A dalam Capaian Pembelajaran setara dengan kelas?",
-                options: [
-                    "Kelas 1-2 SD",
-                    "Kelas 3-4 SD",
-                    "Kelas 5-6 SD",
-                    "Kelas 7-8 SMP"
-                ],
-                correct: 0
-            },
-            {
-                question: "Tujuan Pembelajaran harus disusun berdasarkan?",
-                options: [
-                    "Capaian Pembelajaran",
-                    "Keinginan guru",
-                    "Buku paket",
-                    "Ujian nasional"
-                ],
-                correct: 0
-            },
-            {
-                question: "Asesmen dalam pembelajaran kurikulum Merdeka bersifat?",
-                options: [
-                    "Formatif dan Sumatif",
-                    "Hanya Formatif",
-                    "Hanya Sumatif",
-                    "Tidak perlu asesmen"
-                ],
-                correct: 0
-            },
-            {
-                question: "Pembelajaran berdiferensiasi berarti?",
-                options: [
-                    "Pembelajaran yang disesuaikan dengan kebutuhan siswa",
-                    "Pembelajaran yang sama untuk semua siswa",
-                    "Pembelajaran yang sulit",
-                    "Pembelajaran tanpa tujuan"
-                ],
-                correct: 0
-            },
-            {
-                question: "Profil Pelajar Pancasila memiliki berapa dimensi?",
-                options: [
-                    "6 dimensi",
-                    "4 dimensi",
-                    "5 dimensi",
-                    "7 dimensi"
-                ],
-                correct: 0
-            },
-            {
-                question: "Manakah yang termasuk dimensi Profil Pelajar Pancasila?",
-                options: [
-                    "Beriman, bertakwa kepada Tuhan YME, dan berakhlak mulia",
-                    "Hafal semua pelajaran",
-                    "Nilai sempurna",
-                    "Rajin datang sekolah"
-                ],
-                correct: 0
-            },
-            {
-                question: "Assessment for Learning adalah?",
-                options: [
-                    "Asesmen untuk memperbaiki proses pembelajaran",
-                    "Asesmen akhir semester",
-                    "Ujian nasional",
-                    "Penilaian sikap"
-                ],
-                correct: 0
-            },
-            {
-                question: "KKTP dalam kurikulum Merdeka adalah?",
-                options: [
-                    "Kriteria Ketercapaian Tujuan Pembelajaran",
-                    "Kriteria Ketuntasan Minimal",
-                    "Kompetensi Dasar",
-                    "Indikator Pencapaian"
-                ],
-                correct: 0
-            },
-            {
-                question: "Pembelajaran berbasis proyek disebut juga?",
-                options: [
-                    "Project Based Learning",
-                    "Problem Based Learning",
-                    "Discovery Learning",
-                    "Inquiry Learning"
-                ],
-                correct: 0
-            },
-            {
-                question: "Refleksi dalam pembelajaran bertujuan untuk?",
-                options: [
-                    "Mengevaluasi proses pembelajaran yang telah dilakukan",
-                    "Menghitung nilai",
-                    "Memberi hukuman",
-                    "Menyusun RPP"
-                ],
-                correct: 0
+                question: "Penerapan fungsi kuadrat dalam kehidupan sehari-hari, seperti menghitung lintasan bola yang dilempar, menunjukkan kegunaan matematika. Lintasan tersebut berbentuk...",
+                options: ["Lurus", "Lingkaran", "Parabola", "Hiperbola"],
+                correct: 2
             }
         ];
 
-        // Initialize
+        // Initialize Menu
         document.addEventListener('DOMContentLoaded', function() {
-            // Plane selection
-            document.querySelectorAll('.plane-option').forEach(option => {
-                option.addEventListener('click', function() {
+            const planeSelection = document.getElementById('planeSelection');
+            const colors = ['#4A90E2', '#E24A4A', '#E2A74A', '#4AE24A', '#8E4AE2', '#4AE2E2', '#E24A8E', '#D4AF37'];
+            
+            for (let i = 1; i <= 8; i++) {
+                const div = document.createElement('div');
+                div.className = `plane-option plane-${i} ${i === 1 ? 'selected' : ''}`;
+                div.dataset.plane = i;
+                div.dataset.color = colors[i-1];
+                div.innerHTML = `
+                    <img src="${getPlaneSvg(colors[i-1], i)}" alt="Pesawat ${i}">
+                    <div style="font-size:11px; margin-top:4px;">Pesawat ${i}</div>
+                `;
+                div.addEventListener('click', function() {
                     document.querySelectorAll('.plane-option').forEach(p => p.classList.remove('selected'));
                     this.classList.add('selected');
                     gameState.selectedPlane = parseInt(this.dataset.plane);
                     gameState.selectedPlaneColor = this.dataset.color;
                 });
-            });
+                planeSelection.appendChild(div);
+            }
 
-            // Background selection
             document.querySelectorAll('.bg-option').forEach(option => {
                 option.addEventListener('click', function() {
                     document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected'));
@@ -836,53 +754,48 @@
                     gameState.background = this.dataset.bg;
                 });
             });
-
-            // Select first plane by default
-            document.querySelector('.plane-option').classList.add('selected');
         });
 
+        function getPlaneSvg(color, num) {
+            // Triangle pointing UP, circle body, number inside
+            return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='55' r='35' fill='${encodeURIComponent(color)}' stroke='white' stroke-width='3'/%3E%3Cpolygon points='50,15 65,45 35,45' fill='white'/%3E%3Ctext x='50' y='65' text-anchor='middle' fill='white' font-size='22' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`;
+        }
+
         function startGame() {
-            // Get player name
-            gameState.playerName = document.getElementById('playerName').value || 'Pemain 1';
+            initAudio();
+            gameState.playerName = document.getElementById('playerName').value || 'Siswa Hebat';
             gameState.questionCount = parseInt(document.getElementById('questionCount').value);
             
-            // Shuffle and select questions
             gameState.questions = shuffleArray([...atpQuestions]).slice(0, gameState.questionCount);
             
-            // Initialize opponents
             gameState.opponents = [];
             const planeNumbers = [1, 2, 3, 4, 5, 6, 7, 8].filter(n => n !== gameState.selectedPlane);
             const selectedOpponents = shuffleArray(planeNumbers).slice(0, 5);
             
-            selectedOpponents.forEach((num, index) => {
+            selectedOpponents.forEach(num => {
+                const color = document.querySelector(`.plane-${num}`).dataset.color;
                 gameState.opponents.push({
                     plane: num,
                     position: 0,
-                    color: document.querySelector(`.plane-${num}`).dataset.color,
-                    speed: 0.6 + Math.random() * 0.3 // Random speed between 0.6 and 0.9
+                    color: color
                 });
             });
 
-            // Show game screen
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('gameScreen').classList.add('active');
             
-            // Set background
             const bg = document.getElementById('gameBackground');
             bg.className = 'game-background ' + gameState.background;
             
-            // Add stars for space background
             if (gameState.background === 'space') {
                 addStars();
             }
             
-            // Create race track
             createRaceTrack();
             
-            // Start game after delay
             setTimeout(() => {
                 showNextQuestion();
-            }, 1000);
+            }, 500);
         }
 
         function addStars() {
@@ -903,46 +816,27 @@
             const track = document.getElementById('raceTrack');
             track.innerHTML = '';
             
-            // Add player
-            const playerLane = createRacerLane(
-                gameState.selectedPlane,
-                gameState.selectedPlaneColor,
-                gameState.playerName + ' (Anda)',
-                true
-            );
+            const playerLane = document.createElement('div');
+            playerLane.className = 'racer-lane';
+            playerLane.innerHTML = `
+                <div class="finish-line"></div>
+                <div class="finish-label" id="label-player">🏆 Skor: 0</div>
+                <img class="lane-plane" id="plane-player" src="${getPlaneSvg(gameState.selectedPlaneColor, gameState.selectedPlane)}" alt="Player">
+                <div class="lane-name">${gameState.playerName}</div>
+            `;
             track.appendChild(playerLane);
             
-            // Add opponents
-            gameState.opponents.forEach((opp, index) => {
-                const lane = createRacerLane(
-                    opp.plane,
-                    opp.color,
-                    `Pesawat ${opp.plane}`,
-                    false
-                );
+            gameState.opponents.forEach(opp => {
+                const lane = document.createElement('div');
+                lane.className = 'racer-lane';
+                lane.innerHTML = `
+                    <div class="finish-line"></div>
+                    <div class="finish-label" id="label-opponent-${opp.plane}">🏆 Selesai</div>
+                    <img class="lane-plane" id="plane-opponent-${opp.plane}" src="${getPlaneSvg(opp.color, opp.plane)}" alt="Opponent">
+                    <div class="lane-name">Pesawat ${opp.plane}</div>
+                `;
                 track.appendChild(lane);
             });
-        }
-
-        function createRacerLane(planeNum, color, name, isPlayer) {
-            const lane = document.createElement('div');
-            lane.className = 'racer-lane' + (isPlayer ? ' player' : '');
-            lane.id = 'lane-' + (isPlayer ? 'player' : 'opponent-' + planeNum);
-            
-            const planeSvg = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='${encodeURIComponent(color)}'/%3E%3Ctext x='50' y='60' text-anchor='middle' fill='white' font-size='30' font-weight='bold'%3E${planeNum}%3C/text%3E%3C/svg%3E`;
-            
-            lane.innerHTML = `
-                <div class="lane-number">${planeNum}</div>
-                <img class="lane-plane" src="${planeSvg}" alt="Pesawat ${planeNum}">
-                <div class="lane-progress">
-                    <div class="lane-progress-bar" id="progress-${isPlayer ? 'player' : 'opponent-' + planeNum}" 
-                         style="width: 0%; background: ${color}">
-                    </div>
-                    <div class="finish-line"></div>
-                </div>
-            `;
-            
-            return lane;
         }
 
         function showNextQuestion() {
@@ -953,14 +847,9 @@
             
             const question = gameState.questions[gameState.currentQuestion];
             
-            // Update question number
-            document.getElementById('questionNumber').textContent = 
-                `Soal ${gameState.currentQuestion + 1}/${gameState.questions.length}`;
-            
-            // Update question text
+            document.getElementById('questionNumber').textContent = `Soal ${gameState.currentQuestion + 1}/${gameState.questions.length}`;
             document.getElementById('questionText').textContent = question.question;
             
-            // Create answer buttons
             const optionsContainer = document.getElementById('answerOptions');
             optionsContainer.innerHTML = '';
             
@@ -972,14 +861,11 @@
                 optionsContainer.appendChild(btn);
             });
             
-            // Show modal
-            document.getElementById('quizModal').classList.add('active');
-            
-            // Start timer
             startTimer();
         }
 
         function startTimer() {
+            clearInterval(gameState.timer);
             gameState.timeLeft = 30;
             updateTimer();
             
@@ -989,7 +875,7 @@
                 
                 if (gameState.timeLeft <= 0) {
                     clearInterval(gameState.timer);
-                    checkAnswer(-1, null); // Time's up
+                    checkAnswer(-1, null);
                 }
             }, 1000);
         }
@@ -997,12 +883,7 @@
         function updateTimer() {
             const timerEl = document.getElementById('timer');
             timerEl.textContent = `⏱️ ${gameState.timeLeft}s`;
-            
-            if (gameState.timeLeft <= 10) {
-                timerEl.style.background = '#cc0000';
-            } else {
-                timerEl.style.background = '#ff6b6b';
-            }
+            timerEl.style.background = gameState.timeLeft <= 10 ? '#cc0000' : '#ff6b6b';
         }
 
         function checkAnswer(selectedIndex, btnElement) {
@@ -1011,90 +892,92 @@
             const question = gameState.questions[gameState.currentQuestion];
             const buttons = document.querySelectorAll('.answer-btn');
             
-            // Disable all buttons
             buttons.forEach(btn => btn.disabled = true);
             
-            // Show correct answer
-            if (selectedIndex === question.correct) {
-                if (btnElement) {
-                    btnElement.classList.add('correct');
-                }
+            const isCorrect = selectedIndex === question.correct;
+            
+            if (isCorrect) {
+                if (btnElement) btnElement.classList.add('correct');
                 gameState.correctAnswers++;
-                gameState.playerPosition += (100 / gameState.questions.length);
-                updatePlayerPosition();
             } else {
-                if (btnElement) {
-                    btnElement.classList.add('wrong');
-                }
-                // Show correct answer
+                if (btnElement) btnElement.classList.add('wrong');
                 buttons[question.correct].classList.add('correct');
             }
             
-            // Move opponents
+            updatePlayerPosition(isCorrect);
             moveOpponents();
-            
-            // Check if anyone finished
             checkFinishLine();
             
-            // Next question after delay
             setTimeout(() => {
                 gameState.currentQuestion++;
-                document.getElementById('quizModal').classList.remove('active');
-                showNextQuestion();
-            }, 2000);
+                if (gameState.playerPosition < 100 && !gameState.opponents.some(o => o.position >= 100)) {
+                    showNextQuestion();
+                }
+            }, 1500);
         }
 
-        function updatePlayerPosition() {
-            const progressBar = document.getElementById('progress-player');
-            progressBar.style.width = Math.min(gameState.playerPosition, 100) + '%';
+        function updatePlayerPosition(isCorrect) {
+            const step = 100 / gameState.questions.length;
+            if (isCorrect) {
+                gameState.playerPosition = Math.min(100, gameState.playerPosition + step);
+                playSound('correct');
+                playSound('move');
+            } else {
+                gameState.playerPosition = Math.max(0, gameState.playerPosition - step);
+                playSound('wrong');
+            }
+            
+            const planeEl = document.getElementById('plane-player');
+            const labelEl = document.getElementById('label-player');
+            
+            if (planeEl) {
+                planeEl.style.bottom = gameState.playerPosition + '%';
+            }
+            
+            if (gameState.playerPosition >= 100 && labelEl && !labelEl.classList.contains('show')) {
+                labelEl.innerHTML = `🏆 Skor: ${gameState.correctAnswers}`;
+                labelEl.classList.add('show');
+                playSound('win');
+            }
         }
 
         function moveOpponents() {
             gameState.opponents.forEach(opp => {
-                // Opponents move based on their speed and some randomness
-                const moveAmount = (100 / gameState.questions.length) * opp.speed * (0.8 + Math.random() * 0.4);
-                opp.position += moveAmount;
-                
-                const progressBar = document.getElementById(`progress-opponent-${opp.plane}`);
-                if (progressBar) {
-                    progressBar.style.width = Math.min(opp.position, 100) + '%';
+                if (opp.position < 100) {
+                    const moveAmount = 8 + Math.random() * 12; // Move up 8-20% per question
+                    opp.position = Math.min(100, opp.position + moveAmount);
+                    
+                    const planeEl = document.getElementById(`plane-opponent-${opp.plane}`);
+                    const labelEl = document.getElementById(`label-opponent-${opp.plane}`);
+                    
+                    if (planeEl) {
+                        planeEl.style.bottom = opp.position + '%';
+                    }
+                    if (opp.position >= 100 && labelEl && !labelEl.classList.contains('show')) {
+                        labelEl.classList.add('show');
+                    }
                 }
             });
         }
 
         function checkFinishLine() {
-            // Check if player finished
             if (gameState.playerPosition >= 100) {
-                setTimeout(() => endGame(), 500);
+                setTimeout(() => endGame(), 1000);
                 return;
             }
             
-            // Check if any opponent finished
             const winner = gameState.opponents.find(opp => opp.position >= 100);
             if (winner) {
-                setTimeout(() => endGame(), 500);
+                setTimeout(() => endGame(), 1000);
             }
         }
 
         function endGame() {
-            document.getElementById('quizModal').classList.remove('active');
+            clearInterval(gameState.timer);
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('resultsScreen').classList.add('active');
             
-            // Determine winner
-            let winner = gameState.playerName;
-            let winnerPlane = gameState.selectedPlane;
-            let isPlayerWin = gameState.playerPosition >= 100;
-            
-            if (!isPlayerWin) {
-                const opponentWinner = gameState.opponents.reduce((prev, current) => 
-                    (prev.position > current.position) ? prev : current
-                );
-                winner = `Pesawat ${opponentWinner.plane}`;
-                winnerPlane = opponentWinner.plane;
-            }
-            
-            // Update results
+            const isPlayerWin = gameState.playerPosition >= 100 && !gameState.opponents.some(o => o.position >= 100);
             const trophy = document.getElementById('trophy');
             const winnerText = document.getElementById('winnerText');
             
@@ -1104,13 +987,12 @@
                 winnerText.style.color = '#FFD700';
             } else {
                 trophy.textContent = '🥈';
-                winnerText.textContent = `${winner} Menang!`;
+                winnerText.textContent = 'Balapan Selesai!';
                 winnerText.style.color = '#667eea';
             }
             
-            // Score details
             const scoreDetails = document.getElementById('scoreDetails');
-            let html = `
+            scoreDetails.innerHTML = `
                 <div class="score-item">
                     <span>Jumlah Soal:</span>
                     <strong>${gameState.questions.length}</strong>
@@ -1128,12 +1010,9 @@
                     <strong>${Math.round(gameState.playerPosition)}%</strong>
                 </div>
             `;
-            
-            scoreDetails.innerHTML = html;
         }
 
         function backToMenu() {
-            // Reset game state
             gameState.currentQuestion = 0;
             gameState.playerPosition = 0;
             gameState.correctAnswers = 0;
