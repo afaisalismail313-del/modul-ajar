@@ -20,7 +20,7 @@ let audioCtx;
 const atpDatabase = {
     "Matematika": {
         "Bilangan Berpangkat": [
-            { q: "Hasil dari 2³ × 2 adalah...", options: ["2⁷ = 128", "2¹² = 4096", "4⁷ = 16384", "2⁷ = 64"], correct: 0 },
+            { q: "Hasil dari 2³ × 2⁴ adalah...", options: ["2⁷ = 128", "2¹² = 4096", "4⁷ = 16384", "2⁷ = 64"], correct: 0 },
             { q: "Bentuk akar dari x^(1/2) adalah...", options: ["√x", "x²", "2x", "1/x²"], correct: 0 },
             { q: "Nilai dari 5⁰ adalah...", options: ["1", "0", "5", "Tidak terdefinisi"], correct: 0 },
             { q: "Bentuk sederhana dari (3²)³ adalah...", options: ["3⁶", "3⁵", "9³", "6³"], correct: 0 },
@@ -267,9 +267,19 @@ function updateTopics() {
     }
 }
 
-// Get Plane SVG
+// Get Plane SVG - Mirip dengan gambar yang diupload
 function getPlaneSvg(color, num) {
-    return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='55' r='35' fill='${encodeURIComponent(color)}' stroke='white' stroke-width='3'/%3E%3Cpolygon points='50,15 65,45 35,45' fill='white'/%3E%3Ctext x='50' y='65' text-anchor='middle' fill='white' font-size='22' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`;
+    const planeImages = {
+        1: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%234A90E2' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%2387CEEB' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%231a3a5c' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%234A90E2' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`,
+        2: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%23E24A4A' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%23FF6B6B' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%238B0000' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%23E24A4A' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`,
+        3: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%23E2A74A' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%23FFD700' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%238B6914' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%23E2A74A' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`,
+        4: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%234AE24A' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%2390EE90' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%23228B22' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%234AE24A' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`,
+        5: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%238E4AE2' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%23BA68C8' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%234A148C' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%238E4AE2' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`,
+        6: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%234AE2E2' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%2380DEEA' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%23006064' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%234AE2E2' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`,
+        7: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%23E24A8E' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%23F48FB1' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%23880E4F' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%23E24A8E' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`,
+        8: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%23D4AF37' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%23FFD700' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%238B6914' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%23D4AF37' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`
+    };
+    return planeImages[num];
 }
 
 // Initialize Menu
@@ -310,6 +320,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error("Error starting game:", err);
                 alert("Terjadi kesalahan saat memulai: " + err.message);
             }
+        });
+    }
+
+    // Back Button Event
+    const backBtn = document.getElementById('backBtn');
+    if (backBtn) {
+        backBtn.addEventListener('click', function() {
+            backToMenu();
         });
     }
 });
@@ -354,7 +372,7 @@ function startGame() {
         });
     });
 
-    // Switch to game screen
+    // PERBAIKAN: Hapus class active dari semua screen, lalu tambahkan ke gameScreen
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('gameScreen').classList.add('active');
     
@@ -402,7 +420,7 @@ function createRaceTrack() {
         <div class="lane-progress">
             <div class="lane-progress-bar" id="progress-player" style="width: 0%; background: ${gameState.selectedPlaneColor}"></div>
             <div class="finish-line"></div>
-            <div class="finish-label" id="label-player"> Skor: 0</div>
+            <div class="finish-label" id="label-player">🏆 Skor: 0</div>
         </div>
     `;
     track.appendChild(playerLane);
@@ -475,7 +493,7 @@ function startTimer() {
 // Update Timer Display
 function updateTimer() {
     const timerEl = document.getElementById('timer');
-    timerEl.textContent = `️ ${gameState.timeLeft}s`;
+    timerEl.textContent = `⏱️ ${gameState.timeLeft}s`;
     timerEl.style.background = gameState.timeLeft <= 10 ? '#cc0000' : '#ff6b6b';
 }
 
@@ -584,7 +602,7 @@ function endGame() {
         winnerText.textContent = `🎉 Selamat! ${gameState.playerName} Menang! 🎉`;
         winnerText.style.color = '#FFD700';
     } else {
-        trophy.textContent = '🥈';
+        trophy.textContent = '';
         winnerText.textContent = 'Balapan Selesai!';
         winnerText.style.color = '#667eea';
     }
