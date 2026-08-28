@@ -11,20 +11,26 @@ body {
     touch-action: manipulation;
 }
 
+/* Base screen - hidden by default */
 .screen {
     display: none;
     height: 100vh;
     width: 100vw;
 }
 
+/* Active screen - default to block */
 .screen.active {
     display: block;
+}
+
+/* PERBAIKAN UTAMA: Game screen harus flex, bukan block */
+.screen.game-screen.active {
+    display: flex;
 }
 
 /* Menu Screen */
 .menu-screen {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -124,7 +130,7 @@ body {
 .plane-option img {
     width: 100%;
     height: auto;
-    max-width: 50px;
+    max-width: 60px;
 }
 
 .plane-option.plane-1 { border-color: #4A90E2; }
@@ -180,7 +186,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
+    z-index: 0;
     background-size: cover;
     background-position: center;
 }
@@ -202,18 +208,20 @@ body {
 }
 
 .race-track {
-    display: flex;
-    flex-direction: column;
+    position: relative;
     width: 100%;
     height: 100%;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
     gap: 15px;
     overflow-y: auto;
+    z-index: 1;
 }
 
 .racer-lane {
     position: relative;
-    height: 60px;
+    height: 70px;
     background: rgba(255,255,255,0.9);
     border-radius: 10px;
     display: flex;
@@ -228,18 +236,20 @@ body {
 }
 
 .lane-plane {
-    width: 50px;
-    height: 50px;
-    margin-right: 15px;
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
     transition: margin-left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     z-index: 10;
+    flex-shrink: 0;
 }
 
 .lane-name {
     font-size: 12px;
     font-weight: bold;
     color: #333;
-    min-width: 100px;
+    min-width: 80px;
+    flex-shrink: 0;
 }
 
 .lane-progress {
@@ -388,7 +398,6 @@ body {
 /* Results Screen */
 .results-screen {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -473,19 +482,19 @@ body {
     }
     
     .racer-lane {
-        height: 50px;
+        height: 55px;
         padding: 0 8px;
     }
     
     .lane-plane {
-        width: 40px;
-        height: 40px;
-        margin-right: 10px;
+        width: 45px;
+        height: 45px;
+        margin-right: 8px;
     }
     
     .lane-name {
         font-size: 10px;
-        min-width: 80px;
+        min-width: 70px;
     }
     
     .question-text {
