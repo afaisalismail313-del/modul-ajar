@@ -1,1 +1,653 @@
+// Game State
+let gameState = {
+    selectedPlane: 1,
+    selectedPlaneColor: '#4A90E2',
+    questionCount: 10,
+    background: 'space',
+    playerName: 'Siswa Hebat',
+    currentQuestion: 0,
+    playerPosition: 0,
+    opponents: [],
+    questions: [],
+    correctAnswers: 0,
+    timer: null,
+    timeLeft: 30
+};
 
+let audioCtx;
+
+// ATP Database - Lengkap dari semua file yang diupload
+const atpDatabase = {
+    "Matematika": {
+        "Bilangan Berpangkat": [
+            { q: "Hasil dari 2³ × 2 adalah...", options: ["2⁷ = 128", "2¹² = 4096", "4⁷ = 16384", "2⁷ = 64"], correct: 0 },
+            { q: "Bentuk akar dari x^(1/2) adalah...", options: ["√x", "x²", "2x", "1/x²"], correct: 0 },
+            { q: "Nilai dari 5⁰ adalah...", options: ["1", "0", "5", "Tidak terdefinisi"], correct: 0 },
+            { q: "Bentuk sederhana dari (3²)³ adalah...", options: ["3⁶", "3⁵", "9³", "6³"], correct: 0 },
+            { q: "Sifat bilangan berpangkat a^m × a^n = ...", options: ["a^(m+n)", "a^(m×n)", "a^(m-n)", "a^(m/n)"], correct: 0 }
+        ],
+        "Persamaan Eksponensial": [
+            { q: "Penyelesaian dari 3^(2x) = 81 adalah...", options: ["x = 2", "x = 3", "x = 4", "x = 1"], correct: 0 },
+            { q: "Jika 5^x = 125, maka nilai x adalah...", options: ["3", "4", "5", "2"], correct: 0 },
+            { q: "Himpunan penyelesaian dari 2^(x+1) = 16 adalah...", options: ["{3}", "{4}", "{2}", "{5}"], correct: 0 },
+            { q: "Nilai x yang memenuhi 4^x = 64 adalah...", options: ["3", "4", "2", "6"], correct: 0 },
+            { q: "Persamaan eksponensial a^f(x) = a^g(x) dipenuhi jika...", options: ["f(x) = g(x)", "f(x) ≠ g(x)", "f(x) > g(x)", "f(x) < g(x)"], correct: 0 }
+        ],
+        "Fungsi Eksponensial": [
+            { q: "Grafik fungsi f(x) = a^x dengan a > 1 memiliki karakteristik...", options: ["Monoton naik", "Monoton turun", "Berbentuk parabola", "Garis lurus horizontal"], correct: 0 },
+            { q: "Fungsi eksponensial sering digunakan untuk memodelkan...", options: ["Pertumbuhan populasi dan peluruhan zat", "Gerak lurus beraturan", "Luas lingkaran", "Volume kubus"], correct: 0 },
+            { q: "Fungsi f(x) = (1/2)^x adalah fungsi yang...", options: ["Monoton turun", "Monoton naik", "Konstan", "Periodik"], correct: 0 },
+            { q: "Titik potong grafik f(x) = 2^x dengan sumbu Y adalah...", options: ["(0, 1)", "(1, 0)", "(0, 0)", "(1, 1)"], correct: 0 },
+            { q: "Asimtot datar dari fungsi f(x) = 2^x + 1 adalah...", options: ["y = 1", "y = 0", "x = 0", "x = 1"], correct: 0 }
+        ],
+        "Persamaan Kuadrat": [
+            { q: "Akar-akar dari persamaan x² - 5x + 6 = 0 adalah...", options: ["2 dan 3", "1 dan 6", "-2 dan -3", "-1 dan -6"], correct: 0 },
+            { q: "Jika diskriminan (D) < 0, maka akar persamaan kuadrat bersifat...", options: ["Imajiner (tidak real)", "Real dan berbeda", "Real kembar", "Nol"], correct: 0 },
+            { q: "Rumus abc untuk mencari akar persamaan kuadrat adalah...", options: ["x = (-b ± √(b²-4ac)) / 2a", "x = (-b ± √(b²+4ac)) / 2a", "x = (b ± √(b²-4ac)) / 2a", "x = (-b ± √(b²-4ac)) / a"], correct: 0 },
+            { q: "Persamaan kuadrat yang akar-akarnya 2 dan -3 adalah...", options: ["x² + x - 6 = 0", "x² - x - 6 = 0", "x² + 5x + 6 = 0", "x² - 5x + 6 = 0"], correct: 0 },
+            { q: "Nilai diskriminan dari x² - 4x + 4 = 0 adalah...", options: ["0", "4", "-4", "16"], correct: 0 }
+        ],
+        "Fungsi Kuadrat": [
+            { q: "Titik puncak (vertex) dari fungsi kuadrat f(x) = x² adalah...", options: ["(0, 0)", "(1, 1)", "(-1, 1)", "(0, 1)"], correct: 0 },
+            { q: "Sumbu simetri dari fungsi f(x) = x² - 4x + 3 adalah...", options: ["x = 2", "x = -2", "x = 4", "x = -4"], correct: 0 },
+            { q: "Jika a > 0 pada fungsi f(x) = ax² + bx + c, maka grafik parabola...", options: ["Terbuka ke atas", "Terbuka ke bawah", "Berbentuk garis lurus", "Tidak memiliki puncak"], correct: 0 },
+            { q: "Nilai optimum (minimum) dari f(x) = x² - 2x + 3 adalah...", options: ["2", "3", "1", "0"], correct: 0 },
+            { q: "Grafik fungsi kuadrat memotong sumbu X di dua titik jika...", options: ["D > 0", "D = 0", "D < 0", "D ≥ 0"], correct: 0 }
+        ]
+    },
+    "Fisika": {
+        "Vektor": [
+            { q: "Resultan dua vektor yang saling tegak lurus dengan besar 3 N dan 4 N adalah...", options: ["5 N", "7 N", "1 N", "12 N"], correct: 0 },
+            { q: "Perkalian titik (dot product) dua vektor menghasilkan besaran...", options: ["Skalar", "Vektor", "Momen", "Gaya"], correct: 0 },
+            { q: "Besaran yang memiliki nilai dan arah disebut...", options: ["Besaran Vektor", "Besaran Skalar", "Besaran Pokok", "Besaran Turunan"], correct: 0 },
+            { q: "Komponen vektor F yang membentuk sudut θ terhadap sumbu X adalah...", options: ["Fx = F cos θ", "Fx = F sin θ", "Fx = F tan θ", "Fx = F / cos θ"], correct: 0 },
+            { q: "Dua vektor dikatakan sama jika...", options: ["Nilai dan arahnya sama", "Nilainya sama, arahnya berbeda", "Nilainya berbeda, arahnya sama", "Hanya arahnya yang sama"], correct: 0 }
+        ],
+        "Kinematika": [
+            { q: "Gerak parabola merupakan perpaduan antara...", options: ["GLB pada sumbu x dan GLBB pada sumbu y", "GLBB pada sumbu x dan GLB pada sumbu y", "GLB pada kedua sumbu", "GLBB pada kedua sumbu"], correct: 0 },
+            { q: "Pada Gerak Melingkar Beraturan (GMB), besaran yang tetap besarnya adalah...", options: ["Kelajuan linear", "Kecepatan linear", "Perpindahan", "Percepatan sentripetal"], correct: 0 },
+            { q: "Jarak adalah besaran skalar, sedangkan perpindahan adalah besaran...", options: ["Vektor", "Pokok", "Turunan", "Mutlak"], correct: 0 },
+            { q: "Percepatan pada GLBB memiliki nilai...", options: ["Konstan", "Berubah-ubah", "Nol", "Negatif selalu"], correct: 0 },
+            { q: "Waktu yang dibutuhkan untuk satu putaran penuh dalam GMB disebut...", options: ["Periode", "Frekuensi", "Kecepatan sudut", "Percepatan sentripetal"], correct: 0 }
+        ],
+        "Dinamika Gerak": [
+            { q: "Hukum Newton yang menyatakan bahwa setiap aksi memiliki reaksi yang sama besar dan berlawanan arah adalah...", options: ["Hukum III Newton", "Hukum I Newton", "Hukum II Newton", "Hukum Gravitasi"], correct: 0 },
+            { q: "Hasil kali massa dan kecepatan suatu benda disebut...", options: ["Momentum", "Impuls", "Gaya", "Usaha"], correct: 0 },
+            { q: "Gaya yang bekerja pada benda diam di atas meja dan tegak lurus permukaan disebut...", options: ["Gaya Normal", "Gaya Gesek", "Gaya Berat", "Gaya Tegangan Tali"], correct: 0 },
+            { q: "Hukum I Newton juga dikenal sebagai hukum...", options: ["Kelembaman (Inersia)", "Aksi-Reaksi", "Percepatan", "Gravitasi"], correct: 0 },
+            { q: "Impuls didefinisikan sebagai...", options: ["Gaya dikali selang waktu", "Massa dikali kecepatan", "Gaya dikali perpindahan", "Massa dikali percepatan"], correct: 0 }
+        ],
+        "Fluida": [
+            { q: "Hukum yang menyatakan bahwa tekanan pada fluida statis diteruskan ke segala arah dengan sama besar adalah...", options: ["Hukum Pascal", "Hukum Archimedes", "Hukum Bernoulli", "Hukum Newton"], correct: 0 },
+            { q: "Gaya angkat pada sayap pesawat terbang dapat dijelaskan menggunakan...", options: ["Prinsip Bernoulli", "Hukum Pascal", "Hukum Archimedes", "Hukum Stokes"], correct: 0 },
+            { q: "Tekanan hidrostatis bergantung pada...", options: ["Massa jenis, gravitasi, dan kedalaman", "Massa jenis dan luas penampang", "Volume dan suhu", "Berat dan waktu"], correct: 0 },
+            { q: "Benda akan melayang dalam fluida jika...", options: ["Massa jenis benda = massa jenis fluida", "Massa jenis benda > massa jenis fluida", "Massa jenis benda < massa jenis fluida", "Berat benda > gaya apung"], correct: 0 },
+            { q: "Asas kontinuitas dalam fluida dinamis menyatakan bahwa...", options: ["Debit aliran di setiap penampang adalah sama", "Tekanan di setiap titik adalah sama", "Kecepatan aliran selalu konstan", "Energi mekanik fluida hilang"], correct: 0 }
+        ]
+    },
+    "Ekonomi": {
+        "Pendapatan Nasional": [
+            { q: "Nilai total seluruh barang dan jasa yang diproduksi oleh suatu negara dalam periode tertentu disebut...", options: ["Pendapatan Nasional", "PDB", "PNB", "Pendapatan Per Kapita"], correct: 0 },
+            { q: "Kesenjangan ekonomi dapat diatasi dengan kebijakan pemerintah berupa...", options: ["Pemerataan pembangunan", "Monopoli pasar", "Pengurangan pajak orang kaya saja", "Menaikkan harga barang"], correct: 0 },
+            { q: "Metode perhitungan pendapatan nasional berdasarkan jumlah pengeluaran disebut metode...", options: ["Pendekatan Pengeluaran", "Pendekatan Produksi", "Pendekatan Pendapatan", "Pendekatan Konsumsi"], correct: 0 },
+            { q: "Pertumbuhan ekonomi yang disertai dengan peningkatan kesejahteraan masyarakat disebut...", options: ["Pembangunan Ekonomi", "Pertumbuhan Ekonomi", "Inflasi", "Stagflasi"], correct: 0 },
+            { q: "Faktor yang menghambat pembangunan ekonomi di negara berkembang adalah...", options: ["Kualitas SDM yang rendah", "Sumber daya alam melimpah", "Stabilitas politik", "Investasi asing tinggi"], correct: 0 }
+        ],
+        "Literasi Keuangan Digital": [
+            { q: "Salah satu risiko utama penggunaan layanan keuangan digital adalah...", options: ["Keamanan data dan penipuan (fraud)", "Transaksi terlalu cepat", "Biaya admin gratis", "Akses 24 jam"], correct: 0 },
+            { q: "Strategi mengelola keuangan digital yang baik adalah...", options: ["Tidak membagikan OTP kepada siapa pun", "Menggunakan password yang mudah ditebak", "Mengklik semua link yang masuk", "Berbagi PIN dengan teman"], correct: 0 },
+            { q: "Contoh layanan keuangan digital adalah...", options: ["E-wallet dan mobile banking", "Uang kertas", "Cek dan bilyet giro", "Emas batangan"], correct: 0 },
+            { q: "Literasi keuangan digital bertujuan agar masyarakat...", options: ["Mampu menggunakan teknologi keuangan dengan bijak dan aman", "Menghindari teknologi sama sekali", "Hanya menggunakan uang tunai", "Tidak menabung di bank"], correct: 0 },
+            { q: "Phishing dalam keuangan digital adalah...", options: ["Upaya mencuri data dengan menyamar sebagai entitas tepercaya", "Proses transfer uang yang cepat", "Sistem keamanan bank", "Aplikasi pencatat keuangan"], correct: 0 }
+        ],
+        "Ketenagakerjaan": [
+            { q: "Pengangguran yang terjadi karena adanya perubahan teknologi atau struktur ekonomi disebut pengangguran...", options: ["Struktural", "Friksional", "Siklikal", "Musiman"], correct: 0 },
+            { q: "Usaha untuk mengatasi pengangguran dapat dilakukan dengan...", options: ["Peningkatan kualitas SDM", "Mengurangi lapangan kerja", "Menutup industri padat karya", "Membatasi investasi asing"], correct: 0 },
+            { q: "Pengangguran yang terjadi karena seseorang sedang mencari pekerjaan yang lebih baik disebut...", options: ["Friksional", "Struktural", "Siklikal", "Musiman"], correct: 0 },
+            { q: "Angkatan kerja terdiri dari...", options: ["Penduduk yang bekerja dan yang sedang mencari pekerjaan", "Seluruh penduduk usia produktif", "Hanya mereka yang sudah bekerja", "Pelajar dan mahasiswa"], correct: 0 },
+            { q: "Dampak negatif pengangguran terhadap ekonomi adalah...", options: ["Menurunnya pendapatan nasional", "Meningkatnya tabungan masyarakat", "Stabilitas harga yang terjaga", "Peningkatan investasi"], correct: 0 }
+        ],
+        "Inflasi & Kebijakan Moneter": [
+            { q: "Kenaikan harga barang dan jasa secara umum dan terus-menerus dalam jangka waktu tertentu disebut...", options: ["Inflasi", "Deflasi", "Stagflasi", "Disinflasi"], correct: 0 },
+            { q: "Kebijakan bank sentral untuk mengurangi jumlah uang beredar dengan menjual surat berharga disebut...", options: ["Operasi Pasar Terbuka", "Politik Diskonto", "Cadangan Kas", "Kredit Ketat"], correct: 0 },
+            { q: "Inflasi yang disebabkan oleh kenaikan biaya produksi disebut inflasi...", options: ["Cost-push inflation", "Demand-pull inflation", "Imported inflation", "Hyperinflation"], correct: 0 },
+            { q: "Lembaga yang berwenang melaksanakan kebijakan moneter di Indonesia adalah...", options: ["Bank Indonesia", "Kementerian Keuangan", "OJK", "Bappenas"], correct: 0 },
+            { q: "Dampak inflasi terhadap orang yang berpendapatan tetap adalah...", options: ["Menurunnya daya beli", "Meningkatnya tabungan", "Kenaikan nilai riil pendapatan", "Tidak ada dampak"], correct: 0 }
+        ],
+        "Akuntansi Dasar": [
+            { q: "Persamaan dasar akuntansi yang benar adalah...", options: ["Aset = Kewajiban + Ekuitas", "Aset = Kewajiban - Ekuitas", "Ekuitas = Aset + Kewajiban", "Kewajiban = Aset + Ekuitas"], correct: 0 },
+            { q: "Laporan keuangan yang menunjukkan posisi aset, kewajiban, dan ekuitas pada tanggal tertentu adalah...", options: ["Neraca", "Laporan Laba Rugi", "Laporan Arus Kas", "Laporan Perubahan Ekuitas"], correct: 0 },
+            { q: "Harta yang dimiliki perusahaan disebut...", options: ["Aset", "Kewajiban", "Ekuitas", "Beban"], correct: 0 },
+            { q: "Siklus akuntansi diawali dengan...", options: ["Analisis transaksi dan bukti transaksi", "Penyusunan neraca saldo", "Pembuatan jurnal penutup", "Penyusunan laporan keuangan"], correct: 0 },
+            { q: "Pencatatan transaksi ke dalam jurnal umum didasarkan pada...", options: ["Bukti transaksi yang sah", "Dugaan pemilik", "Laporan tahun lalu", "Permintaan karyawan"], correct: 0 }
+        ]
+    },
+    "Bahasa Arab": {
+        "Pengantar Ilmu Sharaf": [
+            { q: "Ilmu yang mempelajari perubahan bentuk kata untuk mengetahui berbagai makna disebut...", options: ["Ilmu Sharaf", "Ilmu Nahwu", "Ilmu Balaghah", "Ilmu Bayan"], correct: 0 },
+            { q: "Tujuan utama mempelajari ilmu sharaf adalah...", options: ["Mengetahui perubahan bentuk kata dan maknanya", "Mengetahui kedudukan kata dalam kalimat", "Mempelajari sejarah bahasa Arab", "Menghafal kosakata tanpa makna"], correct: 0 },
+            { q: "Ilmu yang mempelajari kedudukan kata dalam kalimat (I'rab dan Bina') adalah...", options: ["Ilmu Nahwu", "Ilmu Sharaf", "Ilmu Bayan", "Ilmu Badi'"], correct: 0 },
+            { q: "Kata dalam bahasa Arab yang dapat menerima perubahan harakat di akhirnya disebut...", options: ["Mu'rab", "Mabni", "Huruf", "Fi'il Amr"], correct: 0 },
+            { q: "Manfaat ilmu sharaf dalam memahami Al-Qur'an adalah...", options: ["Memahami makna yang berubah sesuai bentuk kata", "Mengetahui sebab turunnya ayat", "Mengetahui jumlah ayat", "Menghafal urutan surat"], correct: 0 }
+        ],
+        "Mizan Sharfi": [
+            { q: "Huruf asli (zawaid) dalam mizan sharfi adalah...", options: ["ف, ع, ل (Fa, 'Ain, Lam)", "أ, ب, ت", "س, م, ع", "ك, ت, ب"], correct: 0 },
+            { q: "Kata 'كَتَبَ' (kataba) sesuai dengan wazan...", options: ["فَعَلَ", "فَعَّلَ", "أَفْعَلَ", "تَفَاعَلَ"], correct: 0 },
+            { q: "Kata 'مَكْتُوْبٌ' (maktubun) sesuai dengan wazan...", options: ["مَفْعُوْلٌ", "فَاعِلٌ", "مِفْعَالٌ", "فَعِيْلٌ"], correct: 0 },
+            { q: "Fungsi mizan sharfi adalah untuk...", options: ["Mengetahui huruf asli dan tambahan serta pola kata", "Menghitung jumlah kata dalam kalimat", "Menentukan arti kata dalam kamus", "Membaca teks dengan cepat"], correct: 0 },
+            { q: "Kata 'أَكْرَمَ' (akrama) memiliki huruf tambahan yaitu...", options: ["أ (Hamzah)", "و (Wawu)", "ي (Ya')", "ت (Ta')"], correct: 0 }
+        ],
+        "Fi'il Shahih & Mu'tal": [
+            { q: "Fi'il yang huruf-huruf aslinya tidak mengandung huruf illat (alif, wawu, ya') disebut...", options: ["Fi'il Shahih", "Fi'il Mu'tal", "Fi'il Mujarrad", "Fi'il Mazid"], correct: 0 },
+            { q: "Contoh dari Fi'il Mu'tal adalah...", options: ["قَالَ (qala)", "كَتَبَ (kataba)", "جَلَسَ (jalasa)", "فَتَحَ (fataha)"], correct: 0 },
+            { q: "Fi'il Mu'tal yang huruf illatnya berada di awal kata disebut...", options: ["Mitsal", "Ajwaf", "Naqis", "Lafif"], correct: 0 },
+            { q: "Fi'il 'رَمَى' (rama) termasuk fi'il mu'tal jenis...", options: ["Naqis", "Mitsal", "Ajwaf", "Lafif"], correct: 0 },
+            { q: "Perbedaan utama fi'il shahih dan mu'tal terletak pada...", options: ["Ada atau tidaknya huruf illat", "Jumlah hurufnya", "Waktu terjadinya", "Subjeknya"], correct: 0 }
+        ],
+        "Fi'il Lazim & Muta'addi": [
+            { q: "Fi'il yang tidak membutuhkan maf'ul bih (objek) disebut...", options: ["Fi'il Lazim", "Fi'il Muta'addi", "Fi'il Madhi", "Fi'il Mudhari'"], correct: 0 },
+            { q: "Fi'il yang membutuhkan objek (maf'ul bih) untuk menyempurnakan maknanya disebut...", options: ["Fi'il Muta'addi", "Fi'il Lazim", "Fi'il Amr", "Fi'il Nahyi"], correct: 0 },
+            { q: "Contoh fi'il lazim adalah...", options: ["جَلَسَ (jalasa / duduk)", "ضَرَبَ (dharaba / memukul)", "أَكَلَ (akala / makan)", "قَرَأَ (qara'a / membaca)"], correct: 0 },
+            { q: "Fi'il lazim dapat diubah menjadi muta'addi dengan menambahkan...", options: ["Hamzah atau Ta' di awal kata", "Nun di akhir kata", "Ya' di tengah kata", "Wawu di akhir kata"], correct: 0 },
+            { q: "Dalam kalimat 'ذَهَبَ أَحْمَدُ' (Ahmad telah pergi), kata 'ذَهَبَ' adalah fi'il...", options: ["Lazim", "Muta'addi", "Amr", "Mudhari'"], correct: 0 }
+        ],
+        "Tasrif Lughawi": [
+            { q: "Perubahan bentuk fi'il berdasarkan dhamir (kata ganti) disebut...", options: ["Tasrif Lughawi", "Tasrif Istilahi", "I'rab", "Bina'"], correct: 0 },
+            { q: "Fi'il Amr dibentuk dari Fi'il Mudhari' dengan cara...", options: ["Membuang huruf mudhara'ah dan menambahkan hamzah washal jika perlu", "Menambahkan huruf nun di akhir", "Mengubah harakat menjadi kasrah", "Menambahkan huruf ta' di awal"], correct: 0 },
+            { q: "Tasrif lughawi fi'il madhi 'كَتَبَ' untuk dhamir 'هُمْ' adalah...", options: ["كَتَبُوْا", "كَتَبْنَ", "تَكْتُبُ", "يَكْتُبُ"], correct: 0 },
+            { q: "Fi'il Mudhari' ditandai dengan huruf-huruf...", options: ["أ, ن, ي, ت (Anayta)", "ف, ع, ل", "ا, ل, م", "س, و, ف"], correct: 0 },
+            { q: "Tasrif lughawi bertujuan untuk...", options: ["Menyesuaikan fi'il dengan subjek (dhamir) yang digunakan", "Mengubah makna dasar kata", "Menambah huruf asli", "Menghilangkan harakat"], correct: 0 }
+        ]
+    },
+    "Seni Rupa": {
+        "Definisi & Fungsi Seni": [
+            { q: "Fungsi seni rupa yang ditujukan untuk memenuhi kebutuhan batin atau estetika penciptanya disebut fungsi...", options: ["Individual", "Sosial", "Fisik Kebendaan", "Ekonomis"], correct: 0 },
+            { q: "Seni rupa yang dibuat untuk dinikmati oleh masyarakat luas memiliki fungsi...", options: ["Sosial", "Individual", "Ritual", "Edukasi"], correct: 0 },
+            { q: "Contoh fungsi fisik kebendaan dalam seni rupa adalah...", options: ["Kursi, meja, dan bangunan", "Lukisan yang dipajang di museum", "Tarian tradisional", "Nyanyian daerah"], correct: 0 },
+            { q: "Seni rupa murni (fine art) lebih mengutamakan nilai...", options: ["Estetika", "Praktis", "Ekonomis", "Teknis"], correct: 0 },
+            { q: "Seni rupa terapan (applied art) mengutamakan nilai...", options: ["Kegunaan dan estetika", "Hanya keindahan", "Ekspresi bebas", "Nilai sejarah"], correct: 0 }
+        ],
+        "Perkembangan Seni Rupa": [
+            { q: "Ciri utama seni rupa tradisional adalah...", options: ["Terikat pada pakem dan aturan turun-temurun", "Sangat bebas dan inovatif", "Menggunakan teknologi digital", "Tidak memiliki makna simbolis"], correct: 0 },
+            { q: "Seni rupa yang tidak terikat pada aturan baku dan lebih menekankan pada konsep adalah seni rupa...", options: ["Kontemporer", "Tradisional", "Klasik", "Prasejarah"], correct: 0 },
+            { q: "Seni rupa modern di Indonesia mulai berkembang pesat pada masa...", options: ["Pergerakan nasional", "Kerajaan Hindu-Buddha", "Prasejarah", "Kolonial Belanda awal"], correct: 0 },
+            { q: "Tokoh seni lukis modern Indonesia yang terkenal dengan gaya ekspresionisme adalah...", options: ["Affandi", "Raden Saleh", "Basuki Abdullah", "S. Sudjojono"], correct: 0 },
+            { q: "Perbedaan utama seni tradisional dan modern adalah...", options: ["Keterikatan pada aturan vs kebebasan berekspresi", "Bahan yang digunakan", "Ukuran karya", "Tempat pameran"], correct: 0 }
+        ],
+        "Kritik Seni (Metode Feldman)": [
+            { q: "Tahapan pertama dalam metode kritik seni Feldman adalah...", options: ["Deskripsi", "Analisis Formal", "Interpretasi", "Evaluasi"], correct: 0 },
+            { q: "Tahapan di mana kritikus menjelaskan makna atau pesan yang ingin disampaikan seniman disebut...", options: ["Interpretasi", "Deskripsi", "Analisis Formal", "Evaluasi"], correct: 0 },
+            { q: "Analisis formal dalam kritik seni membahas tentang...", options: ["Unsur dan prinsip seni rupa (garis, warna, komposisi)", "Biografi seniman", "Harga karya seni", "Sejarah pembuatan karya"], correct: 0 },
+            { q: "Tahap evaluasi dalam kritik seni bertujuan untuk...", options: ["Menentukan kualitas atau nilai karya seni", "Mendeskripsikan objek yang dilukis", "Mencari tahu harga pasar", "Meniru gaya seniman"], correct: 0 },
+            { q: "Kritik seni yang bertujuan untuk mengembangkan potensi dan kreativitas seniman disebut kritik...", options: ["Pedagogik", "Jurnalistik", "Populer", "Ilmiah"], correct: 0 }
+        ],
+        "Karya Seni Rupa 2D": [
+            { q: "Teknik melukis dengan cat air yang bersifat transparan disebut teknik...", options: ["Aquarel", "Opaque (Plakat)", "Pointilis", "Akuarel tebal"], correct: 0 },
+            { q: "Pemanfaatan bahan lokal atau limbah untuk karya seni merupakan wujud...", options: ["Tanggung jawab ekologis", "Pemborosan sumber daya", "Ketidakkreatifan", "Ketergantungan impor"], correct: 0 },
+            { q: "Teknik lukis yang menggunakan cat dengan lapisan tebal sehingga menutupi warna di bawahnya disebut...", options: ["Opaque (Plakat)", "Aquarel", "Transparan", "Sketsa"], correct: 0 },
+            { q: "Mandala adalah karya seni yang berbentuk...", options: ["Lingkaran dengan pola simetris", "Persegi panjang acak", "Segitiga tidak beraturan", "Garis bebas"], correct: 0 },
+            { q: "Bahan alami yang dapat digunakan untuk membuat karya seni 2D adalah...", options: ["Daun kering, tanah liat, dan pewarna alam", "Plastik, styrofoam, dan cat minyak", "Kaca, besi, dan beton", "Kertas HVS dan spidol permanen"], correct: 0 }
+        ]
+    }
+};
+
+// Initialize Audio
+function initAudio() {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(e => console.log("Audio resume failed:", e));
+    }
+}
+
+// Play Sound Effects
+function playSound(type) {
+    if (!audioCtx) return;
+    try {
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'correct') {
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(523.25, now);
+            oscillator.frequency.exponentialRampToValueAtTime(1046.5, now + 0.1);
+            gainNode.gain.setValueAtTime(0.3, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+            oscillator.start(now); oscillator.stop(now + 0.3);
+        } else if (type === 'wrong') {
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.setValueAtTime(150, now);
+            oscillator.frequency.linearRampToValueAtTime(100, now + 0.2);
+            gainNode.gain.setValueAtTime(0.3, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+            oscillator.start(now); oscillator.stop(now + 0.3);
+        } else if (type === 'move') {
+            oscillator.type = 'triangle';
+            oscillator.frequency.setValueAtTime(200, now);
+            oscillator.frequency.exponentialRampToValueAtTime(400, now + 0.1);
+            gainNode.gain.setValueAtTime(0.15, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+            oscillator.start(now); oscillator.stop(now + 0.15);
+        } else if (type === 'win') {
+            [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.type = 'sine'; osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.2, now + i * 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.3);
+                osc.start(now + i * 0.1); osc.stop(now + i * 0.1 + 0.3);
+            });
+        }
+    } catch (e) { console.error("Audio error:", e); }
+}
+
+// Update Topics based on Subject
+function updateTopics() {
+    const subjectSelect = document.getElementById('subjectSelect');
+    const topicSelect = document.getElementById('topicSelect');
+    const selectedSubject = subjectSelect.value;
+    
+    topicSelect.innerHTML = '<option value="">-- Pilih Materi --</option>';
+    topicSelect.disabled = true;
+    
+    if (selectedSubject && atpDatabase[selectedSubject]) {
+        const topics = Object.keys(atpDatabase[selectedSubject]);
+        topics.forEach(topic => {
+            const option = document.createElement('option');
+            option.value = topic;
+            option.textContent = topic;
+            topicSelect.appendChild(option);
+        });
+        topicSelect.disabled = false;
+    }
+}
+
+// Get Plane SVG
+function getPlaneSvg(color, num) {
+    return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='55' r='35' fill='${encodeURIComponent(color)}' stroke='white' stroke-width='3'/%3E%3Cpolygon points='50,15 65,45 35,45' fill='white'/%3E%3Ctext x='50' y='65' text-anchor='middle' fill='white' font-size='22' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`;
+}
+
+// Initialize Menu
+document.addEventListener('DOMContentLoaded', function() {
+    const planeSelection = document.getElementById('planeSelection');
+    const colors = ['#4A90E2', '#E24A4A', '#E2A74A', '#4AE24A', '#8E4AE2', '#4AE2E2', '#E24A8E', '#D4AF37'];
+    
+    for (let i = 1; i <= 8; i++) {
+        const div = document.createElement('div');
+        div.className = `plane-option plane-${i} ${i === 1 ? 'selected' : ''}`;
+        div.dataset.plane = i;
+        div.dataset.color = colors[i-1];
+        div.innerHTML = `<img src="${getPlaneSvg(colors[i-1], i)}" alt="Pesawat ${i}"><div style="font-size:11px; margin-top:4px;">Pesawat ${i}</div>`;
+        div.addEventListener('click', function() {
+            document.querySelectorAll('.plane-option').forEach(p => p.classList.remove('selected'));
+            this.classList.add('selected');
+            gameState.selectedPlane = parseInt(this.dataset.plane);
+            gameState.selectedPlaneColor = this.dataset.color;
+        });
+        planeSelection.appendChild(div);
+    }
+
+    document.querySelectorAll('.bg-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            gameState.background = this.dataset.bg;
+        });
+    });
+    
+    // Start Button Event
+    const startBtn = document.getElementById('startBtn');
+    if (startBtn) {
+        startBtn.addEventListener('click', function() {
+            try {
+                startGame();
+            } catch (err) {
+                console.error("Error starting game:", err);
+                alert("Terjadi kesalahan saat memulai: " + err.message);
+            }
+        });
+    }
+});
+
+// Start Game
+function startGame() {
+    initAudio();
+    
+    const playerName = document.getElementById('playerName').value;
+    gameState.playerName = playerName || 'Siswa Hebat';
+    
+    const selectedSubject = document.getElementById('subjectSelect').value;
+    const selectedTopic = document.getElementById('topicSelect').value;
+    
+    if (!selectedSubject || !selectedTopic) {
+        alert("Mohon pilih bidang studi dan materi terlebih dahulu!");
+        return;
+    }
+    
+    let availableQuestions = [];
+    if (atpDatabase[selectedSubject] && atpDatabase[selectedSubject][selectedTopic]) {
+        availableQuestions = atpDatabase[selectedSubject][selectedTopic];
+    } else {
+        alert("Materi tidak tersedia!");
+        return;
+    }
+    
+    let requestedCount = parseInt(document.getElementById('questionCount').value);
+    gameState.questionCount = Math.min(requestedCount, availableQuestions.length);
+    gameState.questions = shuffleArray([...availableQuestions]).slice(0, gameState.questionCount);
+    
+    // Initialize opponents
+    gameState.opponents = [];
+    const planeNumbers = [1, 2, 3, 4, 5, 6, 7, 8].filter(n => n !== gameState.selectedPlane);
+    const selectedOpponents = shuffleArray(planeNumbers).slice(0, 5);
+    
+    selectedOpponents.forEach(num => {
+        gameState.opponents.push({
+            plane: num,
+            position: 0,
+            color: document.querySelector(`.plane-${num}`).dataset.color
+        });
+    });
+
+    // Switch to game screen
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('gameScreen').classList.add('active');
+    
+    // Set background
+    const bg = document.getElementById('gameBackground');
+    bg.className = 'game-background ' + gameState.background;
+    
+    if (gameState.background === 'space') {
+        addStars();
+    }
+    
+    createRaceTrack();
+    
+    setTimeout(() => {
+        showNextQuestion();
+    }, 500);
+}
+
+// Add Stars for Space Background
+function addStars() {
+    const bg = document.getElementById('gameBackground');
+    for (let i = 0; i < 50; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.width = Math.random() * 3 + 1 + 'px';
+        star.style.height = star.style.width;
+        star.style.animationDelay = Math.random() * 2 + 's';
+        bg.appendChild(star);
+    }
+}
+
+// Create Race Track
+function createRaceTrack() {
+    const track = document.getElementById('raceTrack');
+    track.innerHTML = '';
+    
+    // Player lane
+    const playerLane = document.createElement('div');
+    playerLane.className = 'racer-lane player';
+    playerLane.innerHTML = `
+        <img class="lane-plane" id="plane-player" src="${getPlaneSvg(gameState.selectedPlaneColor, gameState.selectedPlane)}" alt="Player">
+        <div class="lane-name">${gameState.playerName}</div>
+        <div class="lane-progress">
+            <div class="lane-progress-bar" id="progress-player" style="width: 0%; background: ${gameState.selectedPlaneColor}"></div>
+            <div class="finish-line"></div>
+            <div class="finish-label" id="label-player"> Skor: 0</div>
+        </div>
+    `;
+    track.appendChild(playerLane);
+    
+    // Opponent lanes
+    gameState.opponents.forEach(opp => {
+        const lane = document.createElement('div');
+        lane.className = 'racer-lane';
+        lane.innerHTML = `
+            <img class="lane-plane" id="plane-opponent-${opp.plane}" src="${getPlaneSvg(opp.color, opp.plane)}" alt="Opponent">
+            <div class="lane-name">Pesawat ${opp.plane}</div>
+            <div class="lane-progress">
+                <div class="lane-progress-bar" id="progress-opponent-${opp.plane}" style="width: 0%; background: ${opp.color}"></div>
+                <div class="finish-line"></div>
+                <div class="finish-label" id="label-opponent-${opp.plane}">🏆 Selesai</div>
+            </div>
+        `;
+        track.appendChild(lane);
+    });
+}
+
+// Show Next Question
+function showNextQuestion() {
+    if (gameState.currentQuestion >= gameState.questions.length) {
+        endGame();
+        return;
+    }
+    
+    const question = gameState.questions[gameState.currentQuestion];
+    
+    document.getElementById('questionNumber').textContent = `Soal ${gameState.currentQuestion + 1}/${gameState.questions.length}`;
+    document.getElementById('questionText').textContent = question.q;
+    
+    const optionsContainer = document.getElementById('answerOptions');
+    optionsContainer.innerHTML = '';
+    
+    // Shuffle answer options
+    const indices = [0, 1, 2, 3].slice(0, question.options.length);
+    const shuffledIndices = shuffleArray(indices);
+    const newCorrectIndex = shuffledIndices.indexOf(question.correct);
+    
+    shuffledIndices.forEach((originalIndex, displayIndex) => {
+        const btn = document.createElement('button');
+        btn.className = 'answer-btn';
+        btn.textContent = `${String.fromCharCode(65 + displayIndex)}. ${question.options[originalIndex]}`;
+        btn.onclick = () => checkAnswer(displayIndex, newCorrectIndex, btn);
+        optionsContainer.appendChild(btn);
+    });
+    
+    startTimer();
+}
+
+// Start Timer
+function startTimer() {
+    clearInterval(gameState.timer);
+    gameState.timeLeft = 30;
+    updateTimer();
+    
+    gameState.timer = setInterval(() => {
+        gameState.timeLeft--;
+        updateTimer();
+        
+        if (gameState.timeLeft <= 0) {
+            clearInterval(gameState.timer);
+            checkAnswer(-1, -1, null);
+        }
+    }, 1000);
+}
+
+// Update Timer Display
+function updateTimer() {
+    const timerEl = document.getElementById('timer');
+    timerEl.textContent = `️ ${gameState.timeLeft}s`;
+    timerEl.style.background = gameState.timeLeft <= 10 ? '#cc0000' : '#ff6b6b';
+}
+
+// Check Answer
+function checkAnswer(selectedIndex, correctIndex, btnElement) {
+    clearInterval(gameState.timer);
+    
+    const buttons = document.querySelectorAll('.answer-btn');
+    buttons.forEach(btn => btn.disabled = true);
+    
+    const isCorrect = selectedIndex === correctIndex;
+    
+    if (isCorrect) {
+        if (btnElement) btnElement.classList.add('correct');
+        gameState.correctAnswers++;
+        playSound('correct');
+        playSound('move');
+    } else {
+        if (btnElement) btnElement.classList.add('wrong');
+        if (correctIndex >= 0 && buttons[correctIndex]) {
+            buttons[correctIndex].classList.add('correct');
+        }
+        playSound('wrong');
+    }
+    
+    updatePlayerPosition(isCorrect);
+    moveOpponents();
+    checkFinishLine();
+    
+    setTimeout(() => {
+        gameState.currentQuestion++;
+        if (gameState.playerPosition < 100 && !gameState.opponents.some(o => o.position >= 100)) {
+            showNextQuestion();
+        }
+    }, 1500);
+}
+
+// Update Player Position
+function updatePlayerPosition(isCorrect) {
+    const step = 100 / gameState.questions.length;
+    if (isCorrect) {
+        gameState.playerPosition = Math.min(100, gameState.playerPosition + step);
+    } else {
+        gameState.playerPosition = Math.max(0, gameState.playerPosition - step);
+    }
+    
+    const progressBar = document.getElementById('progress-player');
+    const labelEl = document.getElementById('label-player');
+    
+    if (progressBar) {
+        progressBar.style.width = gameState.playerPosition + '%';
+    }
+    
+    if (gameState.playerPosition >= 100 && labelEl && !labelEl.classList.contains('show')) {
+        labelEl.innerHTML = `🏆 Skor: ${gameState.correctAnswers}`;
+        labelEl.classList.add('show');
+        playSound('win');
+    }
+}
+
+// Move Opponents
+function moveOpponents() {
+    gameState.opponents.forEach(opp => {
+        if (opp.position < 100) {
+            const moveAmount = 8 + Math.random() * 12;
+            opp.position = Math.min(100, opp.position + moveAmount);
+            
+            const progressBar = document.getElementById(`progress-opponent-${opp.plane}`);
+            const labelEl = document.getElementById(`label-opponent-${opp.plane}`);
+            
+            if (progressBar) {
+                progressBar.style.width = opp.position + '%';
+            }
+            if (opp.position >= 100 && labelEl && !labelEl.classList.contains('show')) {
+                labelEl.classList.add('show');
+            }
+        }
+    });
+}
+
+// Check Finish Line
+function checkFinishLine() {
+    if (gameState.playerPosition >= 100) {
+        setTimeout(() => endGame(), 1000);
+        return;
+    }
+    
+    const winner = gameState.opponents.find(opp => opp.position >= 100);
+    if (winner) {
+        setTimeout(() => endGame(), 1000);
+    }
+}
+
+// End Game
+function endGame() {
+    clearInterval(gameState.timer);
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('resultsScreen').classList.add('active');
+    
+    const isPlayerWin = gameState.playerPosition >= 100 && !gameState.opponents.some(o => o.position >= 100);
+    const trophy = document.getElementById('trophy');
+    const winnerText = document.getElementById('winnerText');
+    
+    if (isPlayerWin) {
+        trophy.textContent = '🏆';
+        winnerText.textContent = `🎉 Selamat! ${gameState.playerName} Menang! 🎉`;
+        winnerText.style.color = '#FFD700';
+    } else {
+        trophy.textContent = '🥈';
+        winnerText.textContent = 'Balapan Selesai!';
+        winnerText.style.color = '#667eea';
+    }
+    
+    const selectedSubject = document.getElementById('subjectSelect');
+    const selectedTopic = document.getElementById('topicSelect');
+    
+    const scoreDetails = document.getElementById('scoreDetails');
+    scoreDetails.innerHTML = `
+        <div class="score-item">
+            <span>Bidang Studi:</span>
+            <strong>${selectedSubject.value}</strong>
+        </div>
+        <div class="score-item">
+            <span>Materi:</span>
+            <strong>${selectedTopic.value}</strong>
+        </div>
+        <div class="score-item">
+            <span>Jumlah Soal:</span>
+            <strong>${gameState.questions.length}</strong>
+        </div>
+        <div class="score-item">
+            <span>Jawaban Benar:</span>
+            <strong>${gameState.correctAnswers}/${gameState.questions.length}</strong>
+        </div>
+        <div class="score-item">
+            <span>Persentase:</span>
+            <strong>${Math.round((gameState.correctAnswers/gameState.questions.length)*100)}%</strong>
+        </div>
+        <div class="score-item">
+            <span>Posisi Akhir:</span>
+            <strong>${Math.round(gameState.playerPosition)}%</strong>
+        </div>
+    `;
+}
+
+// Back to Menu
+function backToMenu() {
+    gameState.currentQuestion = 0;
+    gameState.playerPosition = 0;
+    gameState.correctAnswers = 0;
+    gameState.opponents = [];
+    
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('menuScreen').classList.add('active');
+}
+
+// Shuffle Array
+function shuffleArray(array) {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+}
+
+// Prevent zoom on double tap for mobile
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function(event) {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+}, false);
