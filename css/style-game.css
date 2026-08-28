@@ -1,1 +1,526 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    touch-action: manipulation;
+}
+
+.screen {
+    display: none;
+    height: 100vh;
+    width: 100vw;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* Menu Screen */
+.menu-screen {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.game-title {
+    font-size: 1.6em;
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.menu-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    color: #333;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.form-group select, .form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+    background: white;
+}
+
+.btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* Plane Selection */
+.plane-selection {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.plane-option {
+    border: 3px solid #ddd;
+    border-radius: 10px;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: white;
+}
+
+.plane-option.selected {
+    border-color: #667eea;
+    background: #f0f0ff;
+    transform: scale(1.05);
+}
+
+.plane-option img {
+    width: 100%;
+    height: auto;
+    max-width: 50px;
+}
+
+.plane-option.plane-1 { border-color: #4A90E2; }
+.plane-option.plane-2 { border-color: #E24A4A; }
+.plane-option.plane-3 { border-color: #E2A74A; }
+.plane-option.plane-4 { border-color: #4AE24A; }
+.plane-option.plane-5 { border-color: #8E4AE2; }
+.plane-option.plane-6 { border-color: #4AE2E2; }
+.plane-option.plane-7 { border-color: #E24A8E; }
+.plane-option.plane-8 { border-color: #D4AF37; }
+
+/* Background Selection */
+.bg-selection {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.bg-option {
+    border: 3px solid #ddd;
+    border-radius: 10px;
+    padding: 10px 5px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s;
+}
+
+.bg-option.selected {
+    border-color: #667eea;
+    background: #f0f0ff;
+}
+
+/* Game Screen - Two Layouts */
+.game-screen {
+    display: flex;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Screen 1: Race Container */
+.screen-1.race-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: rgba(0,0,0,0.15);
+}
+
+.game-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-size: cover;
+    background-position: center;
+}
+
+.game-background.space {
+    background: linear-gradient(to bottom, #000000 0%, #1a1a2e 50%, #16213e 100%);
+}
+
+.game-background.forest {
+    background: linear-gradient(to bottom, #87CEEB 0%, #90EE90 50%, #228B22 100%);
+}
+
+.game-background.ocean {
+    background: linear-gradient(to bottom, #87CEEB 0%, #4169E1 50%, #1E90FF 100%);
+}
+
+.game-background.mountain {
+    background: linear-gradient(to bottom, #87CEEB 0%, #E0E0E0 50%, #696969 100%);
+}
+
+.race-track {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    gap: 15px;
+    overflow-y: auto;
+}
+
+.racer-lane {
+    position: relative;
+    height: 60px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.racer-lane.player {
+    border: 3px solid #FFD700;
+    box-shadow: 0 0 15px rgba(255,215,0,0.5);
+}
+
+.lane-plane {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+    transition: margin-left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 10;
+}
+
+.lane-name {
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    min-width: 100px;
+}
+
+.lane-progress {
+    flex: 1;
+    height: 30px;
+    background: #e0e0e0;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    margin-left: 10px;
+}
+
+.lane-progress-bar {
+    height: 100%;
+    transition: width 0.5s ease-out;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+}
+
+.finish-line {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background: repeating-linear-gradient(
+        45deg,
+        #000,
+        #000 10px,
+        #fff 10px,
+        #fff 20px
+    );
+    z-index: 5;
+}
+
+.finish-label {
+    position: absolute;
+    right: 35px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 1px 1px 3px black;
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+    z-index: 15;
+    background: rgba(0,0,0,0.7);
+    padding: 4px 8px;
+    border-radius: 12px;
+}
+
+.finish-label.show {
+    opacity: 1;
+}
+
+/* Screen 2: Quiz Container */
+.screen-2.quiz-container {
+    flex: 1;
+    max-width: 600px;
+    padding: 25px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-left: 5px solid #667eea;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.15);
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #eee;
+}
+
+.question-number {
+    font-size: 1.1em;
+    color: #667eea;
+    font-weight: bold;
+}
+
+.timer {
+    background: #ff6b6b;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.question-text {
+    font-size: 1.15em;
+    color: #333;
+    margin-bottom: 25px;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.answer-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.answer-btn {
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 15px;
+    text-align: left;
+    color: #444;
+    font-weight: 500;
+}
+
+.answer-btn:hover:not(:disabled) {
+    background: #f0f4ff;
+    border-color: #667eea;
+    transform: translateX(5px);
+}
+
+.answer-btn.correct {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+.answer-btn.wrong {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+.answer-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* Results Screen */
+.results-screen {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.results-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.trophy {
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
+.winner-text {
+    font-size: 1.8em;
+    color: #667eea;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.score-details {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f8f8f8;
+    border-radius: 10px;
+}
+
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    padding: 10px;
+    background: white;
+    border-radius: 5px;
+}
+
+/* Stars for space background */
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 2s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    /* Mobile: Screen 1 on top, Screen 2 on bottom */
+    .game-screen {
+        flex-direction: column;
+    }
+    
+    .screen-1.race-container {
+        flex: 0 0 50vh;
+        border-radius: 0;
+    }
+    
+    .screen-2.quiz-container {
+        flex: 1;
+        max-width: 100%;
+        border-left: none;
+        border-top: 5px solid #667eea;
+        padding: 15px;
+        border-radius: 0;
+    }
+    
+    .race-track {
+        padding: 10px;
+        gap: 10px;
+    }
+    
+    .racer-lane {
+        height: 50px;
+        padding: 0 8px;
+    }
+    
+    .lane-plane {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+    
+    .lane-name {
+        font-size: 10px;
+        min-width: 80px;
+    }
+    
+    .question-text {
+        font-size: 1em;
+    }
+    
+    .answer-btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    .game-title {
+        font-size: 1.4em;
+    }
+    
+    .menu-card {
+        padding: 20px;
+    }
+}
+
+@media (min-width: 769px) {
+    /* Desktop/Laptop: Screen 1 on left, Screen 2 on right */
+    .game-screen {
+        flex-direction: row;
+    }
+    
+    .screen-1.race-container {
+        flex: 1;
+        border-radius: 0 20px 20px 0;
+        margin: 10px 10px 10px 0;
+    }
+    
+    .screen-2.quiz-container {
+        flex: 1;
+        border-radius: 20px 0 0 20px;
+        margin: 10px 0 10px 10px;
+    }
+}
