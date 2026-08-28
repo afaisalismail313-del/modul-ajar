@@ -51,7 +51,7 @@
                     <div class="bg-option selected" data-bg="space">🌌 Antariksa</div>
                     <div class="bg-option" data-bg="forest">🌲 Hutan</div>
                     <div class="bg-option" data-bg="ocean">🌊 Laut</div>
-                    <div class="bg-option" data-bg="mountain">️ Gunung</div>
+                    <div class="bg-option" data-bg="mountain">⛰️ Gunung</div>
                 </div>
             </div>
 
@@ -66,13 +66,13 @@
 
     <!-- Game Screen -->
     <div class="screen game-screen" id="gameScreen">
-        <!-- Screen 1: Racing Circuit -->
+        <!-- Screen 1: Racing Circuit (Kiri di Laptop, Atas di HP) -->
         <div class="screen-1 race-container" id="raceContainer">
             <div class="game-background" id="gameBackground"></div>
             <div class="race-track" id="raceTrack"></div>
         </div>
 
-        <!-- Screen 2: Quiz Container -->
+        <!-- Screen 2: Quiz Container (Kanan di Laptop, Bawah di HP) -->
         <div class="screen-2 quiz-container" id="quizContainer">
             <div class="question-header">
                 <span class="question-number" id="questionNumber">Soal 1/10</span>
@@ -86,10 +86,10 @@
     <!-- Results Screen -->
     <div class="screen results-screen" id="resultsScreen">
         <div class="results-card">
-            <div class="trophy" id="trophy"></div>
+            <div class="trophy" id="trophy">🏆</div>
             <div class="winner-text" id="winnerText">Selamat!</div>
             <div class="score-details" id="scoreDetails"></div>
-            <button class="btn btn-primary" onclick="backToMenu()">🔄 Main Lagi</button>
+            <button class="btn btn-primary" id="backBtn">🔄 Main Lagi</button>
         </div>
     </div>
 
