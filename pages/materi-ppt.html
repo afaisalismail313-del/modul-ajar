@@ -10,12 +10,12 @@ body{background:#0f2417;min-height:100vh;display:flex;align-items:center;justify
 .slide{width:min(96vw,1100px);height:min(88vh,620px);background:linear-gradient(135deg,#e8f5e9,#fff8e1);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.5);padding:36px 44px;overflow:auto;position:relative;border-top:8px solid #daa520}
 .kick{color:#b8860b;font-weight:700;letter-spacing:2px;font-size:12px;text-transform:uppercase}
 h1{color:#1a5c2e;font-size:34px;margin:10px 0}
-h2{color:#1a5c2e;font-size:26px;margin-bottom:14px;border-left:6px solid #daa520;padding-left:12px}
+h2{color:#1a5c2e;font-size:24px;margin-bottom:14px;border-left:6px solid #daa520;padding-left:12px}
 .sub{color:#2e7d32;font-size:16px}
-p,li{color:#223;font-size:15px;line-height:1.55}
+p,li{color:#223;font-size:14px;line-height:1.5}
 ul{margin:8px 0 8px 20px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.box{background:#fff;border:1px solid #cfd8cf;border-left:5px solid #2e7d32;border-radius:12px;padding:12px 14px}
+.box{background:#fff;border:1px solid #cfd8cf;border-left:5px solid #2e7d32;border-radius:12px;padding:12px 14px;margin-bottom:10px}
 .box h3{color:#1a5c2e;font-size:15px;margin-bottom:6px}
 .tag{display:inline-block;background:#2e7d32;color:#fff;border-radius:20px;padding:3px 12px;font-size:12px;margin:2px}
 .tag.g{background:#daa520}
@@ -36,17 +36,22 @@ ul{margin:8px 0 8px 20px}
 <button onclick="location.href='modul-ajar.html'">← Modul</button>
 </div>
 <script>
-var D=null;try{D=JSON.parse(localStorage.getItem('maPPTData'))}catch(e){}
-if(!D){document.body.innerHTML='<p style="color:#fff;text-align:center;padding:40px">Belum ada data. Buka <b>Modul Ajar</b>, generate modul, lalu klik "📽️ BUKA PPT MATERI".</p>';}
-else{build();}
-var S=[],cur=0;
+/* === DEKLARASI DI ATAS (PERBAIKAN BUG) === */
+var S=[],cur=0,D=null;
+try{D=JSON.parse(localStorage.getItem('maPPTData'))}catch(e){}
+if(!D||!D.html){
+document.getElementById('deck').innerHTML='<div class="slide"><div class="center" style="margin-top:60px"><h1>⚠️ Belum Ada Data</h1><p>Buka <b>Modul Ajar</b>, pilih mapel & klik <b>Generate</b>, lalu tekan tombol <b>📽️ BUKA PPT MATERI</b>.</p></div></div>';
+}else{build();}
+
 function rows(t){if(!t)return[];return Array.prototype.map.call(t.querySelectorAll('tr'),function(tr){return Array.prototype.map.call(tr.querySelectorAll('th,td'),function(x){return x.innerHTML;});});}
-function part(td,re){var m=td.match(re);return m?m[1]:'';}
+function part(td,re){var m=(td||'').match(re);return m?m[1]:'';}
+function g(r,i){return (r&&r[i]&&r[i][1])?r[i][1]:'';}
+
 function build(){
 var doc=new DOMParser().parseFromString(D.html,'text/html');
 var T=doc.querySelectorAll('table');
-var rId=rows(T[1]),rDes=rows(T[2]),rPeng=rows(T[3]),rAses=rows(T[4]),sign=T[5]?T[5].innerHTML:'';
-function g(r,i){return r[i]?r[i][1]||'':'';}
+var rId=rows(T[1]),rDes=rows(T[2]),rPeng=rows(T[3]),rAses=rows(T[4]);
+var sign=T[5]?T[5].innerHTML:'';
 var awal=[],inti=[],akhir=[];
 rPeng.forEach(function(r){var td=r[1]||'';
 awal.push(part(td,/<b>Kegiatan Awal[^<]*<\/b>:?([\s\S]*?)(?=<b>Kegiatan Inti)/));
@@ -57,20 +62,28 @@ S=[
 {h:'<div class="center" style="margin-top:40px"><div class="kick">Modul Ajar · MAN Bantaeng</div><h1>'+(D.mapel||'')+'</h1><div class="sub">'+g(rId,1)+'</div><p style="margin-top:18px">Kelas '+D.kelas+' · Semester '+D.semester+' · TA '+D.tahun+'</p><p>Guru: <b>'+D.guru+'</b></p></div>'},
 {h:'<h2>1 · Identifikasi Murid & Materi</h2><div class="grid"><div class="box"><h3>👥 Murid</h3><p>'+g(rId,0)+'</p></div><div class="box"><h3>📚 Materi</h3><p>'+g(rId,1)+'</p></div></div>'},
 {h:'<h2>2 · Tujuan Pembelajaran</h2><ul><li>'+g(rDes,2).split('<br>').join('</li><li>')+'</li></ul>'},
-{h:'<h2>3 · Capaian Pembelajaran</h2><div class="box"><p>'+g(rDes,0)+'</p></div><div class="box" style="margin-top:12px"><h3>🔗 Lintas Disiplin</h3><p>'+g(rDes,1)+'</p></div>'},
+{h:'<h2>3 · Capaian Pembelajaran</h2><div class="box"><p>'+g(rDes,0)+'</p></div><div class="box"><h3>🔗 Lintas Disiplin</h3><p>'+g(rDes,1)+'</p></div>'},
 {h:'<h2>4 · Profil Lulusan & Panca Cinta</h2><div class="grid"><div class="box"><h3>🎓 Dimensi Profil Lulusan</h3><p>'+g(rId,2).replace(/<br>/g,' · ')+'</p></div><div class="box"><h3>💚 Topik Panca Cinta</h3><p>'+g(rId,3).replace(/<br>/g,' ')+'</p></div></div>'},
-{h:'<h2>5 · Integrasi KBC</h2><div class="box"><p>'+g(rId,4).replace(/<br><br>/g,'</p></div><div class="box" style="margin-top:10px"><p>')+'</p></div>'},
-{h:'<h2>6 · Praktek Pedagogis & Digital</h2><div class="box"><p>'+g(rDes,4)+'</p></div><div class="box" style="margin-top:12px"><h3>💻 Pemanfaatan Digital</h3><p>'+g(rDes,7)+'</p></div>'},
+{h:'<h2>5 · Integrasi KBC (Kurikulum Berbasis Cinta)</h2><div class="box"><p>'+g(rId,4)+'</p></div>'},
+{h:'<h2>6 · Praktek Pedagogis & Digital</h2><div class="box"><p>'+g(rDes,4)+'</p></div><div class="box"><h3>💻 Pemanfaatan Digital</h3><p>'+g(rDes,7)+'</p></div>'},
 {h:'<h2>7 · Kegiatan Awal ('+N+' Pertemuan)</h2><ul><li>'+awal.join('</li><li>')+'</li></ul>'},
 {h:'<h2>8 · Kegiatan Inti — Pertemuan 1</h2><p>'+(inti[0]||'')+'</p>'},
-{h:'<h2>9 · Kegiatan Inti Lanjutan & Penutup</h2>'+(N>1?'<p><b>Pertemuan 2–'+N+':</b> model bergantian (Discovery, PjBL, Inquiry, Cooperative, Role Playing) dengan prinsip <span class="tag">Mindful</span><span class="tag g">Meaningful</span><span class="tag">Joyful</span>.</p><hr style="margin:10px 0">':'')+'<h2 style="font-size:20px">Kegiatan Akhir</h2><ul><li>'+akhir.join('</li><li>')+'</li></ul>'},
-{h:'<h2>10 · Asesmen Pembelajaran</h2><div class="grid"><div class="box"><h3>Awal</h3><p>'+g(rAses,0)+'</p></div><div class="box"><h3>Proses</h3><p>'+g(rAses,1)+'</p></div></div><div class="box" style="margin-top:12px"><h3>Akhir</h3><p>'+g(rAses,2)+'</p></div>'},
-{h:'<div class="center" style="margin-top:50px"><div class="kick">Terima Kasih</div><h1>Wassalamu\'alaikum Wr. Wb.</h1><p style="margin-top:16px">Belajar dengan <span class="tag">Mindful</span><span class="tag g">Meaningful</span><span class="tag">Joyful</span></p><div style="margin-top:26px;font-size:13px">'+sign+'</div></div>'}
+{h:'<h2>9 · Kegiatan Inti Lanjutan & Penutup</h2>'+(N>1?'<p><b>Pertemuan 2–'+N+':</b> model bergantian (Discovery, PjBL, Inquiry, Cooperative, Role Playing) dengan prinsip <span class="tag">Mindful</span><span class="tag g">Meaningful</span><span class="tag">Joyful</span>.</p><hr style="margin:10px 0">':'')+'<h2 style="font-size:18px">Kegiatan Akhir</h2><ul><li>'+akhir.join('</li><li>')+'</li></ul>'},
+{h:'<h2>10 · Asesmen Pembelajaran</h2><div class="grid"><div class="box"><h3>Awal</h3><p>'+g(rAses,0)+'</p></div><div class="box"><h3>Proses</h3><p>'+g(rAses,1)+'</p></div></div><div class="box"><h3>Akhir</h3><p>'+g(rAses,2)+'</p></div>'},
+{h:'<div class="center" style="margin-top:50px"><div class="kick">Terima Kasih</div><h1>Wassalamu\'alaikum Wr. Wb.</h1><p style="margin-top:16px">Belajar dengan <span class="tag">Mindful</span><span class="tag g">Meaningful</span><span class="tag">Joyful</span></p><div style="margin-top:26px;font-size:12px">'+sign+'</div></div>'}
 ];
+cur=0;
 render();
 }
-function render(){document.getElementById('deck').innerHTML='<div class="slide">'+S[cur].h+'<div class="foot"><span>MAN Bantaeng · '+(D.mapel||'')+'</span><span>Slide '+(cur+1)+' / '+S.length+'</span></div></div>';document.getElementById('ctr').textContent=(cur+1)+' / '+S.length;}
-function go(d){cur=Math.max(0,Math.min(S.length-1,cur+d));render();}
+
+function render(){
+var deck=document.getElementById('deck');
+var s=S[cur];
+if(!s){deck.innerHTML='<div class="slide"><h1>⚠️ Slide tidak tersedia</h1></div>';return;}
+deck.innerHTML='<div class="slide">'+s.h+'<div class="foot"><span>MAN Bantaeng · '+(D.mapel||'')+'</span><span>Slide '+(cur+1)+' / '+S.length+'</span></div></div>';
+document.getElementById('ctr').textContent=(cur+1)+' / '+S.length;
+}
+function go(d){if(!S.length)return;cur=Math.max(0,Math.min(S.length-1,cur+d));render();}
 function fs(){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
 document.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
 </script>
