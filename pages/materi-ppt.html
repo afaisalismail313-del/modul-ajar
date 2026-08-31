@@ -7,20 +7,20 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif}
 body{background:#0f2417;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.slide{width:min(96vw,1100px);height:min(88vh,620px);background:linear-gradient(135deg,#e8f5e9,#fff8e1);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.5);padding:36px 44px;overflow:auto;position:relative;border-top:8px solid #daa520}
+.slide{width:min(96vw,1100px);height:min(88vh,640px);background:linear-gradient(135deg,#e8f5e9,#fff8e1);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.5);padding:34px 42px;overflow:auto;position:relative;border-top:8px solid #daa520}
 .kick{color:#b8860b;font-weight:700;letter-spacing:2px;font-size:12px;text-transform:uppercase}
-h1{color:#1a5c2e;font-size:34px;margin:10px 0}
-h2{color:#1a5c2e;font-size:24px;margin-bottom:14px;border-left:6px solid #daa520;padding-left:12px}
-.sub{color:#2e7d32;font-size:16px}
+h1{color:#1a5c2e;font-size:32px;margin:10px 0}
+h2{color:#1a5c2e;font-size:24px;margin-bottom:12px;border-left:6px solid #daa520;padding-left:12px}
+h3{color:#1a5c2e;font-size:16px;margin:8px 0 6px}
+.sub{color:#2e7d32;font-size:15px}
 p,li{color:#223;font-size:14px;line-height:1.5}
-ul{margin:8px 0 8px 20px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+ul{margin:6px 0 6px 20px}
 .box{background:#fff;border:1px solid #cfd8cf;border-left:5px solid #2e7d32;border-radius:12px;padding:12px 14px;margin-bottom:10px}
-.box h3{color:#1a5c2e;font-size:15px;margin-bottom:6px}
 .tag{display:inline-block;background:#2e7d32;color:#fff;border-radius:20px;padding:3px 12px;font-size:12px;margin:2px}
 .tag.g{background:#daa520}
+.tag.b{background:#1565c0}
 .center{text-align:center}
-.foot{position:absolute;bottom:10px;left:44px;right:44px;display:flex;justify-content:space-between;color:#777;font-size:11px}
+.foot{position:absolute;bottom:10px;left:42px;right:42px;display:flex;justify-content:space-between;color:#777;font-size:11px}
 .ctrl{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center;background:#12301d;padding:8px 14px;border-radius:30px;box-shadow:0 6px 20px rgba(0,0,0,.4)}
 .ctrl button{background:#2e7d32;color:#fff;border:none;border-radius:20px;padding:7px 14px;cursor:pointer;font-size:14px}
 .ctrl button:hover{background:#4caf50}
@@ -36,49 +36,58 @@ ul{margin:8px 0 8px 20px}
 <button onclick="location.href='modul-ajar.html'">← Modul</button>
 </div>
 <script>
-/* === DEKLARASI DI ATAS (PERBAIKAN BUG) === */
 var S=[],cur=0,D=null;
 try{D=JSON.parse(localStorage.getItem('maPPTData'))}catch(e){}
 if(!D||!D.html){
-document.getElementById('deck').innerHTML='<div class="slide"><div class="center" style="margin-top:60px"><h1>⚠️ Belum Ada Data</h1><p>Buka <b>Modul Ajar</b>, pilih mapel & klik <b>Generate</b>, lalu tekan tombol <b>📽️ BUKA PPT MATERI</b>.</p></div></div>';
+document.getElementById('deck').innerHTML='<div class="slide"><div class="center" style="margin-top:60px"><h1>⚠️ Belum Ada Data</h1><p>Buka <b>Modul Ajar</b>, pilih mapel & klik <b>Generate</b>, lalu tekan <b>📽️ BUKA PPT MATERI</b>.</p></div></div>';
 }else{build();}
 
 function rows(t){if(!t)return[];return Array.prototype.map.call(t.querySelectorAll('tr'),function(tr){return Array.prototype.map.call(tr.querySelectorAll('th,td'),function(x){return x.innerHTML;});});}
-function part(td,re){var m=(td||'').match(re);return m?m[1]:'';}
 function g(r,i){return (r&&r[i]&&r[i][1])?r[i][1]:'';}
+function part(td,re){var m=(td||'').match(re);return m?m[1]:'';}
+function stripTP(t){return t.replace(/^Murid\s+(mampu|dapat)\s+/i,'').replace(/^Peserta didik\s+(mampu|dapat)\s+/i,'');}
+function clean(s){return s.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();}
+
+/* Susun MATERI: pakai u.materi bila ada, sonst turunkan dari TP */
+function getMateri(tpList){
+var groups=[],per=Math.max(1,Math.ceil(tpList.length/4));
+for(var i=0;i<tpList.length;i+=per){groups.push(tpList.slice(i,i+per));}
+return groups.map(function(gr,i){return {j:'Materi '+(i+1),p:gr.map(function(x){return clean(stripTP(x));});};});
+}
 
 function build(){
 var doc=new DOMParser().parseFromString(D.html,'text/html');
 var T=doc.querySelectorAll('table');
 var rId=rows(T[1]),rDes=rows(T[2]),rPeng=rows(T[3]),rAses=rows(T[4]);
 var sign=T[5]?T[5].innerHTML:'';
+var tpList=g(rDes,2).split('<br>').filter(function(x){return clean(x);});
+var M=getMateri(tpList);
+while(M.length<4){M.push({j:'Materi '+(M.length+1),p:['Pendalaman materi: guru mengajak murid menghubungkan konsep dengan kehidupan sehari-hari dan nilai Panca Cinta.'];});}
+var kunci=clean(g(rId,1).split('Kata Kunci:')[1]||'materi');
 var awal=[],inti=[],akhir=[];
 rPeng.forEach(function(r){var td=r[1]||'';
-awal.push(part(td,/<b>Kegiatan Awal[^<]*<\/b>:?([\s\S]*?)(?=<b>Kegiatan Inti)/));
+awal.push(clean(part(td,/<b>Kegiatan Awal[^<]*<\/b>:?([\s\S]*?)(?=<b>Kegiatan Inti)/)));
 inti.push(part(td,/<b>Kegiatan Inti[^<]*<\/b>:?([\s\S]*?)(?=<b>Kegiatan Akhir)/));
-akhir.push(part(td,/<b>Kegiatan Akhir[^<]*<\/b>:?([\s\S]*?)$/));});
-var N=rPeng.length;
+akhir.push(clean(part(td,/<b>Kegiatan Akhir[^<]*<\/b>:?([\s\S]*?)$/)));});
+function mSlide(m){return '<h2>'+m.j+' · '+kunci+'</h2><ul><li>'+m.p.join('</li><li>')+'</li></ul>';}
 S=[
-{h:'<div class="center" style="margin-top:40px"><div class="kick">Modul Ajar · MAN Bantaeng</div><h1>'+(D.mapel||'')+'</h1><div class="sub">'+g(rId,1)+'</div><p style="margin-top:18px">Kelas '+D.kelas+' · Semester '+D.semester+' · TA '+D.tahun+'</p><p>Guru: <b>'+D.guru+'</b></p></div>'},
-{h:'<h2>1 · Identifikasi Murid & Materi</h2><div class="grid"><div class="box"><h3>👥 Murid</h3><p>'+g(rId,0)+'</p></div><div class="box"><h3>📚 Materi</h3><p>'+g(rId,1)+'</p></div></div>'},
-{h:'<h2>2 · Tujuan Pembelajaran</h2><ul><li>'+g(rDes,2).split('<br>').join('</li><li>')+'</li></ul>'},
-{h:'<h2>3 · Capaian Pembelajaran</h2><div class="box"><p>'+g(rDes,0)+'</p></div><div class="box"><h3>🔗 Lintas Disiplin</h3><p>'+g(rDes,1)+'</p></div>'},
-{h:'<h2>4 · Profil Lulusan & Panca Cinta</h2><div class="grid"><div class="box"><h3>🎓 Dimensi Profil Lulusan</h3><p>'+g(rId,2).replace(/<br>/g,' · ')+'</p></div><div class="box"><h3>💚 Topik Panca Cinta</h3><p>'+g(rId,3).replace(/<br>/g,' ')+'</p></div></div>'},
-{h:'<h2>5 · Integrasi KBC (Kurikulum Berbasis Cinta)</h2><div class="box"><p>'+g(rId,4)+'</p></div>'},
-{h:'<h2>6 · Praktek Pedagogis & Digital</h2><div class="box"><p>'+g(rDes,4)+'</p></div><div class="box"><h3>💻 Pemanfaatan Digital</h3><p>'+g(rDes,7)+'</p></div>'},
-{h:'<h2>7 · Kegiatan Awal ('+N+' Pertemuan)</h2><ul><li>'+awal.join('</li><li>')+'</li></ul>'},
-{h:'<h2>8 · Kegiatan Inti — Pertemuan 1</h2><p>'+(inti[0]||'')+'</p>'},
-{h:'<h2>9 · Kegiatan Inti Lanjutan & Penutup</h2>'+(N>1?'<p><b>Pertemuan 2–'+N+':</b> model bergantian (Discovery, PjBL, Inquiry, Cooperative, Role Playing) dengan prinsip <span class="tag">Mindful</span><span class="tag g">Meaningful</span><span class="tag">Joyful</span>.</p><hr style="margin:10px 0">':'')+'<h2 style="font-size:18px">Kegiatan Akhir</h2><ul><li>'+akhir.join('</li><li>')+'</li></ul>'},
-{h:'<h2>10 · Asesmen Pembelajaran</h2><div class="grid"><div class="box"><h3>Awal</h3><p>'+g(rAses,0)+'</p></div><div class="box"><h3>Proses</h3><p>'+g(rAses,1)+'</p></div></div><div class="box"><h3>Akhir</h3><p>'+g(rAses,2)+'</p></div>'},
-{h:'<div class="center" style="margin-top:50px"><div class="kick">Terima Kasih</div><h1>Wassalamu\'alaikum Wr. Wb.</h1><p style="margin-top:16px">Belajar dengan <span class="tag">Mindful</span><span class="tag g">Meaningful</span><span class="tag">Joyful</span></p><div style="margin-top:26px;font-size:12px">'+sign+'</div></div>'}
+{h:'<div class="center" style="margin-top:36px"><div class="kick">Media Pembelajaran · MAN Bantaeng</div><h1>'+(D.mapel||'')+'</h1><div class="sub">'+clean(g(rId,1))+'</div><p style="margin-top:16px">Kelas '+D.kelas+' · Semester '+D.semester+' · TA '+D.tahun+'</p><p>Guru: <b>'+D.guru+'</b></p></div>'},
+{h:'<h2>Tujuan Pembelajaran</h2><ul><li>'+tpList.join('</li><li>')+'</li></ul>'},
+{h:mSlide(M[0])},
+{h:mSlide(M[1])},
+{h:mSlide(M[2])},
+{h:mSlide(M[3])},
+{h:'<h2>Pertanyaan Pemantik</h2><ul><li>Apa yang kamu ketahui tentang <b>'+kunci+'</b>?</li><li>Pernahkah kamu melihat/mengalami fenomena <b>'+kunci+'</b> dalam kehidupan sehari-hari?</li><li>Mengapa <b>'+kunci+'</b> penting bagi kehidupanmu dan lingkunganmu?</li><li>Bagaimana pandangan Islam/nilai Panca Cinta memaknai <b>'+kunci+'</b>?</li></ul>'},
+{h:'<h2>Kegiatan Pembelajaran</h2><div class="box"><h3>🟢 Awal</h3><p>'+awal.join(' ')+'</p></div><div class="box"><h3>🟡 Inti (Deep Learning)</h3><p><span class="tag">Mindful</span><span class="tag g">Meaningful</span><span class="tag b">Joyful</span> — memahami, mengaplikasikan, dan merefleksi <b>'+kunci+'</b> melalui model aktif (PBL/Discovery/PjBL/Inquiry/Cooperative/Role Playing).</p></div><div class="box"><h3>🔵 Penutup</h3><p>'+akhir.join(' ')+'</p></div>'},
+{h:'<h2>Nilai Panca Cinta (KBC)</h2><div class="box"><p>'+g(rId,3).replace(/<br>/g,' ')+'</p></div><div class="box"><h3>Integrasi KBC</h3><p>'+g(rId,4)+'</p></div>'},
+{h:'<h2>Asesmen</h2><div class="box"><h3>Awal</h3><p>'+g(rAses,0)+'</p></div><div class="box"><h3>Proses</h3><p>'+g(rAses,1)+'</p></div><div class="box"><h3>Akhir</h3><p>'+g(rAses,2)+'</p></div>'},
+{h:'<h2>Rangkuman</h2><ul><li>'+M.map(function(m){return '<b>'+m.j+':</b> '+m.p[0];}).join('</li><li>')+'</li></ul>'},
+{h:'<div class="center" style="margin-top:46px"><div class="kick">Terima Kasih</div><h1>Wassalamu\'alaikum Wr. Wb.</h1><p style="margin-top:14px">Terus belajar dengan <span class="tag">Mindful</span><span class="tag g">Meaningful</span><span class="tag b">Joyful</span></p><div style="margin-top:22px;font-size:12px">'+sign+'</div></div>'}
 ];
-cur=0;
-render();
+cur=0;render();
 }
-
 function render(){
-var deck=document.getElementById('deck');
-var s=S[cur];
+var deck=document.getElementById('deck');var s=S[cur];
 if(!s){deck.innerHTML='<div class="slide"><h1>⚠️ Slide tidak tersedia</h1></div>';return;}
 deck.innerHTML='<div class="slide">'+s.h+'<div class="foot"><span>MAN Bantaeng · '+(D.mapel||'')+'</span><span>Slide '+(cur+1)+' / '+S.length+'</span></div></div>';
 document.getElementById('ctr').textContent=(cur+1)+' / '+S.length;
