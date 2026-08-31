@@ -144,6 +144,7 @@ body{background:linear-gradient(135deg,var(--gp),var(--ep));min-height:100vh}
     <div class="loading" id="loading"><div class="spinner"></div><p>Memproses Modul Ajar...</p></div>
     <div class="prev" id="prev"><div id="modulContent"></div><br>
     <button class="btn btn-g" onclick="downloadWord()">📥 DOWNLOAD FILE WORD (F4)</button></div>
+    <button class="btn btn-e" onclick="openPPT()">📽️ BUKA PPT MATERI (12 SLIDE)</button>
   </div>
 </div>
 
@@ -665,6 +666,16 @@ const b=new Blob(['\ufeff',html],{type:'application/msword'});
 const a=document.createElement('a');a.href=URL.createObjectURL(b);
 a.download='Modul_Ajar_'+all[mk].nama.replace(/[^a-zA-Z0-9]+/g,'_')+'_Kelas_'+k+'.doc';
 document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href)}
+function openPPT(){
+if(!selUnit){alert('Generate modul terlebih dahulu!');return}
+localStorage.setItem('maPPTData',JSON.stringify({
+madrasah:el('gMadrasah').value,guru:el('gGuru').value,nip:el('gNIP').value,tahun:el('gTahun').value,
+mapel:(getMapelAll()[el('gMapel').value]||{}).nama,kelas:el('gKelas').value,
+semester:(el('gSemester').value==='1'?'Ganjil (I)':'Genap (II)'),
+html:el('modulContent').innerHTML
+}));
+window.open('materi-ppt.html','_blank');
+}
 </script><script>
 /* ===== ATP TAMBAHAN (aman, terpisah) ===== */
 if(typeof ATP_DEFAULT!=='undefined'){
