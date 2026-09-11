@@ -2,41 +2,20 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<title>Dashboard - Aplikasi MA</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aplikasi MA - Modul Ajar Terintegrasi KBC</title>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/auth.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif}
-:root{--g1:#1a5c2e;--g2:#2e7d32;--g3:#4caf50;--e1:#b8860b;--e2:#daa520;--gp:#e8f5e9;--ep:#fff8e1}
+:root{--g1:#1a5c2e;--g2:#2e7d32;--e1:#b8860b;--e2:#daa520;--gp:#e8f5e9;--ep:#fff8e1}
 body{background:linear-gradient(135deg,var(--gp),var(--ep));min-height:100vh}
-.hidden{display:none!important}
-
-/* ============ LOGIN ============ */
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,var(--g1),var(--g2) 60%,#0b3d20);padding:16px}
-.login-card{background:#fff;border-radius:20px;padding:36px 30px;width:100%;max-width:400px;
-  box-shadow:0 20px 60px rgba(0,0,0,.4);border-top:8px solid var(--e2);text-align:center}
-.login-logo{font-size:52px}
-.login-card h1{color:var(--g1);letter-spacing:2px;margin:8px 0 4px;font-size:26px}
-.login-sub{color:#666;font-size:13px;margin-bottom:22px;line-height:1.5}
-.login-card label{display:block;text-align:left;font-size:13px;font-weight:600;color:var(--g1);margin:10px 0 4px}
-.login-card input{width:100%;padding:11px 12px;border:2px solid #e2e8f0;border-radius:10px;font-size:14px;outline:none}
-.login-card input:focus{border-color:var(--e2)}
-.btn-gold{background:linear-gradient(90deg,var(--e1),var(--e2));color:#fff;border:none;
-  padding:12px 22px;border-radius:10px;font-weight:700;cursor:pointer;font-size:15px;transition:.2s}
-.btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(212,175,55,.5)}
-.login-card .btn-gold{width:100%;margin-top:18px}
-.error-msg{color:#dc2626;font-size:13px;margin-top:10px;min-height:16px}
-.login-hint{margin-top:14px;font-size:11.5px;color:#888}
-
-/* ============ HEADER ============ */
 .hdr{background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;
-  padding:14px 24px;display:flex;justify-content:space-between;align-items:center;
-  position:sticky;top:0;z-index:50;border-bottom:3px solid var(--e2)}
+     padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
 .hdr h1{font-size:18px}
 .hdr .who{font-size:12px;opacity:.9}
 .hdr button{background:var(--e2);color:var(--g1);border:none;padding:8px 16px;
-  border-radius:8px;cursor:pointer;font-weight:600;font-size:13px}
-
+            border-radius:8px;cursor:pointer;font-weight:600;font-size:13px}
 .wrap{max-width:1100px;margin:0 auto;padding:24px}
 .greeting{margin-bottom:24px}
 .greeting h2{color:var(--g1);font-size:22px}
@@ -44,504 +23,122 @@ body{background:linear-gradient(135deg,var(--gp),var(--ep));min-height:100vh}
 
 /* ============ GRID KARTU BUNDAR ============ */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:22px}
-.menu{position:relative;display:block;width:100%;aspect-ratio:1/1;background:#fff;
-  border-radius:50%;border:3px solid var(--e2);box-shadow:0 4px 20px rgba(0,0,0,.08);
-  text-decoration:none;color:inherit;overflow:hidden;cursor:pointer;
-  transition:transform .15s,box-shadow .15s}
+
+/* Kartu menu BENTUK LINGKARAN penuh */
+.menu{
+  position:relative;
+  display:block;
+  width:100%;
+  aspect-ratio:1/1;             /* tetap persegi => lingkaran sempurna */
+  background:#fff;
+  border-radius:50%;            /* LINGKARAN */
+  border:3px solid var(--e2);   /* ring emas mengelilingi */
+  box-shadow:0 4px 20px rgba(0,0,0,.08);
+  text-decoration:none;color:inherit;
+  overflow:hidden;
+  transition:transform .15s,box-shadow .15s;
+}
 .menu:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 10px 30px rgba(0,0,0,.15)}
-.menu-in{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;text-align:center;padding:16%}
-.menu .ico{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--g2),var(--e2));
-  color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;
-  margin-bottom:10px;box-shadow:0 3px 10px rgba(0,0,0,.15)}
+
+/* Isi kartu diposisikan ABSOLUT di dalam lingkaran agar lingkaran tidak melar */
+.menu-in{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:16%;
+}
+.menu .ico{
+  width:58px;height:58px;border-radius:50%;
+  background:linear-gradient(135deg,var(--g2),var(--e2));
+  color:#fff;font-size:26px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:10px;box-shadow:0 3px 10px rgba(0,0,0,.15);
+}
 .menu h3{color:var(--g1);font-size:14px;margin-bottom:4px;line-height:1.25}
-.menu p{font-size:11px;color:#666;line-height:1.4;display:-webkit-box;
-  -webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.menu p{
+  font-size:11px;color:#666;line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
 .badge{display:inline-block;background:var(--g2);color:#fff;font-size:10px;
-  padding:2px 8px;border-radius:10px;margin-top:8px}
+       padding:2px 8px;border-radius:10px;margin-top:8px}
 .badge.soon{background:#888}
-@supports not (aspect-ratio:1/1){.menu{height:auto}.menu::before{content:"";display:block;padding-top:100%}}
 
-/* ============ MODUL AJAR ============ */
-.card{background:#fff;border-radius:14px;padding:18px;margin-bottom:16px;
-  box-shadow:0 3px 12px rgba(26,92,46,.08);border-left:5px solid var(--e2)}
-.card h3{color:var(--g1);font-size:15px;margin-bottom:12px;border-bottom:2px dashed #e2e8f0;padding-bottom:8px}
-.card h3 small{color:#888;font-weight:400}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:4px}
-input,select{width:100%;padding:9px 10px;border:1.5px solid #d1d5db;border-radius:8px;
-  font-size:13.5px;background:#fff;outline:none}
-input:focus,select:focus{border-color:var(--g3)}
-.check-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.check-item{display:flex;align-items:center;gap:6px;background:var(--ep);border:1.5px solid #e5e0cf;
-  border-radius:8px;padding:8px 10px;font-size:12.5px;cursor:pointer}
-.check-item:has(input:checked){background:#ecfdf3;border-color:var(--g3)}
+/* Fallback browser lama yang belum mendukung aspect-ratio */
+@supports not (aspect-ratio:1/1){
+  .menu{height:auto}
+  .menu::before{content:"";display:block;padding-top:100%}
+}
 
-/* ====== .btn-row (YANG DITANYAKAN) ====== */
-.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 16px}
-.btn-green{background:var(--g2);color:#fff;border:none;padding:12px 22px;border-radius:10px;
-  font-weight:700;cursor:pointer;font-size:14px}
-.btn-green:hover{background:var(--g3)}
-.btn-outline{background:#fff;color:var(--g1);border:2px solid var(--g2);padding:10px 20px;
-  border-radius:10px;font-weight:700;cursor:pointer}
-.btn-row .btn-gold{width:auto;margin-top:0;padding:12px 22px}
-.btn-gold[disabled]{opacity:.5;cursor:not-allowed}
-.btn-back{background:#f1f5f9;color:#334155;border:2px solid #cbd5e1;padding:10px 20px;
-  border-radius:10px;font-weight:700;cursor:pointer}
-
-/* Preview */
-.preview-card{font-family:'Times New Roman',serif;font-size:13pt;line-height:1.55;border-left:5px solid var(--g2)}
-.preview-card h4{color:var(--g1);margin:12px 0 6px;font-size:13.5pt}
-.preview-card table{width:100%;border-collapse:collapse}
-.preview-card td{padding:2px 4px;vertical-align:top}
-.preview-card .bordered td{border:1px solid #999;padding:5px 8px}
-.preview-card ol,.preview-card ul{padding-left:22px}
-
-/* ============ RESPONSIVE HP ============ */
+/* ============ RESPONSIVE TAMPILAN HP ============ */
 @media(max-width:640px){
   .wrap{padding:16px}
-  .grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:14px}  /* 2 lingkaran per baris */
   .menu{border-width:2px}
   .menu-in{padding:12%}
   .menu .ico{width:46px;height:46px;font-size:20px;margin-bottom:6px}
   .menu h3{font-size:12px}
-  .menu p{display:none}
+  .menu p{display:none}   /* deskripsi disembunyikan agar lingkaran rapi di HP */
   .badge{margin-top:5px}
-  .grid-2,.grid-3{grid-template-columns:1fr}
-  .check-grid{grid-template-columns:1fr 1fr}
-}
-@media print{
-  .hdr,.login-wrap,#dashboardView,.card:not(.preview-card),.btn-row{display:none!important}
-  body{background:#fff}
 }
 </style>
 </head>
 <body>
-
-<!-- ============ 1. HALAMAN LOGIN ============ -->
-<section id="loginPage" class="login-wrap">
-  <div class="login-card">
-    <div class="login-logo">🕌</div>
-    <h1>APLIKASI MA</h1>
-    <p class="login-sub">Modul Ajar Terintegrasi KBC<br>Madrasah Aliyah · Kelas X • XI • XII</p>
-    <form id="loginForm">
-      <label>Username</label>
-      <input type="text" id="username" placeholder="Masukkan username" required autocomplete="off">
-      <label>Password</label>
-      <input type="password" id="password" placeholder="Masukkan password" required>
-      <button type="submit" class="btn-gold">MASUK APLIKASI</button>
-      <p id="loginError" class="error-msg"></p>
-    </form>
-    <p class="login-hint">Demo → Username: <b>guru</b> | Password: <b>madrasah2026</b></p>
+<div class="hdr">
+  <div>
+    <h1>📚 Dashboard Aplikasi MA</h1>
+    <div class="who" id="whoAmI"></div>
   </div>
-</section>
+  <button onclick="Auth.logout()">Keluar</button>
+</div>
 
-<!-- ============ 2. APLIKASI (SETELAH LOGIN) ============ -->
-<div id="appPage" class="hidden">
-  <div class="hdr">
-    <div>
-      <h1>📚 Dashboard Aplikasi MA</h1>
-      <div class="who" id="whoAmI"></div>
-    </div>
-    <button onclick="Auth.logout()">Keluar</button>
+<div class="wrap">
+  <div class="greeting">
+    <h2 id="greet">Selamat Datang</h2>
+    <p>Pilih menu di bawah untuk melanjutkan.</p>
   </div>
 
-  <!-- ====== 2a. DASHBOARD ====== -->
-  <section id="dashboardView" class="wrap">
-    <div class="greeting">
-      <h2 id="greet">Selamat Datang</h2>
-      <p>Pilih menu di bawah untuk melanjutkan.</p>
-    </div>
-    <div class="grid">
-      <a class="menu" onclick="showModul()">
-        <div class="menu-in">
-          <div class="ico">📝</div>
-          <h3>Modul Ajar</h3>
-          <p>Generate Modul Ajar Terintegrasi KBC berbasis ATP.</p>
-          <span class="badge">Aktif</span>
-        </div>
-      </a>
-      <a class="menu" href="worksheet.html">
-        <div class="menu-in">
-          <div class="ico">🧩</div>
-          <h3>Worksheet</h3>
-          <p>Buat Students Worksheet F4 otomatis dengan prompt AI siap pakai.</p>
-          <span class="badge">Aktif</span>
-        </div>
-      </a>
-      <a class="menu" href="game-pembelajaran.html">
-        <div class="menu-in">
-          <div class="ico">🎮</div>
-          <h3>Game Pembelajaran</h3>
-          <p>Buat Game Pembelajaran otomatis dengan prompt AI siap pakai.</p>
-          <span class="badge">Aktif</span>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <!-- ====== 2b. MODUL AJAR ====== -->
-  <section id="modulView" class="wrap hidden">
-    <div class="card">
-      <h3>📋 Identitas & Pemilihan Mata Pelajaran</h3>
-      <div class="grid-2">
-        <div><label>Nama Madrasah</label><input type="text" id="namaMadrasah" value="MAN Bantaeng"></div>
-        <div><label>Nama Kepala Madrasah</label><input type="text" id="namaKepsek" value="MUHAMMAD ARIF PITHER, S.Ag., M.M."></div>
-        <div><label>NIP Kepala Madrasah</label><input type="text" id="nipKepsek" value="197109302007101001"></div>
-        <div><label>Nama Guru Mapel</label><input type="text" id="namaGuru" placeholder="Contoh: Sitti Sainab, S.Ag"></div>
-        <div><label>NIP Guru</label><input type="text" id="nipGuru" placeholder="NIP / -"></div>
-        <div><label>Mata Pelajaran</label>
-          <select id="selMapel" onchange="onMapelChange()"><option value="">— Pilih Mata Pelajaran —</option></select></div>
-        <div><label>Kelas</label>
-          <select id="selKelas" onchange="onKelasChange()"><option value="">— Pilih Kelas —</option></select></div>
-        <div><label>Semester</label>
-          <select id="selSemester"><option value="Ganjil">Ganjil</option><option value="Genap">Genap</option></select></div>
-        <div><label>Topik / Bab / Unit</label>
-          <select id="selTopik" onchange="onTopikChange()"><option value="">— Pilih Topik —</option></select></div>
-        <div><label>Alokasi Waktu (JP)</label><input type="number" id="jp" value="2" min="1"></div>
-        <div><label>Fase (otomatis)</label><input type="text" id="fase" readonly></div>
+  <div class="grid">
+    <!-- Menu: Modul Ajar -->
+    <a href="modul-ajar.html" class="menu">
+      <div class="menu-in">
+        <div class="ico">📝</div>
+        <h3>Modul Ajar</h3>
+        <p>Generate Modul Ajar Terintegrasi KBC berbasis ATP.</p>
+        <span class="badge">Aktif</span>
       </div>
-    </div>
+    </a>
 
-    <div class="card">
-      <h3>🎯 Dimensi Profil Lulusan <small>(pilih minimal 3)</small></h3>
-      <div class="check-grid" id="dimensiBox"></div>
-    </div>
-
-    <div class="card">
-      <h3>💚 Topik Panca Cinta KBC <small>(pilih minimal 2)</small></h3>
-      <div class="check-grid" id="cintaBox"></div>
-    </div>
-
-    <div class="card">
-      <h3>⚙️ Praktik Pedagogis</h3>
-      <div class="grid-3">
-        <div><label>Model Pembelajaran</label>
-          <select id="selModel">
-            <option>Discovery Learning</option>
-            <option>Problem Based Learning</option>
-            <option>Project Based Learning</option>
-            <option>Inquiry Learning</option>
-            <option>Genre Based Pedagogy</option>
-          </select></div>
-        <div><label>Strategi</label><input type="text" id="strategi" value="Pembelajaran Mendalam (Berkesadaran, Bermakna, Menggembirakan)"></div>
-        <div><label>Metode</label><input type="text" id="metode" value="Diskusi, tanya jawab, penugasan, presentasi"></div>
+    <!-- Menu: Worksheet -->
+    <a href="worksheet.html" class="menu">
+      <div class="menu-in">
+        <div class="ico">🧩</div>
+        <h3>Worksheet</h3>
+        <p>Buat Students Worksheet F4 otomatis dengan prompt AI siap pakai.</p>
+        <span class="badge">Aktif</span>
       </div>
-    </div>
+    </a>
 
-    <!-- ====== .btn-row YANG DITANYAKAN ====== -->
-    <div class="btn-row">
-      <button class="btn-back" onclick="showDashboard()">← Kembali</button>
-      <button class="btn-green" onclick="generateModul()">🔍 Generate Modul Ajar</button>
-      <button class="btn-gold" id="btnWord" onclick="downloadWord()" disabled>📥 Download Word (F4)</button>
-      <button class="btn-outline" onclick="window.print()">🖨️ Cetak</button>
-    </div>
+     <!-- Menu: Game Pembelajaran -->
+    <a href="game-pembelajaran.html" class="menu">
+      <div class="menu-in">
+        <div class="ico">🧩</div>
+        <h3>Game Pembelajaran</h3>
+        <p>Buat Game Pembelajaran otomatis dengan prompt AI siap pakai.</p>
+        <span class="badge">Aktif</span>
+      </div>
+    </a>
 
-    <div id="preview" class="card preview-card hidden"></div>
-  </section>
+     
+  </div>
 </div>
 
 <script>
-/* ============ AUTH (kompatibel dengan auth.js) ============ */
-var Auth = {
-  users:{"guru":{pass:"madrasah2026",nama:"Guru Mapel",role:"guru"},
-          "admin":{pass:"madrasah2026",nama:"Administrator",role:"admin"}},
-  login:function(u,p){
-    u=(u||"").toLowerCase();
-    if(this.users[u]&&this.users[u].pass===p){
-      var user={username:u,nama:this.users[u].nama,role:this.users[u].role};
-      sessionStorage.setItem("maUser",JSON.stringify(user));
-      return user;
-    }
-    return null;
-  },
-  logout:function(){sessionStorage.removeItem("maUser");location.reload();},
-  getUser:function(){try{return JSON.parse(sessionStorage.getItem("maUser")); }catch(e){return null;}},
-  isLoggedIn:function(){return !!this.getUser();}
-};
+Auth.requireLogin();
 
-/* ============ NAVIGASI ============ */
-function showDashboard(){
-  document.getElementById('dashboardView').classList.remove('hidden');
-  document.getElementById('modulView').classList.add('hidden');
-}
-function showModul(){
-  document.getElementById('dashboardView').classList.add('hidden');
-  document.getElementById('modulView').classList.remove('hidden');
-  window.scrollTo(0,0);
-}
-
-/* ============ LOGIN HANDLER ============ */
-document.getElementById('loginForm').addEventListener('submit',function(e){
-  e.preventDefault();
-  var u=document.getElementById('username').value;
-  var p=document.getElementById('password').value;
-  var user=Auth.login(u,p);
-  if(user){ initApp(); }
-  else{ document.getElementById('loginError').textContent="❌ Username atau password salah!"; }
-});
-
-function initApp(){
-  document.getElementById('loginPage').classList.add('hidden');
-  document.getElementById('appPage').classList.remove('hidden');
-  var user=Auth.getUser();
-  document.getElementById('whoAmI').textContent=(user.role.toUpperCase()+" • "+(user.nama||user.username));
-  document.getElementById('greet').textContent="Selamat Datang, "+(user.nama||user.username)+" 👋";
-  buildForm();
-}
-
-/* Auto-login jika sudah ada sesi */
-if(Auth.isLoggedIn()){ initApp(); }
-
-/* ============ DATA KBC ============ */
-var DIMENSI=["Keimanan dan Ketakwaan","Kewargaan","Penalaran Kritis","Kreativitas","Kolaborasi","Kemandirian","Kesehatan","Komunikasi"];
-var CINTA={
-  cintaAllah:{label:"Cinta kepada Allah dan Rasul",materi:["Keimanan dan ketakwaan kepada Allah Swt. sebagai inti dan muara kehidupan","Ibadah sebagai wujud cinta kepada Allah Swt.: salat, doa, zikir, membaca Al-Qur'an","Mensyukuri nikmat Allah Swt. dalam perilaku sehari-hari","Mempraktikkan sifat Rasulullah: cerdas, jujur, amanah, lemah lembut, dermawan"]},
-  cintaIlmu:{label:"Cinta Ilmu",materi:["Pilar sukses mencari ilmu: niat, tekun, tawakal, wara', yakin, syukur","Literasi sebagai sumber ilmu & pembelajar sepanjang hayat","Adab kepada guru & pemanfaatan teknologi","Inovasi dan penalaran kritis"]},
-  cintaLingkungan:{label:"Cinta Lingkungan",materi:["Islam sebagai agama rahmatan lil 'alamin","Adab pada alam dan lingkungan","Menghindari fasad/merusak lingkungan (QS. Al-A'raf:56; QS. Ar-Rum:41)","Praktik menjaga kebersihan (thaharah) dan hidup hemat"]},
-  cintaDiri:{label:"Cinta Diri dan Sesama",materi:["Akhlak terpuji pada diri sendiri: tawakal, ikhtiar, syukur, sabar, qanaah","Ukhuwah Islamiyah & ukhuwah insaniyah","Adab kepada orang tua, saudara, tetangga, teman","Ta'awun, tafahum, tasamuh, tawadhu, husnuzhan"]},
-  cintaTanahAir:{label:"Cinta Tanah Air",materi:["Ukhuwah wathaniyah (persaudaraan kebangsaan)","Hubbul Wathan minal Iman","Menghormati perbedaan suku, budaya, agama (QS. Al-Hujurat:13)","Berkontribusi untuk kemajuan bangsa"]}
-};
-var KBC_INTI={
-  cintaAllah:"Dalam pembelajaran disisipkan refleksi bahwa ilmu yang dipelajari adalah bagian dari ayat-ayat Allah, menumbuhkan Cinta kepada Allah dan Rasul-Nya.",
-  cintaIlmu:"Guru membiasakan adab menuntut ilmu, literasi sumber belajar, dan berpikir kritis sebagai implementasi Cinta Ilmu.",
-  cintaLingkungan:"Pembelajaran dikaitkan kesadaran menjaga kelestarian alam dan kebersihan lingkungan sebagai wujud Cinta Lingkungan.",
-  cintaDiri:"Guru menciptakan iklim kelas saling menghargai, kerja kelompok berbasis ta'awun dan tasamuh sebagai wujud Cinta Diri dan Sesama.",
-  cintaTanahAir:"Materi dikontekstualisasikan dengan potensi daerah dan keindonesiaan untuk menumbuhkan Cinta Tanah Air."
-};
-
-/* ============ DATA MAPEL (contoh 2 mapel sesuai ATP; bisa ditambah) ============ */
-var MAPEL={
-  quranhadits:{nama:"Al-Qur'an Hadits",dimensi:["Keimanan dan Ketakwaan","Penalaran Kritis","Kewargaan"],cinta:["cintaAllah","cintaIlmu"],lintas:["PAI dan Budi Pekerti","Bahasa Arab"],mitra:"Pesantren, rumah tahfiz, orang tua",digital:"Aplikasi mushaf digital, rekaman murattal, Quizizz",kelas:{
-    10:{fase:"E",cp:"Murid mampu menganalisis ayat-ayat Al-Qur'an dan hadis tentang pola hidup sederhana, berpikir positif dan sabar, kelestarian lingkungan, ilmu pengetahuan dan teknologi, dakwah yang ramah, amar makruf nahi mungkar, musyawarah, serta berlaku adil dan jujur, kemudian membiasakannya dalam kehidupan sehari-hari.",topik:[
-      {n:"BAB 1: Membudayakan Pola Hidup Sederhana dan Menyantuni Dhuafa",jp:8,smt:1,materi:"QS al-Furqan:67, QS al-Qashash:79-82, QS al-Baqarah:177, QS al-Ma'un:1-7",tp:["Menunjukkan sikap bersahaja dan seimbang dalam berkonsumasi sebagai wujud cinta Allah.","Menganalisis bahaya kesombongan melalui refleksi kisah Qarun.","Merumuskan hakikat kebajikan yang mencakup aspek sosial dan spiritual.","Menjauhi perilaku pendusta agama dengan konsisten peduli pada yatim serta melakukan aksi nyata menyantuni dhuafa."]},
-      {n:"BAB 2: Berpikir Positif dan Sabar dalam Menghadapi Ujian",jp:8,smt:1,materi:"QS al-Baqarah:155-157, QS Ali Imran:186, Hadis karakter tangguh mukmin",tp:["Menunjukkan sikap tenang dan istirja' saat menghadapi masalah.","Bersikap sabar dalam menerima perbedaan pendapat.","Mengembangkan rasa syukur atas hikmah di balik musibah."]},
-      {n:"BAB 3: Menjaga Kelestarian Lingkungan",jp:8,smt:1,materi:"QS ar-Rum:41-42, QS al-A'raf:56-58, QS Shad:27, QS al-Baqarah:204-206",tp:["Menganalisis penyebab kerusakan lingkungan sebagai cerminan ulah tangan manusia.","Merumuskan bahwa tidak ada ciptaan Allah yang sia-sia.","Merancang proyek kecil pengelolaan lingkungan."]},
-      {n:"BAB 4: Mengembangkan Ilmu Pengetahuan dan Teknologi",jp:8,smt:1,materi:"QS al-'Alaq:1-5, QS Yunus:101, QS al-Baqarah:164, QS al-Hujurat:6",tp:["Menunjukkan semangat literasi (Iqra') sebagai bentuk cinta ilmu.","Melakukan observasi fenomena alam dengan penuh kesadaran.","Merancang ide inovasi teknologi sederhana yang bermanfaat."]},
-      {n:"BAB 5: Mendakwahkan Keramahan Islam",jp:6,smt:2,materi:"QS an-Nahl:125, QS asy-Syu'ara':214-216, QS al-Hijr:94-96",tp:["Mendemonstrasikan komunikasi santun (Mauidzah Hasanah).","Menunjukkan sikap kasih sayang dan rendah hati kepada sesama mukmin.","Merancang gerakan Pelopor Kebaikan di lingkungan madrasah."]},
-      {n:"BAB 6: Membudayakan Amar Makruf Nahi Mungkar",jp:6,smt:2,materi:"QS Ali Imran:104 & 110, QS al-Maidah:78-80, Hadis Muslim",tp:["Menunjukkan kebanggaan sebagai Khaira Ummah dengan aktif menebar kebaikan.","Bersikap kritis terhadap kemungkaran di lingkungan sekitar.","Mendemonstrasikan cara mengubah kemungkaran dengan santun."]},
-      {n:"BAB 7: Membudayakan Musyawarah",jp:6,smt:2,materi:"QS Ali Imran:159, QS asy-Syura:38",tp:["Menunjukkan sikap lemah lembut dan pemaaf dalam interaksi sosial.","Merumuskan pentingnya musyawarah dalam penyelesaian urusan.","Mendemonstrasikan perilaku amanah dalam menjalankan keputusan bersama."]},
-      {n:"BAB 8: Berperilaku Adil dan Jujur",jp:6,smt:2,materi:"QS al-Maidah:8-10, QS at-Taubah:119, QS an-Nahl:90-92, QS an-Nisa':105",tp:["Menunjukkan sikap adil meski terhadap orang yang tidak disukai.","Memilih lingkungan pertemanan yang jujur.","Merancang aksi nyata Kantin Kejujuran atau gerakan anti-menyontek."]}
-    ]}
-  }},
-  inggris:{nama:"Bahasa Inggris",dimensi:["Komunikasi","Penalaran Kritis","Kreativitas"],cinta:["cintaIlmu","cintaDiri"],lintas:["Bahasa Indonesia","Informatika"],mitra:"Penutur asing / English corner, perpustakaan",digital:"Kamus daring, video otentik, Canva, podcast",kelas:{
-    12:{fase:"F",cp:"Pada akhir Fase F Kelas XII, peserta didik mampu mengidentifikasi tujuan komunikatif, struktur skematis, ciri kebahasaan, serta informasi tersurat dan tersirat teks naratif, argumentatif, hortatory exposition, dan discussion; menulis teks dengan struktur dan unsur kebahasaan yang tepat; serta menyajikan hasil karya secara santun dan bertanggung jawab terintegrasi dengan nilai-nilai KBC.",topik:[
-      {n:"Unit 1 - Narrative Text: The Story of a Friendly Future",jp:30,smt:1,materi:"Narrative text bertema Renewable Energy",tp:["Mengidentifikasi tujuan komunikatif & struktur skematis teks naratif tentang energi terbarukan.","Mengidentifikasi ciri kebahasaan (past tenses, action verbs).","Mengidentifikasi informasi tersurat & tersirat teks naratif.","Menulis teks naratif bertema Renewable Energy.","Menceritakan kembali isi teks naratif secara runtut."]},
-      {n:"Unit 2 - Argumentative Text: E-Money",jp:24,smt:1,materi:"Argumentative text bertema Digital Money",tp:["Mengidentifikasi tujuan komunikatif & struktur skematis teks argumentatif E-Money.","Mengidentifikasi ciri kebahasaan ungkapan meminta/memberi pendapat.","Mengidentifikasi informasi tersurat & tersirat.","Menulis teks argumentatif tentang Digital Money.","Menyajikan teks argumentatif melalui media pilihan."]},
-      {n:"Unit 3 - Hortatory Exposition: Netiquette",jp:13,smt:2,materi:"Hortatory exposition tentang etika berinternet",tp:["Mengidentifikasi tujuan komunikatif & struktur skematis hortatory exposition tentang netiket.","Mengidentifikasi unsur kebahasaan simple present tense & frasa emotif.","Mengelompokkan fakta dan opini.","Menulis teks hortatory exposition tentang netiket.","Melakukan presentasi kelompok dengan sikap percaya diri dan santun."]},
-      {n:"Unit 4 - Discussion Text: Carbon Footprints",jp:14,smt:2,materi:"Discussion text bertema jejak karbon",tp:["Mengidentifikasi tujuan komunikatif & struktur skematis discussion text.","Mengidentifikasi unsur kebahasaan (generic participants, modality, contrastive conjunction).","Mengelompokkan fakta dan opini.","Menulis discussion text dengan argumen santun dan objektif.","Melakukan presentasi kelompok dengan toleransi dan tanggung jawab."]}
-    ]}
-  }}
-};
-
-/* ============ FORM ============ */
-function buildForm(){
-  var sel=document.getElementById('selMapel');
-  for(var id in MAPEL){
-    var o=document.createElement('option');o.value=id;o.textContent=MAPEL[id].nama;sel.appendChild(o);
-  }
-  var db=document.getElementById('dimensiBox');
-  DIMENSI.forEach(function(d){db.innerHTML+='<label class="check-item"><input type="checkbox" value="'+d+'" class="chkDimensi"> '+d+'</label>';});
-  var cb=document.getElementById('cintaBox');
-  for(var k in CINTA){cb.innerHTML+='<label class="check-item"><input type="checkbox" value="'+k+'" class="chkCinta"> '+CINTA[k].label+'</label>';}
-}
-function onMapelChange(){
-  var id=document.getElementById('selMapel').value;
-  var sk=document.getElementById('selKelas');
-  sk.innerHTML='<option value="">— Pilih Kelas —</option>';
-  document.getElementById('selTopik').innerHTML='<option value="">— Pilih Topik —</option>';
-  document.getElementById('fase').value='';
-  if(!id)return;
-  Object.keys(MAPEL[id].kelas).sort().forEach(function(k){
-    var o=document.createElement('option');o.value=k;o.textContent='Kelas '+['X','XI','XII'][k-10];sk.appendChild(o);
-  });
-}
-function onKelasChange(){
-  var id=document.getElementById('selMapel').value,k=document.getElementById('selKelas').value;
-  var st=document.getElementById('selTopik');
-  st.innerHTML='<option value="">— Pilih Topik —</option>';
-  document.getElementById('fase').value='';
-  if(!id||!k)return;
-  document.getElementById('fase').value='Fase '+MAPEL[id].kelas[k].fase;
-  MAPEL[id].kelas[k].topik.forEach(function(t,i){
-    var o=document.createElement('option');o.value=i;o.textContent=t.n;st.appendChild(o);
-  });
-  setDefaults(id);
-}
-function setDefaults(id){
-  var def=MAPEL[id];
-  document.querySelectorAll('.chkDimensi').forEach(function(c){c.checked=def.dimensi.indexOf(c.value)>-1;});
-  document.querySelectorAll('.chkCinta').forEach(function(c){c.checked=def.cinta.indexOf(c.value)>-1;});
-}
-function onTopikChange(){
-  var id=document.getElementById('selMapel').value,k=document.getElementById('selKelas').value;
-  var ti=document.getElementById('selTopik').value;
-  if(ti==='')return;
-  var t=MAPEL[id].kelas[k].topik[ti];
-  document.getElementById('jp').value=t.jp;
-  if(t.smt)document.getElementById('selSemester').value=t.smt===1?'Ganjil':'Genap';
-}
-function getChecked(cls){
-  var r=[];document.querySelectorAll('.'+cls+':checked').forEach(function(c){r.push(c.value);});return r;
-}
-
-/* ============ GENERATE ============ */
-var currentModul=null;
-function generateModul(){
-  var id=document.getElementById('selMapel').value;
-  var k=document.getElementById('selKelas').value;
-  var ti=document.getElementById('selTopik').value;
-  if(!id||!k||ti===''){alert('Silakan lengkapi Mata Pelajaran, Kelas, dan Topik.');return;}
-  var dimensi=getChecked('chkDimensi'),cinta=getChecked('chkCinta');
-  if(dimensi.length<3){alert('Pilih minimal 3 Dimensi Profil Lulusan.');return;}
-  if(cinta.length<2){alert('Pilih minimal 2 Topik Panca Cinta KBC.');return;}
-
-  var M=MAPEL[id],K=M.kelas[k],T=K.topik[ti];
-  var jp=parseInt(document.getElementById('jp').value)||T.jp;
-  var menitInti=Math.max(jp*45-25,30);
-  var semester=document.getElementById('selSemester').value;
-
-  var materiKBC=cinta.map(function(c){return{topik:CINTA[c].label,items:CINTA[c].materi.slice(0,3)};});
-
-  currentModul={
-    madrasah:document.getElementById('namaMadrasah').value,
-    kepsek:document.getElementById('namaKepsek').value,
-    nipKepsek:document.getElementById('nipKepsek').value,
-    guru:document.getElementById('namaGuru').value||'(nama guru)',
-    nipGuru:document.getElementById('nipGuru').value||'-',
-    mapel:M.nama,kelas:['X','XI','XII'][k-10],fase:K.fase,semester:semester,jp:jp,
-    topik:T.n,materi:T.materi,tp:T.tp,cp:K.cp,dimensi:dimensi,
-    cinta:cinta.map(function(c){return CINTA[c].label;}),cintaKey:cinta,materiKBC:materiKBC,
-    murid:"Kesiapan peserta didik dipetakan melalui asesmen diagnostik (kognitif & non-kognitif) meliputi pengetahuan awal tentang \""+T.n+"\", minat, gaya belajar (visual, auditori, kinestetik), dan kebutuhan belajar. Hasil digunakan untuk membentuk kelompok berdiferensiasi.",
-    lintas:M.lintas,
-    model:document.getElementById('selModel').value,
-    strategi:document.getElementById('strategi').value,
-    metode:document.getElementById('metode').value,
-    mitra:M.mitra,
-    lingkungan:{fisik:"Ruang kelas, perpustakaan madrasah, lingkungan madrasah",virtual:"LMS, video pembelajaran, kuis interaktif, media presentasi digital",budaya:"Budaya kelas religius, saling menghargai, kolaboratif, bertanggung jawab (nilai KBC)"},
-    digital:"Pemanfaatan teknologi digital: "+M.digital+". Digunakan secara bijak dan beretika sesuai adab digital Islami.",
-    kegiatan:bangunKegiatan(T,cinta,menitInti),
-    asesmen:{awal:"Tanya jawab untuk menggali pengetahuan awal murid serta observasi kesiapan belajar.",proses:"Observasi sikap (jurnal), penilaian formatif (LKPD, unjuk kerja) dengan rubrik, serta umpan balik langsung.",akhir:"Tes sumatif tertulis dan/atau penilaian produk/proyek dengan rubrik sesuai Tujuan Pembelajaran. Kunci jawaban terlampir."}
-  };
-  renderPreview(currentModul);
-  document.getElementById('btnWord').disabled=false;
-  document.getElementById('preview').classList.remove('hidden');
-  document.getElementById('preview').scrollIntoView({behavior:'smooth'});
-}
-function bangunKegiatan(T,cinta,menitInti){
-  var model=document.getElementById('selModel').value;
-  var sintaks={
-    "Discovery Learning":["Stimulasi: peserta didik mengamati bacaan/video terkait "+T.n,"Identifikasi masalah: peserta didik merumuskan pertanyaan","Pengumpulan data dari berbagai sumber","Pengolahan data & diskusi kelompok","Verifikasi melalui presentasi","Generalisasi & penyimpulan"],
-    "Problem Based Learning":["Orientasi pada masalah autentik terkait "+T.n,"Mengorganisasi peserta didik dalam kelompok","Membimbing penyelidikan","Menyajikan hasil karya","Evaluasi & refleksi pemecahan masalah"],
-    "Project Based Learning":["Pertanyaan mendasar berbasis "+T.n,"Mendesain perencanaan proyek","Menyusun jadwal","Memonitor pelaksanaan","Menguji hasil proyek","Evaluasi pengalaman"],
-    "Inquiry Learning":["Orientasi & membangun rasa ingin tahu","Merumuskan masalah","Merumuskan hipotesis","Mengumpulkan data","Menguji hipotesis","Merumuskan kesimpulan"],
-    "Genre Based Pedagogy":["Building Knowledge of the Field tentang "+T.n,"Modelling of the Text","Joint Construction of the Text","Independent Construction of the Text"]
-  };
-  var langkah=(sintaks[model]||sintaks["Discovery Learning"]).map(function(s,i){return (i+1)+") "+s+".";});
-  cinta.forEach(function(c){langkah.push(KBC_INTI[c]);});
-  return {
-    awal:["Guru memberi salam, berdoa bersama, dan tadarus singkat sebagai wujud Cinta kepada Allah dan Rasul-Nya (KBC).","Guru memeriksa kehadiran, kebersihan kelas, serta kesiapan peserta didik.","Guru melakukan apersepsi mengaitkan materi \""+T.n+"\" dengan pengalaman peserta didik.","Guru menyampaikan tujuan pembelajaran, cakupan materi, asesmen, dan motivasi nilai KBC ("+cinta.map(function(c){return CINTA[c].label;}).join(" & ")+")."],
-    inti:langkah,menitInti:menitInti,
-    akhir:["Peserta didik bersama guru menyimpulkan materi \""+T.n+"\".","Guru membimbing refleksi nilai-nilai KBC yang telah dipelajari.","Guru memberi umpan balik, apresiasi, dan rencana pertemuan berikutnya.","Guru menutup pembelajaran dengan doa dan salam."]
-  };
-}
-function renderPreview(m){
-  var dimTable=DIMENSI.map(function(d){return '<td style="width:25%;padding:4px">'+(m.dimensi.indexOf(d)>-1?'<b>✔ '+d+'</b>':'☐ '+d)+'</td>';}).join('');
-  var cintaTable=Object.keys(CINTA).map(function(k){var lbl=CINTA[k].label;return '<td style="width:20%;padding:4px">'+(m.cintaKey.indexOf(k)>-1?'<b>✔ '+lbl+'</b>':'☐ '+lbl)+'</td>';}).join('');
-  var materiKBC=m.materiKBC.map(function(x,i){return '<b>'+(i+1)+') '+x.topik+':</b><ul>'+x.items.map(function(y){return '<li>'+y+'</li>';}).join('')+'</ul>';}).join('');
-  var tp=m.tp.map(function(t){return '<li>'+t+'</li>';}).join('');
-  var lintas=m.lintas.map(function(x){return '<li>'+x+'</li>';}).join('');
-  document.getElementById('preview').innerHTML=
-  '<div style="text-align:center"><h4 style="font-size:15pt;margin:0">CONTOH PERENCANAAN PEMBELAJARAN</h4><hr></div>'+
-  '<table>'+
-  '<tr><td style="width:32%">Nama Madrasah</td><td>:</td><td>'+m.madrasah+'</td></tr>'+
-  '<tr><td>Nama Guru Mapel</td><td>:</td><td>'+m.guru+'</td></tr>'+
-  '<tr><td>Mata Pelajaran</td><td>:</td><td>'+m.mapel+'</td></tr>'+
-  '<tr><td>Kelas / Semester</td><td>:</td><td>'+m.kelas+' / '+m.semester+'</td></tr>'+
-  '<tr><td>Alokasi Waktu</td><td>:</td><td>'+m.jp+' JP ('+(m.jp*45)+' Menit)</td></tr>'+
-  '<tr><td>Fase</td><td>:</td><td>'+m.fase+'</td></tr></table>'+
-  '<h4>1. IDENTIFIKASI</h4>'+
-  '<b>1. Murid</b><p>'+m.murid+'</p>'+
-  '<b>2. Materi Pelajaran</b><p>'+m.topik+' — '+m.materi+'</p>'+
-  '<b>3. Dimensi Profil Lulusan</b><table class="bordered"><tr>'+dimTable+'</tr></table>'+
-  '<b>4. Topik Panca Cinta (KBC)</b><table class="bordered"><tr>'+cintaTable+'</tr></table>'+
-  '<b>5. Materi Integrasi KBC</b>'+materiKBC+
-  '<h4>2. DESAIN PEMBELAJARAN</h4>'+
-  '<b>1. Capaian Pembelajaran</b><p>'+m.cp+'</p>'+
-  '<b>2. Lintas Disiplin Ilmu</b><ol>'+lintas+'</ol>'+
-  '<b>3. Tujuan Pembelajaran</b><ol>'+tp+'</ol>'+
-  '<b>4. Topik Pembelajaran</b><p>'+m.topik+'</p>'+
-  '<b>5. Praktik Pedagogis</b><p>Model: '+m.model+' • Strategi: '+m.strategi+' • Metode: '+m.metode+'</p>'+
-  '<b>6. Kemitraan Pembelajaran</b><p>'+m.mitra+'</p>'+
-  '<b>7. Lingkungan Pembelajaran</b><p>Fisik: '+m.lingkungan.fisik+'<br>Virtual: '+m.lingkungan.virtual+'<br>Budaya Belajar: '+m.lingkungan.budaya+'</p>'+
-  '<b>8. Pemanfaatan Digital</b><p>'+m.digital+'</p>'+
-  '<h4>3. PENGALAMAN BELAJAR</h4>'+
-  '<b>1. Kegiatan Awal (10 Menit)</b><ol>'+m.kegiatan.awal.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol>'+
-  '<b>2. Kegiatan Inti ('+m.kegiatan.menitInti+' Menit)</b><ol>'+m.kegiatan.inti.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol>'+
-  '<b>3. Kegiatan Akhir (15 Menit)</b><ol>'+m.kegiatan.akhir.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol>'+
-  '<h4>4. ASESMEN PEMBELAJARAN</h4>'+
-  '<b>1. Asesmen Awal Pembelajaran</b><p>'+m.asesmen.awal+'</p>'+
-  '<b>2. Asesmen Proses Pembelajaran</b><p>'+m.asesmen.proses+'</p>'+
-  '<b>3. Asesmen Akhir Pembelajaran</b><p>'+m.asesmen.akhir+'</p>';
-}
-
-/* ============ DOWNLOAD WORD (F4) ============ */
-function downloadWord(){
-  if(!currentModul){alert('Generate modul terlebih dahulu.');return;}
-  var m=currentModul;
-  var dimTable=DIMENSI.map(function(d){return '<td style="width:25%;border:1px solid #000;padding:5px;font-size:11pt">'+(m.dimensi.indexOf(d)>-1?'<b>✔ '+d+'</b>':'☐ '+d)+'</td>';}).join('');
-  var cintaTable=Object.keys(CINTA).map(function(k){return '<td style="width:20%;border:1px solid #000;padding:5px;font-size:11pt">'+(m.cintaKey.indexOf(k)>-1?'<b>✔ '+CINTA[k].label+'</b>':'☐ '+CINTA[k].label)+'</td>';}).join('');
-  var materiKBC=m.materiKBC.map(function(x,i){return '<p style="margin:6pt 0 2pt"><b>'+(i+1)+') '+x.topik+':</b></p><ul style="margin:2pt 0 6pt 18pt">'+x.items.map(function(y){return '<li>'+y+'</li>';}).join('')+'</ul>';}).join('');
-  var tp=m.tp.map(function(t){return '<li>'+t+'</li>';}).join('');
-  var lintas=m.lintas.map(function(x){return '<li>'+x+'</li>';}).join('');
-  var tgl=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
-  var html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>Modul Ajar</title>'+
-  '<style>@page{size:21.5cm 33.0cm;margin:2.0cm 2.0cm 2.0cm 2.5cm}body{font-family:"Times New Roman",serif;font-size:12pt;line-height:1.5}'+
-  'h1{font-size:14pt;text-align:center;margin-bottom:4pt}h2{font-size:12.5pt;margin:14pt 0 6pt;color:#1a5c2e}'+
-  'table.id td{padding:2pt 4pt;vertical-align:top}table.grid td{border:1px solid #000;padding:5pt;font-size:11pt}'+
-  'p{margin:4pt 0;text-align:justify}ol,ul{margin:4pt 0 4pt 20pt}'+
-  '.ttd{width:100%;margin-top:30pt}.ttd td{vertical-align:top;text-align:center;font-size:12pt}</style></head><body>'+
-  '<h1><u>CONTOH PERENCANAAN PEMBELAJARAN</u></h1>'+
-  '<table class="id" style="width:100%">'+
-  '<tr><td style="width:34%"><b>Nama Madrasah</b></td><td>:</td><td>'+m.madrasah+'</td></tr>'+
-  '<tr><td><b>Nama Guru Mapel</b></td><td>:</td><td>'+m.guru+'</td></tr>'+
-  '<tr><td><b>Mata Pelajaran</b></td><td>:</td><td>'+m.mapel+'</td></tr>'+
-  '<tr><td><b>Kelas / Semester</b></td><td>:</td><td>'+m.kelas+' / '+m.semester+'</td></tr>'+
-  '<tr><td><b>Alokasi Waktu</b></td><td>:</td><td>'+m.jp+' JP ('+(m.jp*45)+' Menit)</td></tr>'+
-  '<tr><td><b>Fase</b></td><td>:</td><td>'+m.fase+'</td></tr></table>'+
-  '<h2>1. IDENTIFIKASI</h2><p><b>1. Murid</b></p><p>'+m.murid+'</p>'+
-  '<p><b>2. Materi Pelajaran</b></p><p>'+m.topik+' — '+m.materi+'</p>'+
-  '<p><b>3. Dimensi Profil Lulusan</b></p><table class="grid" style="width:100%"><tr>'+dimTable+'</tr></table>'+
-  '<p><b>4. Topik Panca Cinta (KBC)</b></p><table class="grid" style="width:100%"><tr>'+cintaTable+'</tr></table>'+
-  '<p><b>5. Materi Integrasi KBC</b></p>'+materiKBC+
-  '<h2>2. DESAIN PEMBELAJARAN</h2><p><b>1. Capaian Pembelajaran</b></p><p>'+m.cp+'</p>'+
-  '<p><b>2. Lintas Disiplin Ilmu</b></p><ol>'+lintas+'</ol>'+
-  '<p><b>3. Tujuan Pembelajaran</b></p><ol>'+tp+'</ol>'+
-  '<p><b>4. Topik Pembelajaran</b></p><p>'+m.topik+'</p>'+
-  '<p><b>5. Praktik Pedagogis</b></p><p>Model: '+m.model+'<br>Strategi: '+m.strategi+'<br>Metode: '+m.metode+'</p>'+
-  '<p><b>6. Kemitraan Pembelajaran</b></p><p>'+m.mitra+'</p>'+
-  '<p><b>7. Lingkungan Pembelajaran</b></p><p>Fisik &nbsp;: '+m.lingkungan.fisik+'<br>Virtual &nbsp;: '+m.lingkungan.virtual+'<br>Budaya Belajar : '+m.lingkungan.budaya+'</p>'+
-  '<p><b>8. Pemanfaatan Digital</b></p><p>'+m.digital+'</p>'+
-  '<h2>3. PENGALAMAN BELAJAR</h2>'+
-  '<p><b>1. Kegiatan Awal (10 Menit)</b></p><ol>'+m.kegiatan.awal.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol>'+
-  '<p><b>2. Kegiatan Inti ('+m.kegiatan.menitInti+' Menit)</b></p><ol>'+m.kegiatan.inti.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol>'+
-  '<p><b>3. Kegiatan Akhir (15 Menit)</b></p><ol>'+m.kegiatan.akhir.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol>'+
-  '<h2>4. ASESMEN PEMBELAJARAN</h2>'+
-  '<p><b>1. Asesmen Awal Pembelajaran</b></p><p>'+m.asesmen.awal+'</p>'+
-  '<p><b>2. Asesmen Proses Pembelajaran</b></p><p>'+m.asesmen.proses+'</p>'+
-  '<p><b>3. Asesmen Akhir Pembelajaran</b></p><p>'+m.asesmen.akhir+'</p>'+
-  '<table class="ttd"><tr>'+
-  '<td style="width:50%;text-align:left"><br>'+m.madrasah+', '+tgl+'<br>Mengetahui,<br>Kepala Madrasah<br><br><br><br><b><u>'+m.kepsek+'</u></b><br>NIP. '+m.nipKepsek+'</td>'+
-  '<td style="width:50%"><br><br><br><br>Guru Mapel / Bidang Studi<br><br><br><br><b><u>'+m.guru+'</u></b><br>NIP. '+m.nipGuru+'</td>'+
-  '</tr></table></body></html>';
-  var blob=new Blob(['\ufeff',html],{type:'application/msword'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url;a.download='Modul Ajar '+m.mapel+' Kelas '+m.kelas+'.doc';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
+const user = Auth.getUser();
+document.getElementById('whoAmI').textContent =
+  `${user.role.toUpperCase()} • ${user.nama || user.username}`;
+document.getElementById('greet').textContent =
+  `Selamat Datang, ${user.nama || user.username} 👋`;
 </script>
 </body>
 </html>
