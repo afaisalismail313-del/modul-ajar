@@ -14,9 +14,13 @@ h1{color:#1a5c2e;font-size:30px;margin:10px 0}
 h2{color:#1a5c2e;font-size:23px;margin-bottom:12px;border-left:6px solid #daa520;padding-left:12px}
 h3{color:#1a5c2e;font-size:15px;margin:8px 0 6px}
 .sub{color:#2e7d32;font-size:15px}
-p,li{color:#223;font-size:14px;line-height:1.5}
+p,li{color:#223;font-size:14px;line-height:1.6}
 ul{margin:6px 0 6px 20px}
+ol{margin:6px 0 6px 20px}
 .box{background:#fff;border:1px solid #cfd8cf;border-left:5px solid #2e7d32;border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.box.gold{border-left-color:#daa520}
+.box.blue{border-left-color:#1565c0}
+.ayat{background:#f0faf0;border:1px solid #a5d6a7;border-radius:10px;padding:12px 16px;margin:8px 0;font-style:italic;color:#1b5e20;text-align:center;font-size:15px}
 .tag{display:inline-block;background:#2e7d32;color:#fff;border-radius:20px;padding:3px 12px;font-size:12px;margin:2px}
 .tag.g{background:#daa520}.tag.b{background:#1565c0}
 .center{text-align:center}
@@ -26,6 +30,8 @@ ul{margin:6px 0 6px 20px}
 .ctrl button{background:#2e7d32;color:#fff;border:none;border-radius:20px;padding:7px 14px;cursor:pointer;font-size:14px}
 .ctrl button:hover{background:#4caf50}
 #ctr{color:#e8f5e9;font-size:13px;min-width:52px;text-align:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}}
 @media print{body{background:#fff;overflow:visible}.ctrl{display:none}.slide{box-shadow:none;height:auto;page-break-after:always}}
 </style>
 </head>
@@ -36,7 +42,6 @@ ul{margin:6px 0 6px 20px}
 <button onclick="fs()">⛶</button><button onclick="window.print()">🖨</button>
 </div>
 <script>
-/* ===== DATA TERTANAM (MANDIRI, TANPA MODUL AJAR) ===== */
 var DATA={
 mapel:"Al-Qur'an Hadits",
 kelas:"X",
@@ -57,38 +62,75 @@ materi:[
 {judul:"Materi 2 · Refleksi Kisah Qarun (QS al-Qashash: 79-82)",poin:["Analisis bahaya kesombongan dan sifat tamak","Pelajaran dari kisah Qarun: harta tanpa syukur membawa kehancuran","Sikap rendah hati dalam menerima setiap karunia materi","Korelasi antara harta dan tanggung jawab sosial"]},
 {judul:"Materi 3 · Hakikat Kebajikan (QS al-Baqarah: 177)",poin:["Kebajikan mencakup aspek sosial dan spiritual secara seimbang","Kepedulian terhadap yatim, miskin, dan kaum dhuafa","Empati sebagai implementasi cinta kepada sesama","Perencanaan pemberian bantuan secara kolaboratif"]},
 {judul:"Materi 4 · Implementasi: Melawan Pendusta Agama (QS al-Ma'un)",poin:["Menjauhi perilaku pendusta agama dengan konsisten peduli pada yatim","Aksi nyata menyantuni dhuafa di lingkungan sekitar madrasah","Kerja kolaboratif dalam program santunan","Evaluasi dampak sosial dari aksi kepedulian"]}
-],
-pancaCinta:"Cinta kepada Allah dan Rasul · Cinta Diri dan Sesama",
-integrasiKBC:"Pola hidup sederhana sebagai wujud cinta kepada Allah; menyantuni dhuafa sebagai implementasi cinta kepada diri dan sesama manusia; refleksi kisah Qarun sebagai pelajaran untuk tidak sombong; aksi nyata sebagai bentuk cinta ilmu dan cinta lingkungan.",
-awal:"Salam, doa pembuka, tadarus ayat terkait. Guru melakukan apersepsi dengan menghubungkan pengalaman siswa tentang hidup sederhana. Menyampaikan tujuan pembelajaran dan pertanyaan pemantik.",
-inti:"Pembelajaran mendalam (Deep Learning): Mindful — siswa memahami makna ayat dengan penuh kesadaran; Meaningful — mengaitkan materi dengan kehidupan nyata dan nilai Panca Cinta; Joyful — berdiskusi kelompok, presentasi, dan melakukan aksi nyata menyantuni dhuafa secara kolaboratif.",
-akhir:"Refleksi bersama tentang nilai-nilai yang dipelajari. Guru memberikan penguatan dan apresiasi. Doa penutup dan salam. Penugasan proyek aksi nyata untuk pertemuan berikutnya.",
-asesmenAwal:"Tanya jawab untuk menggali pengetahuan awal siswa tentang konsep hidup sederhana dan sedekah, serta pengalaman mereka dalam berbagi dengan sesama.",
-asesmenProses:"Observasi keaktifan diskusi kelompok, penilaian presentasi, refleksi tertulis tentang perubahan sikap, dan partisipasi dalam proyek aksi nyata.",
-asesmenAkhir:"Tes sumatif pilihan ganda dan esai tentang pemahaman ayat-ayat terkait; penilaian proyek aksi nyata menyantuni dhuafa; portofolio refleksi sikap selama satu bab.",
-kunciJawaban:"Kunci jawaban terlampir dalam dokumen asesmen guru."
+]
 };
 
-/* ===== PEMBANGUNAN SLIDE ===== */
 var S=[],cur=0;
 function build(){
 S=[
-/* 1 */ {h:'<div class="center" style="margin-top:36px"><div class="kick">Media Pembelajaran · MAN Bantaeng</div><h1>'+DATA.mapel+'</h1><div class="sub">'+DATA.bab+'</div><p style="margin-top:16px">Kelas '+DATA.kelas+' · Semester '+DATA.semester+' · TA '+DATA.tahun+'</p><p>Guru: <b>'+DATA.guru+'</b></p></div>'},
-/* 2 */ {h:'<h2>Tujuan Pembelajaran</h2><ul><li>'+DATA.tp.join('</li><li>')+'</li></ul>'},
-/* 3 */ {h:'<h2>'+DATA.materi[0].judul+'</h2><ul><li>'+DATA.materi[0].poin.join('</li><li>')+'</li></ul>'},
-/* 4 */ {h:'<h2>'+DATA.materi[1].judul+'</h2><ul><li>'+DATA.materi[1].poin.join('</li><li>')+'</li></ul>'},
-/* 5 */ {h:'<h2>'+DATA.materi[2].judul+'</h2><ul><li>'+DATA.materi[2].poin.join('</li><li>')+'</li></ul>'},
-/* 6 */ {h:'<h2>'+DATA.materi[3].judul+'</h2><ul><li>'+DATA.materi[3].poin.join('</li><li>')+'</li></ul>'},
-/* 7 */ {h:'<h2>Pertanyaan Pemantik</h2><ul><li>Apa yang kamu ketahui tentang <b>'+DATA.kataKunci+'</b>?</li><li>Pernahkah kamu melihat/mengalami fenomena <b>'+DATA.kataKunci+'</b> dalam kehidupan sehari-hari?</li><li>Mengapa <b>'+DATA.kataKunci+'</b> penting bagi kehidupanmu dan lingkunganmu?</li><li>Bagaimana nilai Panca Cinta memaknai <b>'+DATA.kataKunci+'</b>?</li></ul>'},
-/* 8 */ {h:'<h2>Kegiatan Pembelajaran</h2><div class="box"><h3>🟢 Awal (10 Menit)</h3><p>'+DATA.awal+'</p></div><div class="box"><h3>🟡 Inti · Deep Learning</h3><p><span class="tag">Mindful</span><span class="tag g">Meaningful</span><span class="tag b">Joyful</span></p><p>'+DATA.inti+'</p></div><div class="box"><h3>🔵 Penutup (15 Menit)</h3><p>'+DATA.akhir+'</p></div>'},
-/* 9 */ {h:'<h2>Nilai Panca Cinta (KBC)</h2><div class="box"><h3>Topik Panca Cinta</h3><p>'+DATA.pancaCinta+'</p></div><div class="box"><h3>Integrasi KBC dalam Pembelajaran</h3><p>'+DATA.integrasiKBC+'</p></div>'},
-/* 10*/ {h:'<h2>Asesmen</h2><div class="box"><h3>📋 Asesmen Awal</h3><p>'+DATA.asesmenAwal+'</p></div><div class="box"><h3>📝 Asesmen Proses</h3><p>'+DATA.asesmenProses+'</p></div><div class="box"><h3>✅ Asesmen Akhir</h3><p>'+DATA.asesmenAkhir+'</p></div>'},
-/* 11*/ {h:'<h2>Rangkuman</h2><ul><li>'+DATA.materi.map(function(m){return '<b>'+m.judul.split('·')[0].trim()+':</b> '+m.poin[0];}).join('</li><li>')+'</li></ul>'},
-/* 12*/ {h:'<div class="center" style="margin-top:46px"><div class="kick">Terima Kasih</div><h1>Wassalamu\'alaikum Wr. Wb.</h1><p style="margin-top:14px">Belajar dengan <span class="tag">Mindful</span><span class="tag g">Meaningful</span><span class="tag b">Joyful</span></p><div style="margin-top:22px;font-size:12px;color:#555"><p>Mengetahui, Kepala Madrasah</p><p><b>'+DATA.kepala+'</b></p><p style="margin-top:14px">Guru Mata Pelajaran</p><p><b>'+DATA.guru+'</b></p></div></div>'}
+/* 1 - JUDUL */
+{h:'<div class="center" style="margin-top:36px"><div class="kick">Media Pembelajaran · MAN Bantaeng</div><h1>'+DATA.mapel+'</h1><div class="sub">'+DATA.bab+'</div><p style="margin-top:16px">Kelas '+DATA.kelas+' · Semester '+DATA.semester+' · TA '+DATA.tahun+'</p><p>Guru: <b>'+DATA.guru+'</b></p></div>'},
+
+/* 2 - TUJUAN PEMBELAJARAN */
+{h:'<h2>Tujuan Pembelajaran</h2><ul><li>'+DATA.tp.join('</li><li>')+'</li></ul>'},
+
+/* 3 - MATERI 1 RINGKAS */
+{h:'<h2>'+DATA.materi[0].judul+'</h2><ul><li>'+DATA.materi[0].poin.join('</li><li>')+'</li></ul>'},
+
+/* 4 - MATERI 2 RINGKAS */
+{h:'<h2>'+DATA.materi[1].judul+'</h2><ul><li>'+DATA.materi[1].poin.join('</li><li>')+'</li></ul>'},
+
+/* 5 - MATERI 3 RINGKAS */
+{h:'<h2>'+DATA.materi[2].judul+'</h2><ul><li>'+DATA.materi[2].poin.join('</li><li>')+'</li></ul>'},
+
+/* 6 - MATERI 4 RINGKAS */
+{h:'<h2>'+DATA.materi[3].judul+'</h2><ul><li>'+DATA.materi[3].poin.join('</li><li>')+'</li></ul>'},
+
+/* 7 - PERTANYAAN PEMANTIK */
+{h:'<h2>Pertanyaan Pemantik</h2><ul><li>Apa yang kamu ketahui tentang <b>'+DATA.kataKunci+'</b>?</li><li>Pernahkah kamu melihat/mengalami fenomena <b>'+DATA.kataKunci+'</b> dalam kehidupan sehari-hari?</li><li>Mengapa <b>'+DATA.kataKunci+'</b> penting bagi kehidupanmu dan lingkunganmu?</li><li>Bagaimana nilai Panca Cinta memaknai <b>'+DATA.kataKunci+'</b>?</li></ul>'},
+
+/* 8 - PENJELASAN MATERI 1 */
+{h:'<h2>📖 Penjelasan Materi 1: Sikap Bersahaja</h2>'
++'<div class="ayat">"Dan orang-orang yang apabila membelanjakan (harta), mereka tidak berlebihan, dan tidak (pula) kikir, dan adalah (pembelanjaan itu) di tengah-tengah antara yang demikian." (QS al-Furqan: 67)</div>'
++'<div class="box"><h3>🔍 Makna Ayat</h3><p>Ayat ini menggambarkan sifat <b>ibadurrahman</b> (hamba-hamba Allah Yang Maha Pengasih) yang bersikap <b>moderat</b> dalam membelanjakan harta. Kata <i>"lam yusrifu"</i> berarti tidak berlebih-lebihan, dan <i>"lam yaqturu"</i> berarti tidak kikir/pelit. Islam mengajarkan keseimbangan (<i>tawazun</i>) dalam segala aspek kehidupan.</p></div>'
++'<div class="box gold"><h3>💡 Implementasi dalam Kehidupan</h3><ul><li>Membeli sesuai kebutuhan, bukan keinginan semata</li><li>Tidak memaksakan gaya hidup di luar kemampuan</li><li>Tetap bersedekah meski dalam keterbatasan</li><li>Menghindari sifat <i>israf</i> (berlebih-lebihan) dan <i>tabdzir</i> (menghamburkan)</li></ul></div>'
++'<div class="box blue"><h3>📌 Hadis Pendukung</h3><p><i>"Makanlah, minumlah, bersedekahlah, dan berpakaianlah tanpa berlebihan dan tanpa kesombongan."</i> (HR Ahmad &amp; Nasa\'i)</p></div>'},
+
+/* 9 - PENJELASAN MATERI 2 */
+{h:'<h2>📖 Penjelasan Materi 2: Refleksi Kisah Qarun</h2>'
++'<div class="ayat">"Maka keluarlah Qarun kepada kaumnya dalam kemegahannya... Maka Kami benamkan dia bersama rumahnya ke dalam bumi." (QS al-Qashash: 79-81)</div>'
++'<div class="box"><h3>🔍 Analisis Kisah Qarun</h3><ul><li><b>Qarun</b> adalah sepupu Nabi Musa yang sangat kaya raya</li><li>Kekayaannya menjadikannya sombong dan merasa itu hasil jerih payahnya sendiri</li><li>Ia menolak nasihat untuk bersyukur dan berbagi</li><li>Akhirnya Allah menenggelamkannya beserta seluruh hartanya</li></ul></div>'
++'<div class="box gold"><h3>⚠️ Pelajaran Penting</h3><ul><li>Harta adalah <b>amanah</b>, bukan milik mutlak manusia</li><li>Kesombongan atas nikmat adalah bentuk <b>kufur nikmat</b></li><li>Kekayaan tanpa syukur = kehancuran</li><li>Setiap harta ada <b>hak orang lain</b> (zakat, sedekah, infak)</li></ul></div>'
++'<div class="box blue"><h3>🎯 Relevansi Masa Kini</h3><p>Fenomena <i>flexing</i> (pamer kekayaan) di media sosial adalah bentuk modern dari sifat Qarun. Sebagai muslim, kita diajarkan untuk <b>rendah hati</b> dan menggunakan harta di jalan Allah.</p></div>'},
+
+/* 10 - PENJELASAN MATERI 3 */
+{h:'<h2>📖 Penjelasan Materi 3: Hakikat Kebajikan</h2>'
++'<div class="ayat">"Kebajikan itu bukanlah kamu menghadapkan wajahmu ke timur dan ke barat, tetapi kebajikan itu ialah beriman kepada Allah, hari akhir, malaikat, kitab-kitab, dan nabi-nabi; memberikan harta yang dicintainya kepada kerabat, anak yatim, orang miskin, musafir, dan orang yang meminta-minta..." (QS al-Baqarah: 177)</div>'
++'<div class="grid2"><div class="box"><h3>🕌 Dimensi Spiritual (Hablum Minallah)</h3><ul><li>Iman kepada Allah dan hari akhir</li><li>Iman kepada malaikat, kitab, dan nabi</li><li>Mendirikan shalat</li><li>Menunaikan zakat</li></ul></div>'
++'<div class="box gold"><h3>🤝 Dimensi Sosial (Hablum Minannas)</h3><ul><li>Memberikan harta kepada kerabat</li><li>Menyantuni anak yatim dan orang miskin</li><li>Membantu musafir (ibnu sabil)</li><li>Menepati janji dan sabar</li></ul></div></div>'
++'<div class="box blue"><h3>💎 Kesimpulan</h3><p>Kebajikan sejati adalah <b>keseimbangan</b> antara hubungan vertikal dengan Allah dan hubungan horizontal dengan sesama manusia. Ibadah ritual tanpa kepedulian sosial adalah ibadah yang <b>tidak sempurna</b>.</p></div>'},
+
+/* 11 - PENJELASAN MATERI 4 */
+{h:'<h2>📖 Penjelasan Materi 4: Melawan Pendusta Agama</h2>'
++'<div class="ayat">"Tahukah kamu (orang) yang mendustakan agama? Itulah orang yang menghardik anak yatim, dan tidak menganjurkan memberi makan orang miskin." (QS al-Ma\'un: 1-3)</div>'
++'<div class="box"><h3>🔍 Ciri-Ciri Pendusta Agama</h3><ul><li><b>Menghardik anak yatim</b> — berlaku kasar dan tidak peduli</li><li><b>Tidak menganjurkan memberi makan orang miskin</b> — bersifat individualis</li><li><b>Lalai dalam shalatnya</b> — shalat tanpa kekhusyukan</li><li><b>Bermuka dua (riya\')</b> — beramal untuk dipuji manusia</li><li><b>Enggan menolong</b> — menahan barang yang berguna bagi orang lain</li></ul></div>'
++'<div class="box gold"><h3>✅ Aksi Nyata sebagai Muslim</h3><ul><li>Menyisihkan uang jajan untuk sedekah rutin</li><li>Mengunjungi dan membantu panti asuhan</li><li>Membuat program "Jumat Berkah" di madrasah</li><li>Menggalang dana untuk korban bencana</li><li>Menjadi relawan di kegiatan sosial masyarakat</li></ul></div>'
++'<div class="box blue"><h3>🤲 Doa & Refleksi</h3><p><i>"Ya Allah, jadikanlah kami hamba-Mu yang peduli, yang tidak menghardik anak yatim, yang selalu memberi makan orang miskin, dan yang ikhlas dalam beribadah. Aamiin."</i></p></div>'},
+
+/* 12 - RANGKUMAN & PENUTUP */
+{h:'<h2>Rangkuman Bab 1</h2>'
++'<div class="box"><h3>📋 Kesimpulan Utama</h3><ul>'
++'<li><b>Sikap Bersahaja:</b> Keseimbangan antara berlebih-lebihan dan kekikiran (QS al-Furqan: 67)</li>'
++'<li><b>Kisah Qarun:</b> Harta tanpa syukur membawa kehancuran (QS al-Qashash: 79-82)</li>'
++'<li><b>Hakikat Kebajikan:</b> Keseimbangan ibadah dan kepedulian sosial (QS al-Baqarah: 177)</li>'
++'<li><b>Melawan Pendusta Agama:</b> Aksi nyata peduli yatim dan dhuafa (QS al-Ma\'un)</li>'
++'</ul></div>'
++'<div class="box gold"><h3>🌟 Nilai Panca Cinta yang Terintegrasi</h3><p><span class="tag">Cinta Allah & Rasul</span> <span class="tag">Cinta Diri & Sesama</span> <span class="tag g">Cinta Ilmu</span> <span class="tag b">Cinta Lingkungan</span></p></div>'
++'<div class="center" style="margin-top:20px"><div class="kick">Terima Kasih</div><h1>Wassalamu\'alaikum Wr. Wb.</h1><p style="margin-top:10px;font-size:13px">Belajar dengan <span class="tag">Mindful</span> <span class="tag g">Meaningful</span> <span class="tag b">Joyful</span></p>'
++'<p style="margin-top:16px;font-size:12px;color:#555">Mengetahui, Kepala Madrasah: <b>'+DATA.kepala+'</b><br>Guru Mata Pelajaran: <b>'+DATA.guru+'</b></p></div></div>'}
 ];
 }
 
-/* ===== RENDER & NAVIGASI ===== */
 function render(){
 var deck=document.getElementById('deck');
 var s=S[cur];
@@ -105,7 +147,6 @@ if(e.key==='Home'){cur=0;render();}
 if(e.key==='End'){cur=S.length-1;render();}
 });
 
-/* ===== INISIALISASI ===== */
 try{build();cur=0;render();}catch(err){
 document.getElementById('deck').innerHTML='<div class="slide"><div class="center big">⚠️ Terjadi kesalahan: '+err.message+'</div></div>';
 }
