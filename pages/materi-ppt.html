@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>PPT Materi - Al-Qur'an Hadits | MAN Bantaeng</title>
+<title>PPT Materi | MAN Bantaeng</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif}
 body{background:#0f2417;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -15,8 +15,7 @@ h2{color:#1a5c2e;font-size:23px;margin-bottom:12px;border-left:6px solid #daa520
 h3{color:#1a5c2e;font-size:15px;margin:8px 0 6px}
 .sub{color:#2e7d32;font-size:15px}
 p,li{color:#223;font-size:14px;line-height:1.6}
-ul{margin:6px 0 6px 20px}
-ol{margin:6px 0 6px 20px}
+ul,ol{margin:6px 0 6px 20px}
 .box{background:#fff;border:1px solid #cfd8cf;border-left:5px solid #2e7d32;border-radius:12px;padding:12px 14px;margin-bottom:10px}
 .box.gold{border-left-color:#daa520}
 .box.blue{border-left-color:#1565c0}
@@ -40,115 +39,111 @@ ol{margin:6px 0 6px 20px}
 <div class="ctrl">
 <button onclick="go(-1)">◀</button><span id="ctr"></span><button onclick="go(1)">▶</button>
 <button onclick="fs()">⛶</button><button onclick="window.print()">🖨</button>
+<button onclick="location.href='index.html'">📋 Modul</button>
 </div>
 <script>
-var DATA={
-mapel:"Al-Qur'an Hadits",
-kelas:"X",
-semester:"Ganjil",
-tahun:"2025/2026",
-guru:"Sitti Sainab, S.Ag",
-kepala:"Muhammad Arif Pither, S.Ag., M.M",
-bab:"BAB 1: Membudayakan Pola Hidup Sederhana dan Menyantuni Dhuafa",
-kataKunci:"Pola Hidup Sederhana",
-tp:[
-"Murid mampu menunjukkan sikap bersahaja dan seimbang dalam berkonsumsi sebagai wujud cinta Allah (QS al-Furqan: 67)",
-"Murid dapat mengembangkan rasa syukur atas kecukupan yang dimiliki tanpa harus berlebih-lebihan",
-"Murid mampu menganalisis bahaya kesombongan melalui refleksi kisah Qarun (QS al-Qashash: 79-82)",
-"Murid mampu merumuskan hakikat kebajikan yang mencakup aspek sosial dan spiritual (QS al-Baqarah: 177)"
-],
-materi:[
-{judul:"Materi 1 · Sikap Bersahaja (QS al-Furqan: 67)",poin:["Pola hidup sederhana: tidak berlebihan dan tidak pelit","Keseimbangan dalam berkonsumsi sebagai wujud cinta kepada Allah","Hadis Abdullah bin Amr tentang seni keseimbangan hidup","Dampak positif hidup sederhana bagi kesehatan mental dan sosial"]},
-{judul:"Materi 2 · Refleksi Kisah Qarun (QS al-Qashash: 79-82)",poin:["Analisis bahaya kesombongan dan sifat tamak","Pelajaran dari kisah Qarun: harta tanpa syukur membawa kehancuran","Sikap rendah hati dalam menerima setiap karunia materi","Korelasi antara harta dan tanggung jawab sosial"]},
-{judul:"Materi 3 · Hakikat Kebajikan (QS al-Baqarah: 177)",poin:["Kebajikan mencakup aspek sosial dan spiritual secara seimbang","Kepedulian terhadap yatim, miskin, dan kaum dhuafa","Empati sebagai implementasi cinta kepada sesama","Perencanaan pemberian bantuan secara kolaboratif"]},
-{judul:"Materi 4 · Implementasi: Melawan Pendusta Agama (QS al-Ma'un)",poin:["Menjauhi perilaku pendusta agama dengan konsisten peduli pada yatim","Aksi nyata menyantuni dhuafa di lingkungan sekitar madrasah","Kerja kolaboratif dalam program santunan","Evaluasi dampak sosial dari aksi kepedulian"]}
-]
-};
+var DATA=null, S=[], cur=0;
 
-var S=[],cur=0;
-function build(){
-S=[
-/* 1 - JUDUL */
-{h:'<div class="center" style="margin-top:36px"><div class="kick">Media Pembelajaran · MAN Bantaeng</div><h1>'+DATA.mapel+'</h1><div class="sub">'+DATA.bab+'</div><p style="margin-top:16px">Kelas '+DATA.kelas+' · Semester '+DATA.semester+' · TA '+DATA.tahun+'</p><p>Guru: <b>'+DATA.guru+'</b></p></div>'},
+// ===== BACA DATA DARI MODUL AJAR =====
+try{
+  DATA = JSON.parse(localStorage.getItem('maPPTData') || 'null');
+}catch(e){ DATA=null; }
 
-/* 2 - TUJUAN PEMBELAJARAN */
-{h:'<h2>Tujuan Pembelajaran</h2><ul><li>'+DATA.tp.join('</li><li>')+'</li></ul>'},
-
-/* 3 - MATERI 1 RINGKAS */
-{h:'<h2>'+DATA.materi[0].judul+'</h2><ul><li>'+DATA.materi[0].poin.join('</li><li>')+'</li></ul>'},
-
-/* 4 - MATERI 2 RINGKAS */
-{h:'<h2>'+DATA.materi[1].judul+'</h2><ul><li>'+DATA.materi[1].poin.join('</li><li>')+'</li></ul>'},
-
-/* 5 - MATERI 3 RINGKAS */
-{h:'<h2>'+DATA.materi[2].judul+'</h2><ul><li>'+DATA.materi[2].poin.join('</li><li>')+'</li></ul>'},
-
-/* 6 - MATERI 4 RINGKAS */
-{h:'<h2>'+DATA.materi[3].judul+'</h2><ul><li>'+DATA.materi[3].poin.join('</li><li>')+'</li></ul>'},
-
-/* 7 - PERTANYAAN PEMANTIK */
-{h:'<h2>Pertanyaan Pemantik</h2><ul><li>Apa yang kamu ketahui tentang <b>'+DATA.kataKunci+'</b>?</li><li>Pernahkah kamu melihat/mengalami fenomena <b>'+DATA.kataKunci+'</b> dalam kehidupan sehari-hari?</li><li>Mengapa <b>'+DATA.kataKunci+'</b> penting bagi kehidupanmu dan lingkunganmu?</li><li>Bagaimana nilai Panca Cinta memaknai <b>'+DATA.kataKunci+'</b>?</li></ul>'},
-
-/* 8 - PENJELASAN MATERI 1 */
-{h:'<h2>📖 Penjelasan Materi 1: Sikap Bersahaja</h2>'
-+'<div class="ayat">"Dan orang-orang yang apabila membelanjakan (harta), mereka tidak berlebihan, dan tidak (pula) kikir, dan adalah (pembelanjaan itu) di tengah-tengah antara yang demikian." (QS al-Furqan: 67)</div>'
-+'<div class="box"><h3>🔍 Makna Ayat</h3><p>Ayat ini menggambarkan sifat <b>ibadurrahman</b> (hamba-hamba Allah Yang Maha Pengasih) yang bersikap <b>moderat</b> dalam membelanjakan harta. Kata <i>"lam yusrifu"</i> berarti tidak berlebih-lebihan, dan <i>"lam yaqturu"</i> berarti tidak kikir/pelit. Islam mengajarkan keseimbangan (<i>tawazun</i>) dalam segala aspek kehidupan.</p></div>'
-+'<div class="box gold"><h3>💡 Implementasi dalam Kehidupan</h3><ul><li>Membeli sesuai kebutuhan, bukan keinginan semata</li><li>Tidak memaksakan gaya hidup di luar kemampuan</li><li>Tetap bersedekah meski dalam keterbatasan</li><li>Menghindari sifat <i>israf</i> (berlebih-lebihan) dan <i>tabdzir</i> (menghamburkan)</li></ul></div>'
-+'<div class="box blue"><h3>📌 Hadis Pendukung</h3><p><i>"Makanlah, minumlah, bersedekahlah, dan berpakaianlah tanpa berlebihan dan tanpa kesombongan."</i> (HR Ahmad &amp; Nasa\'i)</p></div>'},
-
-/* 9 - PENJELASAN MATERI 2 */
-{h:'<h2>📖 Penjelasan Materi 2: Refleksi Kisah Qarun</h2>'
-+'<div class="ayat">"Maka keluarlah Qarun kepada kaumnya dalam kemegahannya... Maka Kami benamkan dia bersama rumahnya ke dalam bumi." (QS al-Qashash: 79-81)</div>'
-+'<div class="box"><h3>🔍 Analisis Kisah Qarun</h3><ul><li><b>Qarun</b> adalah sepupu Nabi Musa yang sangat kaya raya</li><li>Kekayaannya menjadikannya sombong dan merasa itu hasil jerih payahnya sendiri</li><li>Ia menolak nasihat untuk bersyukur dan berbagi</li><li>Akhirnya Allah menenggelamkannya beserta seluruh hartanya</li></ul></div>'
-+'<div class="box gold"><h3>⚠️ Pelajaran Penting</h3><ul><li>Harta adalah <b>amanah</b>, bukan milik mutlak manusia</li><li>Kesombongan atas nikmat adalah bentuk <b>kufur nikmat</b></li><li>Kekayaan tanpa syukur = kehancuran</li><li>Setiap harta ada <b>hak orang lain</b> (zakat, sedekah, infak)</li></ul></div>'
-+'<div class="box blue"><h3>🎯 Relevansi Masa Kini</h3><p>Fenomena <i>flexing</i> (pamer kekayaan) di media sosial adalah bentuk modern dari sifat Qarun. Sebagai muslim, kita diajarkan untuk <b>rendah hati</b> dan menggunakan harta di jalan Allah.</p></div>'},
-
-/* 10 - PENJELASAN MATERI 3 */
-{h:'<h2>📖 Penjelasan Materi 3: Hakikat Kebajikan</h2>'
-+'<div class="ayat">"Kebajikan itu bukanlah kamu menghadapkan wajahmu ke timur dan ke barat, tetapi kebajikan itu ialah beriman kepada Allah, hari akhir, malaikat, kitab-kitab, dan nabi-nabi; memberikan harta yang dicintainya kepada kerabat, anak yatim, orang miskin, musafir, dan orang yang meminta-minta..." (QS al-Baqarah: 177)</div>'
-+'<div class="grid2"><div class="box"><h3>🕌 Dimensi Spiritual (Hablum Minallah)</h3><ul><li>Iman kepada Allah dan hari akhir</li><li>Iman kepada malaikat, kitab, dan nabi</li><li>Mendirikan shalat</li><li>Menunaikan zakat</li></ul></div>'
-+'<div class="box gold"><h3>🤝 Dimensi Sosial (Hablum Minannas)</h3><ul><li>Memberikan harta kepada kerabat</li><li>Menyantuni anak yatim dan orang miskin</li><li>Membantu musafir (ibnu sabil)</li><li>Menepati janji dan sabar</li></ul></div></div>'
-+'<div class="box blue"><h3>💎 Kesimpulan</h3><p>Kebajikan sejati adalah <b>keseimbangan</b> antara hubungan vertikal dengan Allah dan hubungan horizontal dengan sesama manusia. Ibadah ritual tanpa kepedulian sosial adalah ibadah yang <b>tidak sempurna</b>.</p></div>'},
-
-/* 11 - PENJELASAN MATERI 4 */
-{h:'<h2>📖 Penjelasan Materi 4: Melawan Pendusta Agama</h2>'
-+'<div class="ayat">"Tahukah kamu (orang) yang mendustakan agama? Itulah orang yang menghardik anak yatim, dan tidak menganjurkan memberi makan orang miskin." (QS al-Ma\'un: 1-3)</div>'
-+'<div class="box"><h3>🔍 Ciri-Ciri Pendusta Agama</h3><ul><li><b>Menghardik anak yatim</b> — berlaku kasar dan tidak peduli</li><li><b>Tidak menganjurkan memberi makan orang miskin</b> — bersifat individualis</li><li><b>Lalai dalam shalatnya</b> — shalat tanpa kekhusyukan</li><li><b>Bermuka dua (riya\')</b> — beramal untuk dipuji manusia</li><li><b>Enggan menolong</b> — menahan barang yang berguna bagi orang lain</li></ul></div>'
-+'<div class="box gold"><h3>✅ Aksi Nyata sebagai Muslim</h3><ul><li>Menyisihkan uang jajan untuk sedekah rutin</li><li>Mengunjungi dan membantu panti asuhan</li><li>Membuat program "Jumat Berkah" di madrasah</li><li>Menggalang dana untuk korban bencana</li><li>Menjadi relawan di kegiatan sosial masyarakat</li></ul></div>'
-+'<div class="box blue"><h3>🤲 Doa & Refleksi</h3><p><i>"Ya Allah, jadikanlah kami hamba-Mu yang peduli, yang tidak menghardik anak yatim, yang selalu memberi makan orang miskin, dan yang ikhlas dalam beribadah. Aamiin."</i></p></div>'},
-
-/* 12 - RANGKUMAN & PENUTUP */
-{h:'<h2>Rangkuman Bab 1</h2>'
-+'<div class="box"><h3>📋 Kesimpulan Utama</h3><ul>'
-+'<li><b>Sikap Bersahaja:</b> Keseimbangan antara berlebih-lebihan dan kekikiran (QS al-Furqan: 67)</li>'
-+'<li><b>Kisah Qarun:</b> Harta tanpa syukur membawa kehancuran (QS al-Qashash: 79-82)</li>'
-+'<li><b>Hakikat Kebajikan:</b> Keseimbangan ibadah dan kepedulian sosial (QS al-Baqarah: 177)</li>'
-+'<li><b>Melawan Pendusta Agama:</b> Aksi nyata peduli yatim dan dhuafa (QS al-Ma\'un)</li>'
-+'</ul></div>'
-+'<div class="box gold"><h3>🌟 Nilai Panca Cinta yang Terintegrasi</h3><p><span class="tag">Cinta Allah & Rasul</span> <span class="tag">Cinta Diri & Sesama</span> <span class="tag g">Cinta Ilmu</span> <span class="tag b">Cinta Lingkungan</span></p></div>'
-+'<div class="center" style="margin-top:20px"><div class="kick">Terima Kasih</div><h1>Wassalamu\'alaikum Wr. Wb.</h1><p style="margin-top:10px;font-size:13px">Belajar dengan <span class="tag">Mindful</span> <span class="tag g">Meaningful</span> <span class="tag b">Joyful</span></p>'
-+'<p style="margin-top:16px;font-size:12px;color:#555">Mengetahui, Kepala Madrasah: <b>'+DATA.kepala+'</b><br>Guru Mata Pelajaran: <b>'+DATA.guru+'</b></p></div></div>'}
-];
+// ===== SLIDE PANDUAN JIKA BELUM GENERATE =====
+function buildEmpty(){
+  S=[{h:'<div class="center" style="margin-top:50px">'
+    +'<div class="kick">PPT Materi · MAN Bantaeng</div>'
+    +'<h1>📽 Belum Ada Data Materi</h1>'
+    +'<p class="big">Halaman ini terhubung dengan <b>Modul Ajar</b> via penyimpanan lokal.</p>'
+    +'<p style="text-align:left;max-width:600px;margin:20px auto">1️⃣ Buka <b>Modul Ajar</b> lalu login<br>2️⃣ Pilih Mata Pelajaran, Kelas, Semester & Topik<br>3️⃣ Klik <b>⚡ Generate Modul Ajar</b><br>4️⃣ Klik <b>📽 Buka PPT Materi</b></p>'
+    +'<p class="big">✨ Slide otomatis mengikuti bidang studi & materi yang di-generate!</p>'
+    +'<p style="margin-top:24px"><span class="tag">Mindful</span> <span class="tag g">Meaningful</span> <span class="tag b">Joyful</span></p>'
+    +'</div>'}];
 }
 
+// ===== BANGUN SLIDE DINAMIS =====
+function build(){
+  S=[];
+  var d=DATA;
+
+  // --- Slide 1: JUDUL ---
+  S.push({h:'<div class="center" style="margin-top:36px"><div class="kick">Media Pembelajaran · MAN Bantaeng</div>'
+    +'<h1>'+esc(d.mapel)+'</h1><div class="sub">'+esc(d.bab)+'</div>'
+    +'<p style="margin-top:16px">Kelas '+esc(d.kelas)+' · Semester '+esc(d.semester)+' · TA '+esc(d.tahun)+'</p>'
+    +'<p>Guru: <b>'+esc(d.guru)+'</b></p></div>'});
+
+  // --- Slide 2: TUJUAN PEMBELAJARAN ---
+  S.push({h:'<h2>Tujuan Pembelajaran</h2><ul><li>'+d.tp.map(esc).join('</li><li>')+'</li></ul>'});
+
+  // --- Slide 3..N: MATERI RINGKAS (max 4) ---
+  d.materi.slice(0,4).forEach(function(m){
+    S.push({h:'<h2>'+esc(m.judul)+'</h2><ul><li>'+m.poin.map(esc).join('</li><li>')+'</li></ul>'});
+  });
+
+  // --- Slide: PERTANYAAN PEMANTIK ---
+  var kk=esc(d.kataKunci||d.bab);
+  S.push({h:'<h2>Pertanyaan Pemantik</h2><ul>'
+    +'<li>Apa yang kamu ketahui tentang <b>'+kk+'</b>?</li>'
+    +'<li>Pernahkah kamu melihat/mengalami fenomena <b>'+kk+'</b> dalam kehidupan sehari-hari?</li>'
+    +'<li>Mengapa <b>'+kk+'</b> penting bagi kehidupanmu dan lingkunganmu?</li>'
+    +'<li>Bagaimana nilai Panca Cinta memaknai <b>'+kk+'</b>?</li></ul>'});
+
+  // --- Slide PENJELASAN MATERI (dinamis) ---
+  d.materi.slice(0,4).forEach(function(m,i){
+    var h='<h2>📖 Penjelasan Materi '+(i+1)+': '+esc(m.judul)+'</h2>';
+    if(m.detail){
+      if(m.detail.ayat) h+='<div class="ayat">'+m.detail.ayat+'</div>';
+      if(m.detail.makna) h+='<div class="box"><h3>🔍 Makna & Konsep</h3><p>'+m.detail.makna+'</p></div>';
+      if(m.detail.implementasi) h+='<div class="box gold"><h3>💡 Implementasi</h3><ul><li>'+m.detail.implementasi.join('</li><li>')+'</li></ul></div>';
+      if(m.detail.catatan) h+='<div class="box blue"><h3>📌 Catatan Penting</h3><p>'+m.detail.catatan+'</p></div>';
+    } else {
+      h+='<div class="box"><h3>🔍 Konsep Inti</h3><p><b>'+esc(m.poin[0])+'</b></p></div>';
+      h+='<div class="box gold"><h3>💡 Pengembangan</h3><ul><li>'+m.poin.slice(1).map(esc).join('</li><li>')+'</li></ul></div>';
+      h+='<div class="box blue"><h3>🎯 Relevansi</h3><p>Kaitkan <b>'+kk+'</b> dengan kehidupan sehari-hari dan nilai-nilai Panca Cinta dalam konteks ke-madrasah-an.</p></div>';
+    }
+    S.push({h:h});
+  });
+
+  // --- Slide AKHIR: RANGKUMAN ---
+  var rangkum='<h2>Rangkuman</h2><div class="box"><h3>📋 Kesimpulan Utama</h3><ul>';
+  d.materi.slice(0,4).forEach(function(m){
+    rangkum+='<li><b>'+esc(m.judul)+':</b> '+esc(m.poin[0])+'</li>';
+  });
+  rangkum+='</ul></div>';
+  rangkum+='<div class="box gold"><h3>🌟 Nilai Panca Cinta</h3><p>';
+  (d.pancaCinta||[]).forEach(function(c){rangkum+='<span class="tag">'+esc(c)+'</span> ';});
+  rangkum+='</p></div>';
+  rangkum+='<div class="center" style="margin-top:20px"><div class="kick">Terima Kasih</div>'
+    +'<h1>Wassalamu\'alaikum Wr. Wb.</h1>'
+    +'<p style="margin-top:10px;font-size:13px">Belajar dengan <span class="tag">Mindful</span> <span class="tag g">Meaningful</span> <span class="tag b">Joyful</span></p>'
+    +'<p style="margin-top:16px;font-size:12px;color:#555">Kepala Madrasah: <b>'+esc(d.kepala)+'</b><br>Guru Mata Pelajaran: <b>'+esc(d.guru)+'</b></p></div>';
+  S.push({h:rangkum});
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
 function render(){
-var deck=document.getElementById('deck');
-var s=S[cur];
-if(!s){deck.innerHTML='<div class="slide"><div class="center big">⚠️ Slide tidak tersedia</div></div>';return;}
-deck.innerHTML='<div class="slide">'+s.h+'<div class="foot"><span>MAN Bantaeng · '+DATA.mapel+' · Kelas '+DATA.kelas+'</span><span>Slide '+(cur+1)+' / '+S.length+'</span></div></div>';
-document.getElementById('ctr').textContent=(cur+1)+' / '+S.length;
+  var deck=document.getElementById('deck');
+  var s=S[cur];
+  if(!s){deck.innerHTML='<div class="slide"><div class="center big">⚠️ Slide tidak tersedia</div></div>';return;}
+  var foot = DATA ? ('MAN Bantaeng · '+esc(DATA.mapel)+' · Kelas '+esc(DATA.kelas)) : 'MAN Bantaeng';
+  deck.innerHTML='<div class="slide">'+s.h+'<div class="foot"><span>'+foot+'</span><span>Slide '+(cur+1)+' / '+S.length+'</span></div></div>';
+  document.getElementById('ctr').textContent=(cur+1)+' / '+S.length;
 }
 function go(d){if(!S.length)return;cur=Math.max(0,Math.min(S.length-1,cur+d));render();}
 function fs(){try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}catch(e){}}
 document.addEventListener('keydown',function(e){
-if(e.key==='ArrowRight'||e.key===' ')go(1);
-if(e.key==='ArrowLeft')go(-1);
-if(e.key==='Home'){cur=0;render();}
-if(e.key==='End'){cur=S.length-1;render();}
+  if(e.key==='ArrowRight'||e.key===' ')go(1);
+  if(e.key==='ArrowLeft')go(-1);
+  if(e.key==='Home'){cur=0;render();}
+  if(e.key==='End'){cur=S.length-1;render();}
 });
 
-try{build();cur=0;render();}catch(err){
-document.getElementById('deck').innerHTML='<div class="slide"><div class="center big">⚠️ Terjadi kesalahan: '+err.message+'</div></div>';
+try{
+  if(!DATA){buildEmpty();}else{build();}
+  cur=0;render();
+}catch(err){
+  document.getElementById('deck').innerHTML='<div class="slide"><div class="center big">⚠️ Terjadi kesalahan: '+err.message+'</div></div>';
 }
 </script>
 </body>
