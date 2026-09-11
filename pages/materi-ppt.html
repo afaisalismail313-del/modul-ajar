@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>PPT Materi - MAN Bantaeng</title>
+<title>PPT Materi - Al-Qur'an Hadits | MAN Bantaeng</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif}
 body{background:#0f2417;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -34,72 +34,80 @@ ul{margin:6px 0 6px 20px}
 <div class="ctrl">
 <button onclick="go(-1)">◀</button><span id="ctr"></span><button onclick="go(1)">▶</button>
 <button onclick="fs()">⛶</button><button onclick="window.print()">🖨</button>
-<button onclick="location.href='modul-ajar.html'">← Modul</button>
 </div>
 <script>
-var S=[],cur=0,D=null;
-try{D=JSON.parse(localStorage.getItem('maPPTData')||'null')}catch(e){D=null}
+/* ===== DATA TERTANAM (MANDIRI, TANPA MODUL AJAR) ===== */
+var DATA={
+mapel:"Al-Qur'an Hadits",
+kelas:"X",
+semester:"Ganjil",
+tahun:"2025/2026",
+guru:"Sitti Sainab, S.Ag",
+kepala:"Muhammad Arif Pither, S.Ag., M.M",
+bab:"BAB 1: Membudayakan Pola Hidup Sederhana dan Menyantuni Dhuafa",
+kataKunci:"Pola Hidup Sederhana",
+tp:[
+"Murid mampu menunjukkan sikap bersahaja dan seimbang dalam berkonsumsi sebagai wujud cinta Allah (QS al-Furqan: 67)",
+"Murid dapat mengembangkan rasa syukur atas kecukupan yang dimiliki tanpa harus berlebih-lebihan",
+"Murid mampu menganalisis bahaya kesombongan melalui refleksi kisah Qarun (QS al-Qashash: 79-82)",
+"Murid mampu merumuskan hakikat kebajikan yang mencakup aspek sosial dan spiritual (QS al-Baqarah: 177)"
+],
+materi:[
+{judul:"Materi 1 · Sikap Bersahaja (QS al-Furqan: 67)",poin:["Pola hidup sederhana: tidak berlebihan dan tidak pelit","Keseimbangan dalam berkonsumsi sebagai wujud cinta kepada Allah","Hadis Abdullah bin Amr tentang seni keseimbangan hidup","Dampak positif hidup sederhana bagi kesehatan mental dan sosial"]},
+{judul:"Materi 2 · Refleksi Kisah Qarun (QS al-Qashash: 79-82)",poin:["Analisis bahaya kesombongan dan sifat tamak","Pelajaran dari kisah Qarun: harta tanpa syukur membawa kehancuran","Sikap rendah hati dalam menerima setiap karunia materi","Korelasi antara harta dan tanggung jawab sosial"]},
+{judul:"Materi 3 · Hakikat Kebajikan (QS al-Baqarah: 177)",poin:["Kebajikan mencakup aspek sosial dan spiritual secara seimbang","Kepedulian terhadap yatim, miskin, dan kaum dhuafa","Empati sebagai implementasi cinta kepada sesama","Perencanaan pemberian bantuan secara kolaboratif"]},
+{judul:"Materi 4 · Implementasi: Melawan Pendusta Agama (QS al-Ma'un)",poin:["Menjauhi perilaku pendusta agama dengan konsisten peduli pada yatim","Aksi nyata menyantuni dhuafa di lingkungan sekitar madrasah","Kerja kolaboratif dalam program santunan","Evaluasi dampak sosial dari aksi kepedulian"]}
+],
+pancaCinta:"Cinta kepada Allah dan Rasul · Cinta Diri dan Sesama",
+integrasiKBC:"Pola hidup sederhana sebagai wujud cinta kepada Allah; menyantuni dhuafa sebagai implementasi cinta kepada diri dan sesama manusia; refleksi kisah Qarun sebagai pelajaran untuk tidak sombong; aksi nyata sebagai bentuk cinta ilmu dan cinta lingkungan.",
+awal:"Salam, doa pembuka, tadarus ayat terkait. Guru melakukan apersepsi dengan menghubungkan pengalaman siswa tentang hidup sederhana. Menyampaikan tujuan pembelajaran dan pertanyaan pemantik.",
+inti:"Pembelajaran mendalam (Deep Learning): Mindful — siswa memahami makna ayat dengan penuh kesadaran; Meaningful — mengaitkan materi dengan kehidupan nyata dan nilai Panca Cinta; Joyful — berdiskusi kelompok, presentasi, dan melakukan aksi nyata menyantuni dhuafa secara kolaboratif.",
+akhir:"Refleksi bersama tentang nilai-nilai yang dipelajari. Guru memberikan penguatan dan apresiasi. Doa penutup dan salam. Penugasan proyek aksi nyata untuk pertemuan berikutnya.",
+asesmenAwal:"Tanya jawab untuk menggali pengetahuan awal siswa tentang konsep hidup sederhana dan sedekah, serta pengalaman mereka dalam berbagi dengan sesama.",
+asesmenProses:"Observasi keaktifan diskusi kelompok, penilaian presentasi, refleksi tertulis tentang perubahan sikap, dan partisipasi dalam proyek aksi nyata.",
+asesmenAkhir:"Tes sumatif pilihan ganda dan esai tentang pemahaman ayat-ayat terkait; penilaian proyek aksi nyata menyantuni dhuafa; portofolio refleksi sikap selama satu bab.",
+kunciJawaban:"Kunci jawaban terlampir dalam dokumen asesmen guru."
+};
 
-function rows(t){if(!t)return[];return Array.prototype.map.call(t.querySelectorAll('tr'),function(tr){return Array.prototype.map.call(tr.querySelectorAll('th,td'),function(x){return x.innerHTML;});});}
-function g(r,i){return (r&&r[i]&&r[i][1])?r[i][1]:'';}
-function part(td,re){var m=String(td||'').match(re);return m?m[1]:'';}
-function stripTP(t){return String(t).replace(/^Murid\s+(mampu|dapat)\s+/i,'').replace(/^Peserta didik\s+(mampu|dapat)\s+/i,'');}
-function clean(s){return String(s).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();}
-function getMateri(tpList){
-var groups=[],per=Math.max(1,Math.ceil(tpList.length/4));
-for(var i=0;i<tpList.length;i+=per){groups.push(tpList.slice(i,i+per));}
-return groups.map(function(gr,i){return {j:'Materi '+(i+1),p:gr.map(function(x){return clean(stripTP(x));});};});
-}
-
+/* ===== PEMBANGUNAN SLIDE ===== */
+var S=[],cur=0;
 function build(){
-var doc=new DOMParser().parseFromString(D.html,'text/html');
-var T=doc.querySelectorAll('table');
-var rId=rows(T[1]),rDes=rows(T[2]),rPeng=rows(T[3]),rAses=rows(T[4]);
-var sign=T[5]?T[5].innerHTML:'';
-var tpList=g(rDes,2).split('<br>').filter(function(x){return clean(x);});
-var M=getMateri(tpList);
-while(M.length<4){M.push({j:'Materi '+(M.length+1),p:['Pendalaman materi: guru menghubungkan konsep dengan kehidupan sehari-hari dan nilai Panca Cinta.']);});
-var kunci=clean((g(rId,1).split('Kata Kunci:')[1])||'materi')||'materi';
-var awal=[],inti=[],akhir=[];
-rPeng.forEach(function(r){var td=r[1]||'';
-awal.push(clean(part(td,/<b>Kegiatan Awal[^<]*<\/b>:?([\s\S]*?)(?=<b>Kegiatan Inti)/)));
-inti.push(part(td,/<b>Kegiatan Inti[^<]*<\/b>:?([\s\S]*?)(?=<b>Kegiatan Akhir)/));
-akhir.push(clean(part(td,/<b>Kegiatan Akhir[^<]*<\/b>:?([\s\S]*?)$/)));});
-function mSlide(m){return '<h2>'+m.j+' · '+kunci+'</h2><ul><li>'+m.p.join('</li><li>')+'</li></ul>';}
 S=[
-{h:'<div class="center" style="margin-top:36px"><div class="kick">Media Pembelajaran · MAN Bantaeng</div><h1>'+(D.mapel||'')+'</h1><div class="sub">'+clean(g(rId,1))+'</div><p style="margin-top:16px">Kelas '+D.kelas+' · Semester '+D.semester+' · TA '+D.tahun+'</p><p>Guru: <b>'+D.guru+'</b></p></div>'},
-{h:'<h2>Tujuan Pembelajaran</h2><ul><li>'+tpList.join('</li><li>')+'</li></ul>'},
-{h:mSlide(M[0])},{h:mSlide(M[1])},{h:mSlide(M[2])},{h:mSlide(M[3])},
-{h:'<h2>Pertanyaan Pemantik</h2><ul><li>Apa yang kamu ketahui tentang <b>'+kunci+'</b>?</li><li>Pernahkah kamu melihat/mengalami fenomena <b>'+kunci+'</b> dalam kehidupan sehari-hari?</li><li>Mengapa <b>'+kunci+'</b> penting bagi kehidupanmu dan lingkunganmu?</li><li>Bagaimana nilai Panca Cinta memaknai <b>'+kunci+'</b>?</li></ul>'},
-{h:'<h2>Kegiatan Pembelajaran</h2><div class="box"><h3>🟢 Awal</h3><p>'+(awal.join(' ')||'-')+'</p></div><div class="box"><h3>🟡 Inti (Deep Learning)</h3><p><span class="tag">Mindful</span><span class="tag g">Meaningful</span><span class="tag b">Joyful</span> — memahami, mengaplikasikan, dan merefleksi <b>'+kunci+'</b>.</p></div><div class="box"><h3>🔵 Penutup</h3><p>'+(akhir.join(' ')||'-')+'</p></div>'},
-{h:'<h2>Nilai Panca Cinta (KBC)</h2><div class="box"><p>'+g(rId,3).replace(/<br>/g,' ')+'</p></div><div class="box"><h3>Integrasi KBC</h3><p>'+g(rId,4)+'</p></div>'},
-{h:'<h2>Asesmen</h2><div class="box"><h3>Awal</h3><p>'+g(rAses,0)+'</p></div><div class="box"><h3>Proses</h3><p>'+g(rAses,1)+'</p></div><div class="box"><h3>Akhir</h3><p>'+g(rAses,2)+'</p></div>'},
-{h:'<h2>Rangkuman</h2><ul><li>'+M.map(function(m){return '<b>'+m.j+':</b> '+m.p[0];}).join('</li><li>')+'</li></ul>'},
-{h:'<div class="center" style="margin-top:46px"><div class="kick">Terima Kasih</div><h1>Wassalamu\'alaikum Wr. Wb.</h1><p style="margin-top:14px">Belajar dengan <span class="tag">Mindful</span><span class="tag g">Meaningful</span><span class="tag b">Joyful</span></p><div style="margin-top:22px;font-size:12px">'+sign+'</div></div>'}
+/* 1 */ {h:'<div class="center" style="margin-top:36px"><div class="kick">Media Pembelajaran · MAN Bantaeng</div><h1>'+DATA.mapel+'</h1><div class="sub">'+DATA.bab+'</div><p style="margin-top:16px">Kelas '+DATA.kelas+' · Semester '+DATA.semester+' · TA '+DATA.tahun+'</p><p>Guru: <b>'+DATA.guru+'</b></p></div>'},
+/* 2 */ {h:'<h2>Tujuan Pembelajaran</h2><ul><li>'+DATA.tp.join('</li><li>')+'</li></ul>'},
+/* 3 */ {h:'<h2>'+DATA.materi[0].judul+'</h2><ul><li>'+DATA.materi[0].poin.join('</li><li>')+'</li></ul>'},
+/* 4 */ {h:'<h2>'+DATA.materi[1].judul+'</h2><ul><li>'+DATA.materi[1].poin.join('</li><li>')+'</li></ul>'},
+/* 5 */ {h:'<h2>'+DATA.materi[2].judul+'</h2><ul><li>'+DATA.materi[2].poin.join('</li><li>')+'</li></ul>'},
+/* 6 */ {h:'<h2>'+DATA.materi[3].judul+'</h2><ul><li>'+DATA.materi[3].poin.join('</li><li>')+'</li></ul>'},
+/* 7 */ {h:'<h2>Pertanyaan Pemantik</h2><ul><li>Apa yang kamu ketahui tentang <b>'+DATA.kataKunci+'</b>?</li><li>Pernahkah kamu melihat/mengalami fenomena <b>'+DATA.kataKunci+'</b> dalam kehidupan sehari-hari?</li><li>Mengapa <b>'+DATA.kataKunci+'</b> penting bagi kehidupanmu dan lingkunganmu?</li><li>Bagaimana nilai Panca Cinta memaknai <b>'+DATA.kataKunci+'</b>?</li></ul>'},
+/* 8 */ {h:'<h2>Kegiatan Pembelajaran</h2><div class="box"><h3>🟢 Awal (10 Menit)</h3><p>'+DATA.awal+'</p></div><div class="box"><h3>🟡 Inti · Deep Learning</h3><p><span class="tag">Mindful</span><span class="tag g">Meaningful</span><span class="tag b">Joyful</span></p><p>'+DATA.inti+'</p></div><div class="box"><h3>🔵 Penutup (15 Menit)</h3><p>'+DATA.akhir+'</p></div>'},
+/* 9 */ {h:'<h2>Nilai Panca Cinta (KBC)</h2><div class="box"><h3>Topik Panca Cinta</h3><p>'+DATA.pancaCinta+'</p></div><div class="box"><h3>Integrasi KBC dalam Pembelajaran</h3><p>'+DATA.integrasiKBC+'</p></div>'},
+/* 10*/ {h:'<h2>Asesmen</h2><div class="box"><h3>📋 Asesmen Awal</h3><p>'+DATA.asesmenAwal+'</p></div><div class="box"><h3>📝 Asesmen Proses</h3><p>'+DATA.asesmenProses+'</p></div><div class="box"><h3>✅ Asesmen Akhir</h3><p>'+DATA.asesmenAkhir+'</p></div>'},
+/* 11*/ {h:'<h2>Rangkuman</h2><ul><li>'+DATA.materi.map(function(m){return '<b>'+m.judul.split('·')[0].trim()+':</b> '+m.poin[0];}).join('</li><li>')+'</li></ul>'},
+/* 12*/ {h:'<div class="center" style="margin-top:46px"><div class="kick">Terima Kasih</div><h1>Wassalamu\'alaikum Wr. Wb.</h1><p style="margin-top:14px">Belajar dengan <span class="tag">Mindful</span><span class="tag g">Meaningful</span><span class="tag b">Joyful</span></p><div style="margin-top:22px;font-size:12px;color:#555"><p>Mengetahui, Kepala Madrasah</p><p><b>'+DATA.kepala+'</b></p><p style="margin-top:14px">Guru Mata Pelajaran</p><p><b>'+DATA.guru+'</b></p></div></div>'}
 ];
 }
 
+/* ===== RENDER & NAVIGASI ===== */
 function render(){
 var deck=document.getElementById('deck');
 var s=S[cur];
 if(!s){deck.innerHTML='<div class="slide"><div class="center big">⚠️ Slide tidak tersedia</div></div>';return;}
-deck.innerHTML='<div class="slide">'+s.h+'<div class="foot"><span>MAN Bantaeng · '+(D&&D.mapel?D.mapel:'')+'</span><span>Slide '+(cur+1)+' / '+S.length+'</span></div></div>';
+deck.innerHTML='<div class="slide">'+s.h+'<div class="foot"><span>MAN Bantaeng · '+DATA.mapel+' · Kelas '+DATA.kelas+'</span><span>Slide '+(cur+1)+' / '+S.length+'</span></div></div>';
 document.getElementById('ctr').textContent=(cur+1)+' / '+S.length;
 }
 function go(d){if(!S.length)return;cur=Math.max(0,Math.min(S.length-1,cur+d));render();}
 function fs(){try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}catch(e){}}
-document.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1);});
+document.addEventListener('keydown',function(e){
+if(e.key==='ArrowRight'||e.key===' ')go(1);
+if(e.key==='ArrowLeft')go(-1);
+if(e.key==='Home'){cur=0;render();}
+if(e.key==='End'){cur=S.length-1;render();}
+});
 
-/* ===== MULAI (aman, tidak pernah blank) ===== */
-try{
-if(!D||!D.html){
-S=[{h:'<div class="center" style="margin-top:50px"><div class="kick">PPT Materi · MAN Bantaeng</div><h1>📽️ Belum Ada Data Materi</h1><p class="big">Halaman PPT ini mengambil data dari <b>Modul Ajar</b>.</p><p>1️⃣ Buka <b>Modul Ajar</b> → pilih mapel, kelas, semester, unit.<br>2️⃣ Klik <b>⚡ GENERATE MODUL AJAR</b>.<br>3️⃣ Klik tombol <b>📽️ BUKA PPT MATERI (12 SLIDE)</b>.</p><p class="big">Maka 12 slide materi akan otomatis tersusun di sini.</p></div>'}];
-cur=0;render();
-}else{
-build();cur=0;render();
-}
-}catch(err){
-S=[{h:'<div class="center big">⚠️ Terjadi kesalahan: '+err.message+'</div>'}];cur=0;render();
+/* ===== INISIALISASI ===== */
+try{build();cur=0;render();}catch(err){
+document.getElementById('deck').innerHTML='<div class="slide"><div class="center big">⚠️ Terjadi kesalahan: '+err.message+'</div></div>';
 }
 </script>
 </body>
