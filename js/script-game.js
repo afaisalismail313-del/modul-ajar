@@ -1,22 +1,12 @@
 // Game State
 let gameState = {
-    selectedPlane: 1,
-    selectedPlaneColor: '#4A90E2',
-    questionCount: 10,
-    background: 'space',
-    playerName: 'Siswa Hebat',
-    currentQuestion: 0,
-    playerPosition: 0,
-    opponents: [],
-    questions: [],
-    correctAnswers: 0,
-    timer: null,
-    timeLeft: 30
+    selectedPlane: 1, selectedPlaneColor: '#4A90E2', questionCount: 10, background: 'space',
+    playerName: 'Siswa Hebat', currentQuestion: 0, playerPosition: 0, opponents: [],
+    questions: [], correctAnswers: 0, timer: null, timeLeft: 30
 };
-
 let audioCtx;
 
-// ATP Database - Lengkap dari semua file yang diupload
+// ATP Database - Lengkap termasuk Bahasa Inggris dari file upload
 const atpDatabase = {
     "Matematika": {
         "Bilangan Berpangkat": [
@@ -188,17 +178,51 @@ const atpDatabase = {
             { q: "Mandala adalah karya seni yang berbentuk...", options: ["Lingkaran dengan pola simetris", "Persegi panjang acak", "Segitiga tidak beraturan", "Garis bebas"], correct: 0 },
             { q: "Bahan alami yang dapat digunakan untuk membuat karya seni 2D adalah...", options: ["Daun kering, tanah liat, dan pewarna alam", "Plastik, styrofoam, dan cat minyak", "Kaca, besi, dan beton", "Kertas HVS dan spidol permanen"], correct: 0 }
         ]
+    },
+    // BARU: Bahasa Inggris dari ATP XI Genap & XII
+    "Bahasa Inggris": {
+        "Narrative Text: Environmental Figures": [
+            { q: "What is the main purpose of a Narrative Text?", options: ["To entertain or amuse the reader with a story", "To describe a particular person or place", "To explain how something works", "To persuade the reader to agree with an opinion"], correct: 0 },
+            { q: "Which tense is predominantly used in Narrative Texts?", options: ["Simple Past Tense", "Simple Present Tense", "Present Continuous Tense", "Future Tense"], correct: 0 },
+            { q: "The part of the narrative that introduces the characters and setting is called...", options: ["Orientation", "Complication", "Resolution", "Reorientation"], correct: 0 },
+            { q: "In a biography of an environmental figure, which element shows the struggle they faced?", options: ["Complication", "Orientation", "Evaluation", "Coda"], correct: 0 },
+            { q: "'Starting a conversation' expressions are important in listening activities. Which one is appropriate?", options: ["Excuse me, may I ask you something?", "I have to go now.", "That's all for today.", "See you later."], correct: 0 }
+        ],
+        "Procedure Text: Personal Money Management": [
+            { q: "What is the social function of a Procedure Text?", options: ["To describe how to make or do something through a sequence of steps", "To tell a past experience", "To argue about a specific issue", "To report factual information"], correct: 0 },
+            { q: "Which grammatical feature is most common in Procedure Texts about money management?", options: ["Imperative sentences (Commands)", "Past tense verbs", "Passive voice only", "Direct speech"], correct: 0 },
+            { q: "'How to Save Money Wisely' is an example of a...", options: ["Goal / Aim of a procedure text", "Complication", "Resolution", "Argument"], correct: 0 },
+            { q: "When giving financial advice using superlatives, which sentence is correct?", options: ["This is the safest way to invest.", "This is safer than that.", "This is safe.", "This was safe."], correct: 0 },
+            { q: "In a tutorial video about budgeting, what should you evaluate first?", options: ["Your income and expenses", "Your favorite color", "The weather forecast", "Your friends' opinions"], correct: 0 }
+        ],
+        "Argumentative Text: E-Money": [
+            { q: "What is the primary goal of an Argumentative Text?", options: ["To persuade the reader that an idea is valid or invalid", "To entertain the reader with a fictional story", "To describe a process step-by-step", "To report daily events"], correct: 0 },
+            { q: "Which language feature is essential when discussing E-Money pros and cons?", options: ["Expressions of asking and giving opinions", "Action verbs only", "Simple past tense", "Time connectives"], correct: 0 },
+            { q: "'E-money provides convenience but poses security risks.' This sentence shows...", options: ["Contrasting arguments", "A single opinion", "A narrative complication", "A procedural step"], correct: 0 },
+            { q: "In an argumentative essay about cashless society, what belongs in the conclusion?", options: ["Restatement of the thesis and summary of arguments", "New unrelated arguments", "Detailed description of a bank", "Dialogue between characters"], correct: 0 },
+            { q: "Which word best connects two opposing ideas in an argumentative text?", options: ["However", "Firstly", "Then", "Finally"], correct: 0 }
+        ],
+        "Hortatory Exposition: Netiquette": [
+            { q: "What distinguishes Hortatory Exposition from Analytical Exposition?", options: ["It includes recommendations/suggestions at the end", "It only presents facts without opinion", "It tells a fictional story", "It uses only past tense"], correct: 0 },
+            { q: "Netiquette refers to...", options: ["Ethical behavior and manners on the internet", "Computer network hardware", "Internet speed measurement", "Online gaming strategies"], correct: 0 },
+            { q: "Which emotive phrase is suitable for a hortatory exposition about cyberbullying?", options: ["We must seriously address this harmful issue", "The computer is on the table", "She went to school yesterday", "First, turn on the device"], correct: 0 },
+            { q: "The structure of Hortatory Exposition typically consists of...", options: ["Thesis, Arguments, Recommendation", "Orientation, Complication, Resolution", "Goal, Materials, Steps", "Identification, Description"], correct: 0 },
+            { q: "Why is present tense used in Hortatory Exposition about netiquette?", options: ["Because it discusses general truths and current issues", "Because it happened in the past", "Because it is a fictional story", "Because it is a personal diary"], correct: 0 }
+        ],
+        "Discussion Text: Carbon Footprints": [
+            { q: "What is the purpose of a Discussion Text?", options: ["To present at least two points of view about an issue", "To tell a humorous story", "To explain how to cook food", "To describe a specific animal"], correct: 0 },
+            { q: "Carbon footprint primarily measures...", options: ["Total greenhouse gas emissions caused by human actions", "The size of a person's shoe", "The amount of carbon in soil", "The weight of coal"], correct: 0 },
+            { q: "Which linguistic feature helps present contrasting views in a Discussion Text?", options: ["Contrastive conjunctions (e.g., on the other hand)", "Temporal conjunctions", "Action verbs", "Direct speech"], correct: 0 },
+            { q: "'Some people argue that vegan diets reduce emissions, while others believe local meat is better.' This shows...", options: ["Balanced presentation of different perspectives", "A single biased opinion", "A narrative resolution", "A procedural instruction"], correct: 0 },
+            { q: "In a discussion about sustainable diets, what should the recommendation include?", options: ["A balanced conclusion based on presented arguments", "Only one side's opinion", "Irrelevant personal stories", "Fictional characters"], correct: 0 }
+        ]
     }
 };
 
 // Initialize Audio
 function initAudio() {
-    if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume().catch(e => console.log("Audio resume failed:", e));
-    }
+    if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+    if (audioCtx.state === 'suspended') { audioCtx.resume().catch(e => console.log("Audio resume failed:", e)); }
 }
 
 // Play Sound Effects
@@ -207,39 +231,28 @@ function playSound(type) {
     try {
         const oscillator = audioCtx.createOscillator();
         const gainNode = audioCtx.createGain();
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
+        oscillator.connect(gainNode); gainNode.connect(audioCtx.destination);
         const now = audioCtx.currentTime;
-
         if (type === 'correct') {
-            oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(523.25, now);
+            oscillator.type = 'sine'; oscillator.frequency.setValueAtTime(523.25, now);
             oscillator.frequency.exponentialRampToValueAtTime(1046.5, now + 0.1);
-            gainNode.gain.setValueAtTime(0.3, now);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+            gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
             oscillator.start(now); oscillator.stop(now + 0.3);
         } else if (type === 'wrong') {
-            oscillator.type = 'sawtooth';
-            oscillator.frequency.setValueAtTime(150, now);
+            oscillator.type = 'sawtooth'; oscillator.frequency.setValueAtTime(150, now);
             oscillator.frequency.linearRampToValueAtTime(100, now + 0.2);
-            gainNode.gain.setValueAtTime(0.3, now);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+            gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
             oscillator.start(now); oscillator.stop(now + 0.3);
         } else if (type === 'move') {
-            oscillator.type = 'triangle';
-            oscillator.frequency.setValueAtTime(200, now);
+            oscillator.type = 'triangle'; oscillator.frequency.setValueAtTime(200, now);
             oscillator.frequency.exponentialRampToValueAtTime(400, now + 0.1);
-            gainNode.gain.setValueAtTime(0.15, now);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+            gainNode.gain.setValueAtTime(0.15, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
             oscillator.start(now); oscillator.stop(now + 0.15);
         } else if (type === 'win') {
             [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.type = 'sine'; osc.frequency.value = freq;
-                gain.gain.setValueAtTime(0.2, now + i * 0.1);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.3);
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination); osc.type = 'sine'; osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.2, now + i * 0.1); gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.3);
                 osc.start(now + i * 0.1); osc.stop(now + i * 0.1 + 0.3);
             });
         }
@@ -251,47 +264,32 @@ function updateTopics() {
     const subjectSelect = document.getElementById('subjectSelect');
     const topicSelect = document.getElementById('topicSelect');
     const selectedSubject = subjectSelect.value;
-    
     topicSelect.innerHTML = '<option value="">-- Pilih Materi --</option>';
     topicSelect.disabled = true;
-    
     if (selectedSubject && atpDatabase[selectedSubject]) {
         const topics = Object.keys(atpDatabase[selectedSubject]);
         topics.forEach(topic => {
             const option = document.createElement('option');
-            option.value = topic;
-            option.textContent = topic;
+            option.value = topic; option.textContent = topic;
             topicSelect.appendChild(option);
         });
         topicSelect.disabled = false;
     }
 }
 
-// Get Plane SVG - Mirip dengan gambar yang diupload
+// Get Plane SVG
 function getPlaneSvg(color, num) {
-    const planeImages = {
-        1: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%234A90E2' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%2387CEEB' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%231a3a5c' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%234A90E2' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`,
-        2: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%23E24A4A' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%23FF6B6B' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%238B0000' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%23E24A4A' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`,
-        3: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%23E2A74A' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%23FFD700' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%238B6914' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%23E2A74A' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`,
-        4: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%234AE24A' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%2390EE90' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%23228B22' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%234AE24A' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`,
-        5: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%238E4AE2' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%23BA68C8' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%234A148C' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%238E4AE2' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`,
-        6: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%234AE2E2' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%2380DEEA' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%23006064' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%234AE2E2' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`,
-        7: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%23E24A8E' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%23F48FB1' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%23880E4F' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%23E24A8E' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`,
-        8: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cellipse cx='60' cy='60' rx='50' ry='30' fill='%23D4AF37' stroke='white' stroke-width='3'/%3E%3Cpolygon points='60,20 75,50 45,50' fill='%23FFD700' stroke='white' stroke-width='2'/%3E%3Ccircle cx='60' cy='60' r='15' fill='%238B6914' stroke='white' stroke-width='2'/%3E%3Crect x='20' y='55' width='80' height='10' fill='%23D4AF37' stroke='white' stroke-width='2'/%3E%3Ctext x='60' y='65' text-anchor='middle' fill='white' font-size='18' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`
-    };
-    return planeImages[num];
+    return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='55' r='35' fill='${encodeURIComponent(color)}' stroke='white' stroke-width='3'/%3E%3Cpolygon points='50,15 65,45 35,45' fill='white'/%3E%3Ctext x='50' y='65' text-anchor='middle' fill='white' font-size='22' font-weight='bold' font-family='Arial'%3E${num}%3C/text%3E%3C/svg%3E`;
 }
 
 // Initialize Menu
 document.addEventListener('DOMContentLoaded', function() {
     const planeSelection = document.getElementById('planeSelection');
     const colors = ['#4A90E2', '#E24A4A', '#E2A74A', '#4AE24A', '#8E4AE2', '#4AE2E2', '#E24A8E', '#D4AF37'];
-    
     for (let i = 1; i <= 8; i++) {
         const div = document.createElement('div');
         div.className = `plane-option plane-${i} ${i === 1 ? 'selected' : ''}`;
-        div.dataset.plane = i;
-        div.dataset.color = colors[i-1];
+        div.dataset.plane = i; div.dataset.color = colors[i-1];
         div.innerHTML = `<img src="${getPlaneSvg(colors[i-1], i)}" alt="Pesawat ${i}"><div style="font-size:11px; margin-top:4px;">Pesawat ${i}</div>`;
         div.addEventListener('click', function() {
             document.querySelectorAll('.plane-option').forEach(p => p.classList.remove('selected'));
@@ -301,356 +299,176 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         planeSelection.appendChild(div);
     }
-
     document.querySelectorAll('.bg-option').forEach(option => {
         option.addEventListener('click', function() {
             document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('selected'));
-            this.classList.add('selected');
-            gameState.background = this.dataset.bg;
+            this.classList.add('selected'); gameState.background = this.dataset.bg;
         });
     });
-    
-    // Start Button Event
     const startBtn = document.getElementById('startBtn');
-    if (startBtn) {
-        startBtn.addEventListener('click', function() {
-            try {
-                startGame();
-            } catch (err) {
-                console.error("Error starting game:", err);
-                alert("Terjadi kesalahan saat memulai: " + err.message);
-            }
-        });
-    }
-
-    // Back Button Event
+    if (startBtn) { startBtn.addEventListener('click', function() { try { startGame(); } catch (err) { alert("Error: " + err.message); } }); }
     const backBtn = document.getElementById('backBtn');
-    if (backBtn) {
-        backBtn.addEventListener('click', function() {
-            backToMenu();
-        });
-    }
+    if (backBtn) { backBtn.addEventListener('click', backToMenu); }
 });
 
 // Start Game
 function startGame() {
     initAudio();
-    
-    const playerName = document.getElementById('playerName').value;
-    gameState.playerName = playerName || 'Siswa Hebat';
-    
+    gameState.playerName = document.getElementById('playerName').value || 'Siswa Hebat';
     const selectedSubject = document.getElementById('subjectSelect').value;
     const selectedTopic = document.getElementById('topicSelect').value;
-    
-    if (!selectedSubject || !selectedTopic) {
-        alert("Mohon pilih bidang studi dan materi terlebih dahulu!");
-        return;
-    }
-    
+    if (!selectedSubject || !selectedTopic) { alert("Mohon pilih bidang studi dan materi!"); return; }
     let availableQuestions = [];
     if (atpDatabase[selectedSubject] && atpDatabase[selectedSubject][selectedTopic]) {
         availableQuestions = atpDatabase[selectedSubject][selectedTopic];
-    } else {
-        alert("Materi tidak tersedia!");
-        return;
-    }
-    
+    } else { alert("Materi tidak tersedia!"); return; }
     let requestedCount = parseInt(document.getElementById('questionCount').value);
     gameState.questionCount = Math.min(requestedCount, availableQuestions.length);
     gameState.questions = shuffleArray([...availableQuestions]).slice(0, gameState.questionCount);
-    
-    // Initialize opponents
     gameState.opponents = [];
     const planeNumbers = [1, 2, 3, 4, 5, 6, 7, 8].filter(n => n !== gameState.selectedPlane);
     const selectedOpponents = shuffleArray(planeNumbers).slice(0, 5);
-    
     selectedOpponents.forEach(num => {
-        gameState.opponents.push({
-            plane: num,
-            position: 0,
-            color: document.querySelector(`.plane-${num}`).dataset.color
-        });
+        gameState.opponents.push({ plane: num, position: 0, color: document.querySelector(`.plane-${num}`).dataset.color });
     });
-
-    // PERBAIKAN: Hapus class active dari semua screen, lalu tambahkan ke gameScreen
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('gameScreen').classList.add('active');
-    
-    // Set background
     const bg = document.getElementById('gameBackground');
     bg.className = 'game-background ' + gameState.background;
-    
-    if (gameState.background === 'space') {
-        addStars();
-    }
-    
+    if (gameState.background === 'space') addStars();
     createRaceTrack();
-    
-    setTimeout(() => {
-        showNextQuestion();
-    }, 500);
+    setTimeout(() => { showNextQuestion(); }, 500);
 }
 
-// Add Stars for Space Background
 function addStars() {
     const bg = document.getElementById('gameBackground');
     for (let i = 0; i < 50; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.width = Math.random() * 3 + 1 + 'px';
-        star.style.height = star.style.width;
-        star.style.animationDelay = Math.random() * 2 + 's';
-        bg.appendChild(star);
+        const star = document.createElement('div'); star.className = 'star';
+        star.style.left = Math.random() * 100 + '%'; star.style.top = Math.random() * 100 + '%';
+        star.style.width = Math.random() * 3 + 1 + 'px'; star.style.height = star.style.width;
+        star.style.animationDelay = Math.random() * 2 + 's'; bg.appendChild(star);
     }
 }
 
-// Create Race Track
 function createRaceTrack() {
-    const track = document.getElementById('raceTrack');
-    track.innerHTML = '';
-    
-    // Player lane
-    const playerLane = document.createElement('div');
-    playerLane.className = 'racer-lane player';
-    playerLane.innerHTML = `
-        <img class="lane-plane" id="plane-player" src="${getPlaneSvg(gameState.selectedPlaneColor, gameState.selectedPlane)}" alt="Player">
-        <div class="lane-name">${gameState.playerName}</div>
-        <div class="lane-progress">
-            <div class="lane-progress-bar" id="progress-player" style="width: 0%; background: ${gameState.selectedPlaneColor}"></div>
-            <div class="finish-line"></div>
-            <div class="finish-label" id="label-player">🏆 Skor: 0</div>
-        </div>
-    `;
+    const track = document.getElementById('raceTrack'); track.innerHTML = '';
+    const playerLane = document.createElement('div'); playerLane.className = 'racer-lane player';
+    playerLane.innerHTML = `<img class="lane-plane" id="plane-player" src="${getPlaneSvg(gameState.selectedPlaneColor, gameState.selectedPlane)}" alt="Player"><div class="lane-name">${gameState.playerName}</div><div class="lane-progress"><div class="lane-progress-bar" id="progress-player" style="width: 0%; background: ${gameState.selectedPlaneColor}"></div><div class="finish-line"></div><div class="finish-label" id="label-player">🏆 Skor: 0</div></div>`;
     track.appendChild(playerLane);
-    
-    // Opponent lanes
     gameState.opponents.forEach(opp => {
-        const lane = document.createElement('div');
-        lane.className = 'racer-lane';
-        lane.innerHTML = `
-            <img class="lane-plane" id="plane-opponent-${opp.plane}" src="${getPlaneSvg(opp.color, opp.plane)}" alt="Opponent">
-            <div class="lane-name">Pesawat ${opp.plane}</div>
-            <div class="lane-progress">
-                <div class="lane-progress-bar" id="progress-opponent-${opp.plane}" style="width: 0%; background: ${opp.color}"></div>
-                <div class="finish-line"></div>
-                <div class="finish-label" id="label-opponent-${opp.plane}">🏆 Selesai</div>
-            </div>
-        `;
+        const lane = document.createElement('div'); lane.className = 'racer-lane';
+        lane.innerHTML = `<img class="lane-plane" id="plane-opponent-${opp.plane}" src="${getPlaneSvg(opp.color, opp.plane)}" alt="Opponent"><div class="lane-name">Pesawat ${opp.plane}</div><div class="lane-progress"><div class="lane-progress-bar" id="progress-opponent-${opp.plane}" style="width: 0%; background: ${opp.color}"></div><div class="finish-line"></div><div class="finish-label" id="label-opponent-${opp.plane}">🏆 Selesai</div></div>`;
         track.appendChild(lane);
     });
 }
 
-// Show Next Question
 function showNextQuestion() {
-    if (gameState.currentQuestion >= gameState.questions.length) {
-        endGame();
-        return;
-    }
-    
+    if (gameState.currentQuestion >= gameState.questions.length) { endGame(); return; }
     const question = gameState.questions[gameState.currentQuestion];
-    
     document.getElementById('questionNumber').textContent = `Soal ${gameState.currentQuestion + 1}/${gameState.questions.length}`;
     document.getElementById('questionText').textContent = question.q;
-    
-    const optionsContainer = document.getElementById('answerOptions');
-    optionsContainer.innerHTML = '';
-    
-    // Shuffle answer options
+    const optionsContainer = document.getElementById('answerOptions'); optionsContainer.innerHTML = '';
     const indices = [0, 1, 2, 3].slice(0, question.options.length);
     const shuffledIndices = shuffleArray(indices);
     const newCorrectIndex = shuffledIndices.indexOf(question.correct);
-    
     shuffledIndices.forEach((originalIndex, displayIndex) => {
-        const btn = document.createElement('button');
-        btn.className = 'answer-btn';
+        const btn = document.createElement('button'); btn.className = 'answer-btn';
         btn.textContent = `${String.fromCharCode(65 + displayIndex)}. ${question.options[originalIndex]}`;
         btn.onclick = () => checkAnswer(displayIndex, newCorrectIndex, btn);
         optionsContainer.appendChild(btn);
     });
-    
     startTimer();
 }
 
-// Start Timer
 function startTimer() {
-    clearInterval(gameState.timer);
-    gameState.timeLeft = 30;
-    updateTimer();
-    
+    clearInterval(gameState.timer); gameState.timeLeft = 30; updateTimer();
     gameState.timer = setInterval(() => {
-        gameState.timeLeft--;
-        updateTimer();
-        
-        if (gameState.timeLeft <= 0) {
-            clearInterval(gameState.timer);
-            checkAnswer(-1, -1, null);
-        }
+        gameState.timeLeft--; updateTimer();
+        if (gameState.timeLeft <= 0) { clearInterval(gameState.timer); checkAnswer(-1, -1, null); }
     }, 1000);
 }
 
-// Update Timer Display
 function updateTimer() {
     const timerEl = document.getElementById('timer');
-    timerEl.textContent = `⏱️ ${gameState.timeLeft}s`;
+    timerEl.textContent = `️ ${gameState.timeLeft}s`;
     timerEl.style.background = gameState.timeLeft <= 10 ? '#cc0000' : '#ff6b6b';
 }
 
-// Check Answer
 function checkAnswer(selectedIndex, correctIndex, btnElement) {
     clearInterval(gameState.timer);
-    
-    const buttons = document.querySelectorAll('.answer-btn');
-    buttons.forEach(btn => btn.disabled = true);
-    
+    const buttons = document.querySelectorAll('.answer-btn'); buttons.forEach(btn => btn.disabled = true);
     const isCorrect = selectedIndex === correctIndex;
-    
     if (isCorrect) {
         if (btnElement) btnElement.classList.add('correct');
-        gameState.correctAnswers++;
-        playSound('correct');
-        playSound('move');
+        gameState.correctAnswers++; playSound('correct'); playSound('move');
     } else {
         if (btnElement) btnElement.classList.add('wrong');
-        if (correctIndex >= 0 && buttons[correctIndex]) {
-            buttons[correctIndex].classList.add('correct');
-        }
+        if (correctIndex >= 0 && buttons[correctIndex]) buttons[correctIndex].classList.add('correct');
         playSound('wrong');
     }
-    
-    updatePlayerPosition(isCorrect);
-    moveOpponents();
-    checkFinishLine();
-    
+    updatePlayerPosition(isCorrect); moveOpponents(); checkFinishLine();
     setTimeout(() => {
         gameState.currentQuestion++;
-        if (gameState.playerPosition < 100 && !gameState.opponents.some(o => o.position >= 100)) {
-            showNextQuestion();
-        }
+        if (gameState.playerPosition < 100 && !gameState.opponents.some(o => o.position >= 100)) { showNextQuestion(); }
     }, 1500);
 }
 
-// Update Player Position
 function updatePlayerPosition(isCorrect) {
     const step = 100 / gameState.questions.length;
-    if (isCorrect) {
-        gameState.playerPosition = Math.min(100, gameState.playerPosition + step);
-    } else {
-        gameState.playerPosition = Math.max(0, gameState.playerPosition - step);
-    }
-    
+    if (isCorrect) { gameState.playerPosition = Math.min(100, gameState.playerPosition + step); } 
+    else { gameState.playerPosition = Math.max(0, gameState.playerPosition - step); }
     const progressBar = document.getElementById('progress-player');
     const labelEl = document.getElementById('label-player');
-    
-    if (progressBar) {
-        progressBar.style.width = gameState.playerPosition + '%';
-    }
-    
+    if (progressBar) progressBar.style.width = gameState.playerPosition + '%';
     if (gameState.playerPosition >= 100 && labelEl && !labelEl.classList.contains('show')) {
-        labelEl.innerHTML = `🏆 Skor: ${gameState.correctAnswers}`;
-        labelEl.classList.add('show');
-        playSound('win');
+        labelEl.innerHTML = `🏆 Skor: ${gameState.correctAnswers}`; labelEl.classList.add('show'); playSound('win');
     }
 }
 
-// Move Opponents
 function moveOpponents() {
     gameState.opponents.forEach(opp => {
         if (opp.position < 100) {
-            const moveAmount = 8 + Math.random() * 12;
-            opp.position = Math.min(100, opp.position + moveAmount);
-            
+            const moveAmount = 8 + Math.random() * 12; opp.position = Math.min(100, opp.position + moveAmount);
             const progressBar = document.getElementById(`progress-opponent-${opp.plane}`);
             const labelEl = document.getElementById(`label-opponent-${opp.plane}`);
-            
-            if (progressBar) {
-                progressBar.style.width = opp.position + '%';
-            }
-            if (opp.position >= 100 && labelEl && !labelEl.classList.contains('show')) {
-                labelEl.classList.add('show');
-            }
+            if (progressBar) progressBar.style.width = opp.position + '%';
+            if (opp.position >= 100 && labelEl && !labelEl.classList.contains('show')) labelEl.classList.add('show');
         }
     });
 }
 
-// Check Finish Line
 function checkFinishLine() {
-    if (gameState.playerPosition >= 100) {
-        setTimeout(() => endGame(), 1000);
-        return;
-    }
-    
+    if (gameState.playerPosition >= 100) { setTimeout(() => endGame(), 1000); return; }
     const winner = gameState.opponents.find(opp => opp.position >= 100);
-    if (winner) {
-        setTimeout(() => endGame(), 1000);
-    }
+    if (winner) setTimeout(() => endGame(), 1000);
 }
 
-// End Game
 function endGame() {
     clearInterval(gameState.timer);
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('resultsScreen').classList.add('active');
-    
     const isPlayerWin = gameState.playerPosition >= 100 && !gameState.opponents.some(o => o.position >= 100);
-    const trophy = document.getElementById('trophy');
+    document.getElementById('trophy').textContent = isPlayerWin ? '🏆' : '🥈';
     const winnerText = document.getElementById('winnerText');
-    
-    if (isPlayerWin) {
-        trophy.textContent = '🏆';
-        winnerText.textContent = `🎉 Selamat! ${gameState.playerName} Menang! 🎉`;
-        winnerText.style.color = '#FFD700';
-    } else {
-        trophy.textContent = '';
-        winnerText.textContent = 'Balapan Selesai!';
-        winnerText.style.color = '#667eea';
-    }
-    
+    winnerText.textContent = isPlayerWin ? ` Selamat! ${gameState.playerName} Menang! 🎉` : 'Balapan Selesai!';
+    winnerText.style.color = isPlayerWin ? '#FFD700' : '#667eea';
     const selectedSubject = document.getElementById('subjectSelect');
     const selectedTopic = document.getElementById('topicSelect');
-    
-    const scoreDetails = document.getElementById('scoreDetails');
-    scoreDetails.innerHTML = `
-        <div class="score-item">
-            <span>Bidang Studi:</span>
-            <strong>${selectedSubject.value}</strong>
-        </div>
-        <div class="score-item">
-            <span>Materi:</span>
-            <strong>${selectedTopic.value}</strong>
-        </div>
-        <div class="score-item">
-            <span>Jumlah Soal:</span>
-            <strong>${gameState.questions.length}</strong>
-        </div>
-        <div class="score-item">
-            <span>Jawaban Benar:</span>
-            <strong>${gameState.correctAnswers}/${gameState.questions.length}</strong>
-        </div>
-        <div class="score-item">
-            <span>Persentase:</span>
-            <strong>${Math.round((gameState.correctAnswers/gameState.questions.length)*100)}%</strong>
-        </div>
-        <div class="score-item">
-            <span>Posisi Akhir:</span>
-            <strong>${Math.round(gameState.playerPosition)}%</strong>
-        </div>
-    `;
+    document.getElementById('scoreDetails').innerHTML = `
+        <div class="score-item"><span>Bidang Studi:</span><strong>${selectedSubject.value}</strong></div>
+        <div class="score-item"><span>Materi:</span><strong>${selectedTopic.value}</strong></div>
+        <div class="score-item"><span>Jumlah Soal:</span><strong>${gameState.questions.length}</strong></div>
+        <div class="score-item"><span>Jawaban Benar:</span><strong>${gameState.correctAnswers}/${gameState.questions.length}</strong></div>
+        <div class="score-item"><span>Persentase:</span><strong>${Math.round((gameState.correctAnswers/gameState.questions.length)*100)}%</strong></div>
+        <div class="score-item"><span>Posisi Akhir:</span><strong>${Math.round(gameState.playerPosition)}%</strong></div>`;
 }
 
-// Back to Menu
 function backToMenu() {
-    gameState.currentQuestion = 0;
-    gameState.playerPosition = 0;
-    gameState.correctAnswers = 0;
-    gameState.opponents = [];
-    
+    gameState.currentQuestion = 0; gameState.playerPosition = 0; gameState.correctAnswers = 0; gameState.opponents = [];
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('menuScreen').classList.add('active');
 }
 
-// Shuffle Array
 function shuffleArray(array) {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
@@ -660,12 +478,9 @@ function shuffleArray(array) {
     return newArray;
 }
 
-// Prevent zoom on double tap for mobile
 let lastTouchEnd = 0;
 document.addEventListener('touchend', function(event) {
     const now = Date.now();
-    if (now - lastTouchEnd <= 300) {
-        event.preventDefault();
-    }
+    if (now - lastTouchEnd <= 300) event.preventDefault();
     lastTouchEnd = now;
 }, false);
